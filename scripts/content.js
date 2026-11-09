@@ -191,7 +191,7 @@ export const projects = [
     slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Dior",
     kind: "Omnichannel Marketing Analyst",
-    when: "Sep–Dec 2024",
+    when: "", // no date shown
     score: "15%",
     scoreLabel: "PROJECTED B2C LIFT",
     context: "SKEMA capstone auditing Dior's retail, e-commerce and mobile ecosystems.",
@@ -204,7 +204,7 @@ export const projects = [
     id: "coop",
     client: "COOP ATLANTIQUE",
     kind: "Strategy Consultant · Business Simulation",
-    when: "Sep–Dec 2024",
+    when: "", // no date shown
     score: "10%",
     scoreLabel: "DECISION-MAKING EFFICIENCY",
     context: "Four-person consultancy report on Coop Atlantique, a cooperative retailer with 185 stores across western France, for SKEMA's business simulation.",
@@ -222,7 +222,7 @@ export const projects = [
     slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Eco-Packaging",
     kind: "Strategic Branding · The MAYA Principle",
-    when: "Jan–Apr 2025",
+    when: "", // no date shown
     score: "GTM",
     scoreLabel: "GO-TO-MARKET STRATEGY",
     context: "Brand strategy for sustainable packaging using the MAYA principle.",
