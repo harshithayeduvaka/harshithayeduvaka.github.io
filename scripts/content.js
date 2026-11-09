@@ -171,6 +171,21 @@ export const experience = [
 // To add a new case study, copy one { ... } block and change the text.
 export const projects = [
   {
+    id: "comintelli",
+    // the real deck (PDF exported to images, assets/decks/comintelli/01..24.jpg)
+    slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.jpg`),
+    client: "Comintelli",
+    kind: "International Business Strategy · US Expansion",
+    when: "2026",
+    score: "12 mo",
+    scoreLabel: "US ENTRY ROADMAP",
+    context: "Swedish competitive-intelligence SaaS: SEK 30m ARR, flat for a year, with half its customers in North America and every decision made in Kista.",
+    audited: "Value chain, Porter's Diamond, CAGE distance, decision rights and the Sweden–US culture gap.",
+    found: "A method rivals can't copy, run entirely from one office: nobody in America can approve a price or sign a partner, and missing SOC 2 / ISO 27001 stalls US deals.",
+    recommended: "Keep the method in Kista, let certified partners sell and serve, and give a Head of the Americas written decision rights.",
+    impact: "A 12-month plan with month-12 KPIs: 2–3 certified US partners, certification readiness, and under 30% of decisions sent back to Kista.",
+  },
+  {
     id: "dior",
     // the real deck (PDF exported to images, assets/decks/dior/01..16.jpg)
     slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
