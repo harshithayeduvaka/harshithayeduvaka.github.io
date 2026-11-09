@@ -45,7 +45,7 @@ export const about = {
 // note: optional line in your words, shown under the desk on click. Leave "" to show nothing.
 export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
-    img: "assets/objects/notebook.png", w: 960, h: 709, // transparent cut-out
+    img: "assets/objects/notebook.png", w: 960, h: 694, // transparent cut-out (ruled MUJI notebook)
     alt: "Open cream notebook with a red ribbon bookmark",
     ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
     desk: { x: 19, y: 12, w: 58, r: -10 },

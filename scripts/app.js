@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110i";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110j";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110i";
+} from "./content.js?v=20261110j";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
