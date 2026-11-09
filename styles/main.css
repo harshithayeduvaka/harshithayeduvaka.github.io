@@ -288,8 +288,8 @@ section { position: relative; }
   pointer-events: none;
 }
 .kit__sign {
-  font-family: "Allura", cursive; font-weight: 400; font-size: 12.5cqw; line-height: 1.15;
-  color: #3a2618; white-space: nowrap; padding-inline: .1em;
+  display: block; width: 84cqw; padding: 1cqw 0; /* her handwritten name (assets/signature.png) */
+  line-height: 0;
   transform: rotate(-3deg);
 }
 .kit__type {
@@ -353,7 +353,8 @@ section { position: relative; }
   display: grid; justify-items: center; text-align: center; gap: 1.2cqw;
 }
 .chaos-ink > span { opacity: 0; display: block; }
-.chaos-ink__name { font-family: "Allura", cursive; font-size: 7.4cqw; line-height: 1; color: #3a2618; white-space: nowrap; }
+.chaos-ink__name { width: 44cqw; line-height: 0; } /* her handwritten name */
+.chaos-ink__name img, .kit__sign img { width: 100%; height: auto; display: block; }
 .chaos-ink__title { font-family: "Martian Mono", monospace; font-size: 1.7cqw; letter-spacing: .08em; color: var(--roast); }
 .chaos-ink__tag { font-family: "Martian Mono", monospace; font-size: 1.15cqw; color: #4a3528; max-width: 34cqw; line-height: 1.5; }
 

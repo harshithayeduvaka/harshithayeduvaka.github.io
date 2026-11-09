@@ -76,7 +76,7 @@ resume.pdf          downloadable CV (linked from meta.resume)
 | `--cherry`   | `#B4432F` | used sparingly: "missing"             |
 
 Type: **Fraunces** (display, soft serif), **Inter Tight** (body), **Martian Mono**
-(labels, uppercase, 0.08em tracking), **Allura** (handwriting on the notebook).
+(labels, uppercase, 0.08em tracking), **her own handwriting** for the name (assets/signature.png, transparent, ink #3A2618; Allura font no longer used for it).
 Fluid scale `--fs-11` → `--fs-hero`.
 Spacing: `--gutter`, `--rail-w`, `--pass-pad` (all clamp-based). Easing: `--ease-parse`.
 
