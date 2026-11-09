@@ -405,7 +405,7 @@ function pass03() {
         <div class="tl__body">
           <h4 class="tl__org display">${e.link ? `<a href="${e.link}" target="_blank" rel="noopener">${e.org}<span class="tl__ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>` : e.org}</h4>
           <p class="tl__role mono">${e.role}</p>
-          <ul class="tl__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+          ${e.bullets.length ? `<ul class="tl__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
         </div>
       </li>`;
   });

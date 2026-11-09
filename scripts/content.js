@@ -112,10 +112,7 @@ export const experience = [
     city: "Paris",
     accent: "ultramarine",
     vocab: ["Brand Strategy", "GTM", "Market Research", "ROI"],
-    bullets: [
-      "Relevant coursework: Brand Strategy, Design-Led Marketing, GTM Strategy, Market Research, ROI Analysis.",
-      "Consulting projects for Dior, Coop Atlantique and an eco-packaging brand (see Case studies below).",
-    ],
+    bullets: [],
   },
   {
     year: "2026",
