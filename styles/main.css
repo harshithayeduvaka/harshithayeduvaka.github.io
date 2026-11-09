@@ -94,7 +94,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: relative;
   padding-block: var(--pass-pad);
   padding-inline: var(--gutter);
-  border-top: 1px solid var(--latte);
 }
 .pass__grid {
   display: grid;
@@ -348,12 +347,6 @@ section { position: relative; }
 
 .kit__note { min-height: 1.5em; margin-top: .8em; text-align: center; font-size: var(--fs-18); }
 
-.hero__cue {
-  position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%);
-  width: 1px; height: 40px; background: var(--espresso);
-  animation: cue 1.25s var(--ease-parse) infinite;
-}
-@keyframes cue { 0%,100%{opacity:.2;transform:translateX(-50%) scaleY(.6)} 50%{opacity:1;transform:translateX(-50%) scaleY(1)} }
 
 /* ============================================================
    Experience — one vertical timeline
@@ -489,7 +482,7 @@ section { position: relative; }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; flex-wrap: wrap; gap: 12px 40px; border-top: 1px solid var(--latte); }
+footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; flex-wrap: wrap; gap: 12px 40px; }
 footer span { color: var(--roast); opacity: 0.55; }
 
 /* ============================================================
@@ -608,7 +601,6 @@ html.deck-open { overflow: hidden; }
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition-duration: 0.15s !important; }
-  .hero__cue { display: none; }
   .kit__item:hover img, .kit__item.is-dragging img { transform: none; }
   .print::after { animation: none !important; opacity: 0 !important; } /* photo shown fully developed */
   .slide { transform: none !important; } /* deck: cross-fade only */
