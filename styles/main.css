@@ -211,6 +211,7 @@ section { position: relative; }
 
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
 .kit__item--notebook, .kit__item--camera, .kit__item--print { mix-blend-mode: normal; }
+.kit__item--print { padding: 0; } /* keeps the eject geometry exact */
 .kit__item--notebook img { filter: drop-shadow(0 22px 26px rgba(43, 29, 22, .16)) drop-shadow(0 2px 3px rgba(43, 29, 22, .12)); }
 .kit__item--camera img { filter: drop-shadow(0 12px 16px rgba(43, 29, 22, .22)) drop-shadow(0 1px 2px rgba(43, 29, 22, .2)); }
 
@@ -309,7 +310,8 @@ section { position: relative; }
 }
 .panel__role { margin: 0.4em 0 1.4em; color: var(--roast); }
 .panel__dates { color: var(--espresso); }
-.rail .panel__tag { color: var(--cream); background: var(--espresso); opacity: 1; padding: 3px 6px; border-radius: 2px; width: max-content; }
+.panel > .content { grid-column: 2; } /* no small rail: the big year + city carry it */
+.panel__tag { color: var(--cream); background: var(--espresso); padding: 4px 8px; border-radius: 2px; width: max-content; margin-bottom: 1em; }
 .panel__bullets { list-style: none; max-width: 60ch; display: grid; gap: 14px; }
 .panel__bullets li { position: relative; padding-left: 22px; }
 .panel__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--caramel); }
@@ -494,6 +496,7 @@ footer span { color: var(--roast); opacity: 0.55; }
   .work__row { grid-template-columns: auto 1fr; }
   .work__score { grid-column: 2; text-align: left; }
   .panel__city { position: static; opacity: 0.4; margin-top: 24px; }
+  .panel > .content { grid-column: 1; }
 }
 
 /* ============================================================

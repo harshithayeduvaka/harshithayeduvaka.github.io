@@ -70,9 +70,23 @@ export const kit = [
 // generated in scripts/sound.js. No Spotify / third-party player.
 // The song she loves, kept for reference: "Coffee & Chill" by Cloudchord.
 
-// Reverse chronology — a parser walking back through history.
+// Order shown on the site: education first, then work experience (newest first).
 // type: "work" | "education" (education panels get their own label).
 export const experience = [
+  {
+    year: "2024",
+    dates: "2024 – 2027",
+    type: "education",
+    org: "SKEMA Business School",
+    role: "MSc International Marketing & Business Development",
+    city: "Paris",
+    accent: "ultramarine",
+    vocab: ["Brand Strategy", "GTM", "Market Research", "ROI"],
+    bullets: [
+      "Relevant coursework: Brand Strategy, Design-Led Marketing, GTM Strategy, Market Research, ROI Analysis.",
+      "Consulting projects for Dior, Coop Atlantique and an eco-packaging brand (see Case studies below).",
+    ],
+  },
   {
     year: "2026",
     dates: "Mar 2026 – Present",
@@ -102,20 +116,6 @@ export const experience = [
       "Designed & ran A/B tests on email sequences — open rates +15%, isolating the messaging that drove replies and sign-ups.",
       "Grew follower base +12% and engagement +17% through integrated growth-marketing initiatives.",
       "Scaled paid social (Meta Ads) and analysed campaign performance for attribution and ROI.",
-    ],
-  },
-  {
-    year: "2024",
-    dates: "2024 – 2027",
-    type: "education",
-    org: "SKEMA Business School",
-    role: "MSc International Marketing & Business Development",
-    city: "Paris",
-    accent: "ultramarine",
-    vocab: ["Brand Strategy", "GTM", "Market Research", "ROI"],
-    bullets: [
-      "Relevant coursework: Brand Strategy, Design-Led Marketing, GTM Strategy, Market Research, ROI Analysis.",
-      "Consulting projects for Dior, Coop Atlantique and an eco-packaging brand (see Case studies below).",
     ],
   },
   {

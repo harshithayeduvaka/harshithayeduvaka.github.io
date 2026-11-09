@@ -180,8 +180,10 @@ function passKit() {
     grid.appendChild(b);
   });
 
-  // --- camera click: the print slides out of the camera's top slot (white,
-  //     like a real instax), then drops beside the camera and develops ---------
+  // --- camera click: like a real instax mini Evo, the print slides out of the
+  //     camera's short side (the right-hand edge as it lies on the desk), photo
+  //     top first and milky white. Then it is pulled out, dropped beside the
+  //     camera, and develops. ---------------------------------------------------
   const printBtn = $(".kit__item--print"), camBtn = $(".kit__item--camera");
   const printSpec = kit.find((k) => k.print), camSpec = kit.find((k) => k.id === "camera");
   let ejectTl = null;
@@ -205,28 +207,39 @@ function passKit() {
     }
     const v = (el, n) => parseFloat(el.style.getPropertyValue(n)) || 0;
     const camDx = v(camBtn, "--dx"), camDy = v(camBtn, "--dy");
-    // centres at rest (offsets ignore transforms)
+    // camera body size + centre (offsets ignore transforms; buttons have 10px padding)
+    const camW = camBtn.offsetWidth - 20, camH = camW * (camSpec.h / camSpec.w);
     const camCx = camBtn.offsetLeft + camBtn.offsetWidth / 2 + camDx;
-    const slotY = camBtn.offsetTop + camBtn.offsetHeight * 0.14 + camDy; // top edge of the body
+    const camCy = camBtn.offsetTop + camBtn.offsetHeight / 2 + camDy;
+    const a = (camSpec.desk.r * Math.PI) / 180, cos = Math.cos(a), sin = Math.sin(a);
+    // print resting centre (no padding on the print button on desktop)
     const prCx = printBtn.offsetLeft + printBtn.offsetWidth / 2;
     const prCy = printBtn.offsetTop + printBtn.offsetHeight / 2;
-    const s = Math.min(1, (camBtn.offsetWidth * 0.5) / printBtn.offsetWidth); // print ≈ half the camera's width
+    // real proportions: a mini print is ~56% of the camera's short side wide
+    const s = (camH * 0.56) / printBtn.offsetWidth;
     const hS = printBtn.offsetHeight * s;
+    const slot = camW / 2 - 4; // just inside the right-hand edge
+    // a point along the camera's own x-axis (local) → desk offsets for the print
+    const at = (lx) => ({
+      "--dx": camCx + lx * cos - prCx + "px",
+      "--dy": camCy + lx * sin - prCy + "px",
+    });
+    const out = (f) => slot - hS / 2 + f * hS; // print centre when fraction f is outside
 
     camBtn.style.zIndex = ++top;
     printBtn.style.zIndex = top - 1; // tucked behind the camera while it ejects
     ejectTl = gsap.timeline()
-      .set(printBtn, {
-        "--dx": camCx - prCx + "px", "--dy": slotY + hS / 2 - prCy + "px",
-        "--s": s, "--r": `${camSpec.desk.r}deg`, clipPath: "inset(0% 0% 100% 0%)",
-      })
-      // slides up out of the slot: the part above the slot is revealed as it rises
-      .to(printBtn, { "--dy": slotY - hS / 2 - prCy + "px", clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power1.inOut" })
-      .call(() => { printBtn.style.zIndex = ++top; }, null, "+=0.15")
-      // ...then it is pulled out and dropped beside the camera
+      // photo top points out of the slot: rotate a quarter-turn from the camera's tilt
+      .set(printBtn, { ...at(out(0)), "--s": s, "--r": `${camSpec.desk.r + 90}deg`, clipPath: "inset(0% 0% 100% 0%)" })
+      // motor pushes it out ~80% (the part outside the slot is what you see)
+      .to(printBtn, { ...at(out(0.8)), clipPath: "inset(0% 0% 20% 0%)", duration: 1.3, ease: "power1.inOut" })
+      // a beat, then it is pulled free...
+      .to(printBtn, { ...at(out(1.15)), clipPath: "inset(0% 0% 0% 0%)", duration: 0.25, ease: "power1.in" }, "+=0.35")
+      .call(() => { printBtn.style.zIndex = ++top; })
+      // ...and dropped beside the camera
       .to(printBtn, {
         "--dx": camDx + "px", "--dy": camDy + "px", "--s": 1, "--r": `${printSpec.desk.r}deg`,
-        duration: 0.75, ease: "back.out(1.4)",
+        duration: 0.8, ease: "back.out(1.3)",
       });
   }
 
@@ -265,8 +278,8 @@ function pass03() {
     const panel = document.createElement("article");
     panel.className = "panel";
     panel.innerHTML = `
-      <div class="rail mono"><span class="rail__idx">${e.year}</span><span>${e.city.toUpperCase()}</span>${e.type === "education" ? '<span class="panel__tag">EDUCATION</span>' : ""}</div>
       <div class="content">
+        <p class="panel__tag mono">${e.type === "education" ? "Education" : "Work experience"}</p>
         <p class="panel__year">${e.year}</p>
         <h3 class="panel__org display">${e.org}</h3>
         <p class="panel__role mono">${e.role}<span class="panel__dates"> · ${e.dates}</span></p>
