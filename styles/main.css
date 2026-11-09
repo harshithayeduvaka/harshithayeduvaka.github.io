@@ -185,7 +185,7 @@ section { position: relative; }
 .kit__item {
   position: absolute; display: block; padding: 10px;
   transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--r, 0deg)) scale(var(--s, 1));
-  mix-blend-mode: multiply;
+  /* every object is a transparent cut-out, so it looks right anywhere on the page */
   cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
 }
 .kit__item.is-dragging { cursor: grabbing; }
@@ -202,7 +202,8 @@ section { position: relative; }
 .kit__item--print.is-dragging .print { transform: scale(1.04); }
 
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
-.kit__item--notebook, .kit__item--camera, .kit__item--print { mix-blend-mode: normal; }
+.kit__item--pen { padding: 2px; } /* thin object: barely any padding */
+.kit__item--headphones img, .kit__item--pen img { filter: drop-shadow(0 10px 12px rgba(43, 29, 22, .2)) drop-shadow(0 1px 2px rgba(43, 29, 22, .18)); }
 .kit__item--print { padding: 0; } /* keeps the eject geometry exact */
 .kit__item--notebook img { filter: drop-shadow(0 22px 26px rgba(43, 29, 22, .16)) drop-shadow(0 2px 3px rgba(43, 29, 22, .12)); }
 .kit__item--camera img { filter: drop-shadow(0 12px 16px rgba(43, 29, 22, .22)) drop-shadow(0 1px 2px rgba(43, 29, 22, .2)); }
@@ -577,7 +578,9 @@ html.deck-open { overflow: hidden; }
   .kit__item--camera { order: 1; }
   .kit__item--print { order: 2; padding-inline: 22%; }
   .kit__item--headphones { order: 3; }
-  .kit__item--pen { order: 4; }
+  .kit__item--pen { order: 4; padding: 14px 10px; }
+  .kit__item--pen img { width: auto; height: 120px; margin-inline: auto; }
+  .kit__item--headphones img { width: auto; height: 120px; margin-inline: auto; }
   .kit__item--cup { order: 5; padding: 18px; }
   .folder { position: relative; left: auto; top: auto; width: 84px; order: 6; justify-self: center; }
   .toolkit { position: static; width: auto; height: auto; grid-column: 1 / -1; order: 7; display: none;

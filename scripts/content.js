@@ -54,14 +54,14 @@ export const kit = [
     desk: { x: 5, y: 67, w: 18, r: 8 },
     note: "" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
-    img: "assets/objects/headphones.jpg", w: 560, h: 560,
+    img: "assets/objects/headphones.png", w: 413, h: 560, // transparent cut-out
     alt: "Black over-ear wireless headphones",
-    desk: { x: 4, y: 12, w: 15, r: -18 },
+    desk: { x: 6, y: 12, w: 10.5, r: -18 },
     note: "" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
-    img: "assets/objects/pen.jpg", w: 447, h: 447,
+    img: "assets/objects/pen.png", w: 46, h: 373, // transparent cut-out (clear plastic)
     alt: "Clear retractable gel pen with black ink",
-    desk: { x: 58, y: 37, w: 15, r: 18 }, // lies across the notebook's right page
+    desk: { x: 64.5, y: 38, w: 2.2, r: 18 }, // lies across the notebook's right page
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.jpg, cup drawn in CSS).
   // Click: a 2s slurp (assets/sounds/slurp.mp3 if present) + steam wisps. r = handle direction.
