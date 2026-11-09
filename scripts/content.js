@@ -74,7 +74,7 @@ export const kit = [
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
     img: "assets/objects/pen.png", w: 46, h: 373, // transparent cut-out (clear plastic)
     alt: "Clear retractable gel pen with black ink",
-    desk: { x: 64.5, y: 38, w: 2.2, r: 18 }, // lies across the notebook's right page
+    desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
     chaos: { x: 63, y: 6, w: 2.2, r: 52 },
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.jpg, cup drawn in CSS).
