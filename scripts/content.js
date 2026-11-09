@@ -34,37 +34,43 @@ export const about = {
 };
 
 // "Off the CV" desk under the About bio. Order = stacking order (first is at the bottom).
+// Objects cluster around the notebook (ref: jackiehu.design).
 // desk: starting spot on the desktop layout, in % of the desk (x, y, width) + tilt in degrees.
 // sound: shutter | click | page | music.  note: your words, shown on click.
 export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
     img: "assets/objects/notebook.jpg", w: 560, h: 420,
     alt: "Open cream notebook with a red ribbon bookmark",
-    desk: { x: 3, y: 12, w: 40, r: -7 },
+    ink: meta.name, // handwritten on the right-hand page (one line per word)
+    desk: { x: 5, y: 8, w: 50, r: -5 },
     note: "[TODO: what goes in this notebook]" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
     img: "assets/objects/pen.jpg", w: 447, h: 447,
     alt: "Clear retractable gel pen with black ink",
-    desk: { x: 29, y: 2, w: 17, r: 28 },
+    desk: { x: 40, y: 30, w: 14, r: 38 },
     note: "[TODO: what you write by hand]" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
     img: "assets/objects/camera.jpg", w: 361, h: 350,
     alt: "Brown and silver instant camera",
-    desk: { x: 40, y: 48, w: 24, r: 7 },
+    desk: { x: 39, y: 57, w: 21, r: 9 },
     note: "[TODO: why this camera / what you shoot]" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.jpg", w: 560, h: 560,
     alt: "Black over-ear wireless headphones",
-    desk: { x: 52, y: 3, w: 25, r: -12 },
+    desk: { x: 55, y: 1, w: 20, r: -14 },
     note: "[TODO: one line on why you love this song]" },
 ];
 
-// The record card next to the headphones. Until `link` is set, the headphones play
-// an original placeholder loop generated in code (scripts/sound.js).
+// The record card next to the headphones.
+// link = a Spotify TRACK link (Spotify app → ⋯ → Share → Copy Song Link), e.g.
+//   "https://open.spotify.com/track/XXXXXXXXXXXXXXXXXXXXXX"
+// With a Spotify link, the headphones open the official Spotify player on the card
+// (30-second preview for visitors not logged in to Spotify, full song if they are).
+// Until then, they play an original placeholder loop generated in scripts/sound.js.
 export const music = {
-  title: "[TODO: song title]",
-  artist: "[TODO: artist]",
-  link: "", // e.g. a Spotify or YouTube URL; shows a "Listen" link on the card
+  title: "Coffee & Chill",
+  artist: "Cloudchord",
+  link: "", // [TODO: paste the Spotify track link here]
 };
 
 // Metrics the parser extracts in Pass 02 (real numbers she moved).

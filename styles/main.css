@@ -284,6 +284,18 @@ section { position: relative; }
 /* these two photos have off-white/grey backdrops: lift them to pure white so multiply drops them */
 .kit__item--camera img { filter: brightness(1.07) contrast(1.06); }
 .kit__item--notebook img { filter: brightness(1.13) contrast(1.12); }
+/* her name handwritten on the notebook's right page, in blue ink (sizes in cqw so it
+   scales with the notebook on every screen and while it is dragged) */
+.kit__item--notebook .kit__img { position: relative; container-type: inline-size; }
+.kit__ink {
+  position: absolute; left: 56%; right: 5%; top: 14%;
+  display: grid; justify-items: start; gap: 0;
+  font-family: "Allura", cursive; font-weight: 400; font-size: 9.6cqw; line-height: 1;
+  color: var(--ultramarine); transform: rotate(-6deg); transform-origin: left top;
+  pointer-events: none; white-space: nowrap;
+}
+.kit__ink span { display: block; padding-right: .15em; }
+.kit__ink span + span { margin-left: .35em; }
 .kit__item:hover img { transform: translateY(-5px); }
 .kit__item.is-dragging img { transform: scale(1.04); }
 .kit__label {
@@ -339,6 +351,8 @@ section { position: relative; }
 .record__title { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: var(--fs-16); line-height: 1.2; }
 .record__artist { color: var(--graphite); opacity: .6; }
 .record__actions { display: flex; justify-content: center; gap: 16px; margin-top: 6px; }
+.record__embed { width: 100%; }
+.record__embed iframe { display: block; width: 100%; border: 0; border-radius: 12px; }
 
 .kit__note { min-height: 3em; margin-top: 1.2em; max-width: var(--measure); font-size: var(--fs-18); }
 .kit__note .mono { color: var(--ultramarine); margin-right: .6em; }
@@ -569,6 +583,7 @@ footer span { color: var(--graphite); opacity: 0.55; }
     grid-template-columns: 96px 1fr; justify-items: start; text-align: left; align-items: center; }
   .record__disc { width: 96px; }
   .record__actions { justify-content: flex-start; }
+  .record__embed { grid-column: 1 / -1; }
   #deskTidy { display: none; }
   .mailto { font-size: clamp(1.1rem, 5.4vw, 2.4rem); }  /* keep the address on one line on phones */
   .ledger, .ring-panel, .ledger.sticky { position: static; }

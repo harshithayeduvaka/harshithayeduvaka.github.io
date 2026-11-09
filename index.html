@@ -10,7 +10,7 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400..800&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400..800&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&family=Allura&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles/main.css" />
 
 <!-- JSON-LD -->
@@ -93,6 +93,8 @@
                 <a id="recordLink" target="_blank" rel="noopener" hidden>Listen ↗</a>
               </div>
             </div>
+            <!-- Spotify player is injected here on first play (only if music.link is a Spotify track) -->
+            <div class="record__embed" id="recordEmbed" hidden></div>
           </div>
         </div>
         <p class="kit__note" id="kitNote" aria-live="polite"></p>

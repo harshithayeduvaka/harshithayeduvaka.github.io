@@ -137,18 +137,58 @@ function passKit() {
   $("#recordTitle").textContent = music.title;
   $("#recordArtist").textContent = music.artist;
   if (music.link) { const a = $("#recordLink"); a.href = music.link; a.hidden = false; }
-  const setPlaying = (on) => {
+
+  // Spotify track link → official Spotify player (loaded only after the first click,
+  // so no third-party script runs until a visitor asks for music).
+  const spotifyId = (music.link.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?track\/([A-Za-z0-9]+)/) || [])[1];
+  let spotify = null; // Spotify EmbedController once loaded
+
+  // paint the card + headphones (no audio side effects)
+  const paint = (on, label) => {
     playing = on;
     rec.classList.toggle("is-playing", on);
     recBtn.setAttribute("aria-pressed", String(on));
     recBtn.textContent = on ? "❚❚ Pause" : "▶ Play";
-    recState.textContent = on ? "NOW PLAYING · PLACEHOLDER LOOP" : "PAUSED";
+    recState.textContent = on ? `NOW PLAYING · ${label}` : "PAUSED";
     const hp = $(".kit__item--headphones");
     if (hp) hp.setAttribute("aria-pressed", String(on));
+  };
+
+  function loadSpotify() {
+    const box = $("#recordEmbed");
+    box.hidden = false;
+    recState.textContent = "LOADING SPOTIFY…";
+    window.onSpotifyIframeApiReady = (API) => {
+      const el = document.createElement("div");
+      box.appendChild(el);
+      API.createController(el, { uri: `spotify:track:${spotifyId}`, width: "100%", height: 80 }, (c) => {
+        spotify = c;
+        // keep the vinyl in sync with the real player (also when they use Spotify's own button)
+        c.addListener("playback_update", (e) => paint(!e.data.isPaused, "SPOTIFY"));
+        c.addListener("ready", () => { recState.textContent = "PRESS PLAY"; c.play(); });
+      });
+    };
+    const s = document.createElement("script");
+    s.src = "https://open.spotify.com/embed/iframe-api/v1";
+    s.async = true;
+    s.onerror = () => { recState.textContent = "SPOTIFY BLOCKED · USE LISTEN ↗"; box.hidden = true; };
+    document.head.appendChild(s);
+  }
+
+  const setPlaying = (on) => {
+    if (spotifyId) {
+      if (on && !spotify) { play("needle"); loadSpotify(); return; }
+      if (spotify) spotify.togglePlay();
+      return;
+    }
+    paint(on, "PLACEHOLDER LOOP");
     on ? startMusic() : stopMusic();
   };
   recBtn.addEventListener("click", () => setPlaying(!playing));
-  document.addEventListener("visibilitychange", () => { if (document.hidden && playing) setPlaying(false); });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden || !playing) return;
+    if (spotify) spotify.pause(); else setPlaying(false);
+  });
 
   // --- sound toggle --------------------------------------------------
   const mute = $("#deskMute");
@@ -167,7 +207,9 @@ function passKit() {
     b.setAttribute("aria-pressed", "false");
     b.setAttribute("aria-label", `${k.label.toLowerCase()}: ${k.alt}. Plays a sound.`);
     b.innerHTML = `
-      <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>
+      <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
+        k.ink ? `<span class="kit__ink" aria-hidden="true">${k.ink.split(" ").map((w) => `<span>${w}</span>`).join("")}</span>` : ""
+      }</span>
       <span class="kit__label mono">OBJ.0${i + 1} · ${k.label}</span>`;
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
@@ -227,6 +269,16 @@ function passKit() {
     }
     grid.appendChild(b);
   });
+
+  // --- the name "writes itself" onto the notebook when the desk scrolls in ---
+  const ink = $$(".kit__ink span");
+  if (ink.length && !reduced) {
+    gsap.set(ink, { clipPath: "inset(-20% 100% -20% 0)" });
+    gsap.to(ink, {
+      clipPath: "inset(-20% 0% -20% 0)", duration: 1.1, ease: "power1.inOut", stagger: 0.9,
+      scrollTrigger: { trigger: grid, start: "top 70%" },
+    });
+  }
 
   // --- tidy: send everything back to its starting spot ---------------
   $("#deskTidy").addEventListener("click", () => {
