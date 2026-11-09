@@ -139,11 +139,11 @@ export const experience = [
     role: "Marketing Intern",
     city: "Berlin",
     accent: "saffron",
-    vocab: ["A/B", "+15% open", "+12% follows", "+17% eng", "SEO"],
+    vocab: ["A/B", "+15% open", "+12% follows", "+17% eng", "Meta Ads", "ROI"],
     bullets: [
       "Designed & ran A/B tests on email sequences: open rates +15%, isolating the messaging that drove replies and sign-ups.",
       "Grew follower base +12% and engagement +17% through integrated growth-marketing initiatives.",
-      "Worked on SEO: analysed the website and identified how it could be improved to rank higher in search results.",
+      "Scaled paid social (Meta Ads) and analysed campaign performance for attribution and ROI.",
     ],
   },
   {
