@@ -463,6 +463,13 @@ section { position: relative; }
 .about-me__cmd { color: var(--caramel); font-weight: 400; font-size: .7em; vertical-align: .12em; margin-left: .1em; }
 .about-me__body { display: grid; gap: 1.1em; max-width: none; } /* text spans the full content width */
 .about-me__body p { font-size: var(--fs-18); line-height: 1.65; color: var(--roast); }
+/* About text flicker: hidden until scrolled in, then it stutters on and stays lit */
+.about-me__body p.flicker { opacity: 0; }
+.about-me__body p.flicker.is-lit { opacity: 1; animation: flicker 1.1s linear both; } /* lit = visible even if animations are off */
+@keyframes flicker {
+  0% { opacity: 0; } 8% { opacity: .9; } 12% { opacity: .1; } 20% { opacity: .85; } 24% { opacity: .2; }
+  34% { opacity: 1; } 40% { opacity: .35; } 48% { opacity: 1; } 56% { opacity: .7; } 64%, 100% { opacity: 1; }
+}
 
 .close { text-align: center; padding-block: var(--pass-pad); padding-inline: var(--gutter); }
 .mailto {

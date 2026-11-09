@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109i";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109k";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109i";
+} from "./content.js?v=20261109k";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -566,10 +566,18 @@ function passAboutMe() {
   const body = $("#aboutBody");
   if (!body) return;
   body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
+  // "flicker": each paragraph switches on like an old bulb as the section scrolls in (once).
+  // CSS animation, triggered by adding .is-lit; the heading is left alone.
+  if (reduced) return;
+  const ps = $$("p", body);
+  ps.forEach((p, i) => { p.classList.add("flicker"); p.style.animationDelay = `${i * 0.18}s`; });
+  ScrollTrigger.create({ trigger: body, start: "top 80%", once: true,
+    onEnter: () => ps.forEach((p) => p.classList.add("is-lit")) });
 }
 
 function revealTitles() {
   $$(".pass__title").forEach((t) => {
+    if (t.id === "about-h") return; // About heading: no animation
     if (reduced) return;
     gsap.from(t, { yPercent: 20, opacity: 0, duration: 0.8,
       scrollTrigger: { trigger: t, start: "top 85%" } });
