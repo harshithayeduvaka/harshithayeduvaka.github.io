@@ -388,9 +388,8 @@ section { position: relative; }
 .tl__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--caramel); }
 
 /* ============================================================
-   PASS 04 — ohmyATS demo
+   Form fields + button (used by the contact form)
    ============================================================ */
-.demo { display: grid; grid-template-columns: 1fr 380px; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .demo__field { display: grid; gap: 6px; margin-bottom: 18px; }
 .demo__field label { color: var(--espresso); }
 .demo__field input,
@@ -411,23 +410,6 @@ section { position: relative; }
   min-height: 44px; transition: transform 0.18s var(--ease-parse);
 }
 .btn:hover { transform: translateY(-2px); }
-.ring-panel {
-  background: var(--roast); border-radius: 6px; padding: 28px;
-  display: grid; justify-items: center; gap: 18px; position: sticky; top: 12vh;
-}
-.ring-wrap { position: relative; width: 240px; height: 240px; }
-.ring-wrap svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-.ring-wrap .track-c { fill: none; stroke: rgba(220,201,180,0.18); stroke-width: 10; }
-.ring-wrap .prog-c { fill: none; stroke: var(--caramel); stroke-width: 10; stroke-linecap: round; }
-.ring-wrap.bloom .prog-c { filter: drop-shadow(0 0 8px var(--caramel)); }
-.ring-num {
-  position: absolute; inset: 0; display: grid; place-content: center;
-  font-family: "Fraunces"; font-weight: 800; font-size: 3.4rem; color: var(--cream);
-}
-.ring-num small { display:block; text-align:center; font-family:"Martian Mono"; font-size:.7rem; color: var(--latte); letter-spacing:.08em; margin-top:4px; }
-.demo__out { color: var(--latte); text-align: center; min-height: 1.4em; }
-.demo__out .miss { color: var(--cherry); }
-.demo__note { color: var(--roast); opacity: 0.7; max-width: 46ch; margin-top: 22px; }
 
 /* ============================================================
    PASS 05 — Projects (parser output rows)
@@ -569,7 +551,7 @@ html.deck-open { overflow: hidden; }
   .tl__item::before { left: 0; top: .2em; }
   .tl__when { text-align: left; padding-top: 0; margin-bottom: .4em; }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-  .demo, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
+  .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   /* desk -> tap grid; no dragging (it would fight scrolling) */
   .hero.desk { min-height: auto; padding-top: 16px; padding-bottom: 56px; }
   .kit__tools { position: static; justify-content: flex-end; margin-bottom: 8px; padding-left: 80px; }
@@ -598,13 +580,7 @@ html.deck-open { overflow: hidden; }
   .record__disc { width: 96px; }
   .record__actions { justify-content: flex-start; }
   .mailto { font-size: clamp(1.1rem, 5.4vw, 2.4rem); }  /* keep the address on one line on phones */
-  .ring-panel { position: static; }
-  .demo { }
-  .ring-panel { order: -1; }
-  .work__row { grid-template-columns: auto 1fr; }
-  .work__score { grid-column: 2; text-align: left; }
-}
-
+  
 /* ============================================================
    Reduced motion — first-class, composed static state
    ============================================================ */

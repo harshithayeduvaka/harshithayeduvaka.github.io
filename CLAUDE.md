@@ -7,7 +7,8 @@ Audience: marketing hiring managers and recruiters (FR/EU), plus startup founder
 Concept: **a coffee-coded desk**. The first screen is a desk (ref: jackiehu.design):
 an open notebook with her name, title and tagline written on it, plus headphones (music),
 an instax camera (click = her photo slides out as a print), a pen and a record card.
-Below it: experience timeline, ohmyATS demo, case studies, languages, contact. She asked for: no CV-copy intro, no object labels/numbers,
+Below it: experience timeline, case studies, About ⌘, contact. (ohmyATS demo removed: the
+timeline links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
 no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots | entry); the group headings
 "Foundations" (education) and "The Story So Far" (work) appear once each.

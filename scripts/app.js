@@ -423,62 +423,6 @@ function pass03() {
 }
 
 // ------------------------------------------------------------------
-// PASS 04 — ohmyATS demo (deterministic client-side scoring)
-// ------------------------------------------------------------------
-const STOP = new Set("a an the and or of to for with you your we our will own on in is are as be by that which most this all through".split(" "));
-function tokenize(t) {
-  return (t.toLowerCase().match(/[a-z][a-z/+-]{1,}/g) || []).filter((w) => !STOP.has(w) && w.length > 2);
-}
-function score(jd, cv) {
-  const jTok = tokenize(jd), cTok = new Set(tokenize(cv));
-  const jSet = [...new Set(jTok)];
-  if (!jSet.length) return { pct: 0, missing: [], matched: [] };
-  // term frequency in JD as weight (TF); intersection with CV
-  const tf = {};
-  jTok.forEach((w) => (tf[w] = (tf[w] || 0) + 1));
-  let hit = 0, tot = 0;
-  const matched = [], missing = [];
-  jSet.forEach((w) => {
-    const weight = 1 + Math.log(tf[w]);
-    tot += weight;
-    if (cTok.has(w)) { hit += weight; matched.push(w); }
-    else missing.push(w);
-  });
-  return { pct: Math.round((hit / tot) * 100), missing: missing.slice(0, 4), matched };
-}
-
-const RING_CIRC = 2 * Math.PI * 105;
-function pass04() {
-  const form = $("#demoForm");
-  const prog = $("#ringProg");
-  const num = $("#ringNum");
-  const out = $("#demoOut");
-  const wrap = $("#ringWrap");
-  prog.style.strokeDasharray = RING_CIRC;
-  prog.style.strokeDashoffset = RING_CIRC;
-
-  function run() {
-    const { pct, missing } = score($("#jd").value, $("#cv").value);
-    const state = { v: 0 };
-    wrap.classList.remove("bloom");
-    gsap.to(state, {
-      v: pct, duration: reduced ? 0.15 : 1.1, ease: "power2.out",
-      onUpdate: () => {
-        const val = Math.round(state.v);
-        prog.style.strokeDashoffset = RING_CIRC * (1 - val / 100);
-        num.innerHTML = `${val}%<small>MATCH</small>`;
-      },
-      onComplete: () => wrap.classList.add("bloom"),
-    });
-    out.innerHTML = missing.length
-      ? `MATCH ${pct}% <span class="miss">· MISSING: ${missing.join(", ")}</span>`
-      : `MATCH ${pct}% · FULL COVERAGE`;
-  }
-  form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
-  run(); // prefilled example: never an empty state
-}
-
-// ------------------------------------------------------------------
 // PASS 05 — Case studies. Each row opens its deck in a viewer on the same page.
 // A project with `slides` (image paths) shows those images; otherwise the deck is
 // built from the project's own text (context, audit, findings, recommendation, impact).
@@ -657,7 +601,7 @@ function contactForm() {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, passToolkit, pass03, pass04, pass05, passAboutMe, revealTitles, contact, contactForm };
+  const passes = { passKit, passToolkit, pass03, pass05, passAboutMe, revealTitles, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
