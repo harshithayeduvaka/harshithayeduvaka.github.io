@@ -190,7 +190,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/dior/01..16.jpg)
     slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Dior",
-    kind: "Omnichannel Marketing Analyst",
+    kind: "Omnichannel Analysis",
     when: "", // no date shown
     score: "15%",
     scoreLabel: "PROJECTED B2C LIFT",
@@ -203,7 +203,7 @@ export const projects = [
   {
     id: "coop",
     client: "COOP ATLANTIQUE",
-    kind: "Strategy Consultant · Business Simulation",
+    kind: "Business Simulation",
     when: "", // no date shown
     score: "10%",
     scoreLabel: "DECISION-MAKING EFFICIENCY",
