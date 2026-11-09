@@ -291,7 +291,7 @@ section { position: relative; }
 .kit__sign {
   display: block; width: 84cqw; padding: 1cqw 0; /* her handwritten name (assets/signature.png) */
   line-height: 0;
-  transform: rotate(-3deg);
+  transform: rotate(.45deg); /* cancels the handwriting's own slight upward slope: baseline parallel to the lines below */
 }
 .kit__type {
   font-family: "Martian Mono", monospace; font-size: 2.15cqw; letter-spacing: .02em;
@@ -354,7 +354,7 @@ section { position: relative; }
   display: grid; justify-items: center; text-align: center; gap: 1.2cqw;
 }
 .chaos-ink > span { opacity: 0; display: block; }
-.chaos-ink__name { width: 44cqw; line-height: 0; } /* her handwritten name */
+.chaos-ink__name { width: 44cqw; line-height: 0; transform: rotate(.45deg); } /* her handwritten name */
 .chaos-ink__name img, .kit__sign img { width: 100%; height: auto; display: block; }
 .chaos-ink__title { font-family: "Martian Mono", monospace; font-size: 1.7cqw; letter-spacing: .08em; color: var(--roast); }
 .chaos-ink__tag { font-family: "Martian Mono", monospace; font-size: 1.15cqw; color: #4a3528; max-width: 34cqw; line-height: 1.5; }
