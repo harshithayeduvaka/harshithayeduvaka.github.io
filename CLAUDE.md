@@ -21,7 +21,7 @@ PNGs she supplied in assets/tools/ (tile: "full" for square app icons, else a li
 Folder click = assets/sounds/click.mp3 if present (her Pixabay click), else a synthesized click.
 Brand mark: assets/logo-hy.png (her HY monogram, transparent, brown #522606), top left of the page, scrolls with content (not fixed)
 + favicon; only a Sound on/off button (top right). No Tidy button. A top-down cappuccino (kit item `cup`, latte art in
-assets/objects/crema.jpg) replaced the coffee-ring stain; click = a small gentle slurp (slurp.mp3 if present, capped 2s; else ~0.7s synth) + steam wisps only (the cup
+assets/objects/crema.avif) replaced the coffee-ring stain; click = a small gentle slurp (slurp.mp3 if present, capped 2s; else ~0.7s synth) + steam wisps only (the cup
 never hops or lifts; she found that weird).
 Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome
 never advances; inject `*{transition:none!important}` in test harnesses to see final states.
@@ -48,7 +48,7 @@ styles/main.css     all styles; design tokens live in :root at the top
 scripts/content.js  ALL editable content (desk objects, jobs, projects, skills, links)
 scripts/app.js      animation orchestration + section rendering + ohmyATS demo
 scripts/sound.js    Web Audio synth: desk click sounds + original lo-fi loop (no audio files)
-assets/             her photo (the instax print) and desk objects (assets/objects/; notebook
+assets/             images are AVIF (small, transparent): her photo (instax print) + desk objects (assets/objects/; notebook
                     and camera are transparent PNG cut-outs)
 vendor/             third-party libs, never edit
 resume.pdf          downloadable CV (linked from meta.resume)

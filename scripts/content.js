@@ -24,7 +24,7 @@ export const meta = {
 
 // Her photo: shown on the desk as an instax print that comes out of the camera.
 export const about = {
-  photo: { src: "assets/harshitha-480.jpg", src2x: "assets/harshitha-960.jpg", w: 480, h: 640,
+  photo: { src: "assets/harshitha.avif", w: 300, h: 400,
            alt: "Harshitha Yeduvaka smiling, standing on a tree-lined street in a yellow dress" },
   // The "About ⌘" section near the bottom of the page (her words).
   title: "About",
@@ -45,7 +45,7 @@ export const about = {
 // note: optional line in your words, shown under the desk on click. Leave "" to show nothing.
 export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
-    img: "assets/objects/notebook.png", w: 960, h: 694, // transparent cut-out (ruled MUJI notebook)
+    img: "assets/objects/notebook.avif", w: 960, h: 694, // transparent cut-out (ruled MUJI notebook)
     alt: "Open cream notebook with a red ribbon bookmark",
     ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
     desk: { x: 19, y: 12, w: 58, r: -10 },
@@ -60,27 +60,27 @@ export const kit = [
     chaos: { x: 61, y: 57, w: 10, r: 13 },
     note: "" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
-    img: "assets/objects/camera.png", w: 361, h: 259, // transparent cut-out
+    img: "assets/objects/camera.avif", w: 361, h: 259, // transparent cut-out
     alt: "Brown and silver instant camera",
     desk: { x: 5, y: 67, w: 18, r: 8 },
     chaos: { x: 5, y: 5, w: 16, r: 0 },
     note: "" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
-    img: "assets/objects/headphones.png", w: 413, h: 560, // transparent cut-out
+    img: "assets/objects/headphones.avif", w: 236, h: 320, // transparent cut-out
     alt: "Black over-ear wireless headphones",
     desk: { x: 6, y: 12, w: 10.5, r: -18 },
     chaos: { x: 26, y: 3, w: 9, r: 26 },
     note: "" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
-    img: "assets/objects/pen.png", w: 46, h: 373, // transparent cut-out (clear plastic)
+    img: "assets/objects/pen.avif", w: 46, h: 373, // transparent cut-out (clear plastic)
     alt: "Clear retractable gel pen with black ink",
     desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
     chaos: { x: 63, y: 6, w: 2.2, r: 52 },
     note: "" },
-  // A cappuccino seen from above (latte art from assets/objects/crema.jpg, cup drawn in CSS).
+  // A cappuccino seen from above (latte art from assets/objects/crema.avif, cup drawn in CSS).
   // Click: a 2s slurp (assets/sounds/slurp.mp3 if present) + steam wisps. r = handle direction.
   { id: "cup", label: "CAPPUCCINO", name: "Cappuccino", sound: "slurp",
-    cup: true, img: "assets/objects/crema.jpg", w: 360, h: 360,
+    cup: true, img: "assets/objects/crema.avif", w: 360, h: 360,
     alt: "A cappuccino with a rosetta in the foam",
     desk: { x: 77, y: 52, w: 16, r: -20 },
     chaos: { x: 76, y: 63, w: 15, r: -8 },
@@ -92,15 +92,15 @@ export const kit = [
 // tile: "full" = the logo is already a coloured square (it fills the tile);
 //       otherwise the logo sits on a small light tile (`bg` sets its colour).
 export const tools = [
-  { name: "HubSpot", icon: "assets/tools/hubspot.png", tile: "full" },
-  { name: "GA4", icon: "assets/tools/ga4.png" },
-  { name: "SQL", icon: "assets/tools/sql.png" },
-  { name: "Excel", icon: "assets/tools/excel.png" },
-  { name: "Apollo.io", icon: "assets/tools/apollo.png", tile: "full" },
-  { name: "Notion", icon: "assets/tools/notion.png" },
-  { name: "Asana", icon: "assets/tools/asana.png", bg: "#F2F2F2" },
-  { name: "Canva", icon: "assets/tools/canva.png", tile: "full" },
-  { name: "Brandwatch", icon: "assets/tools/brandwatch.png" },
+  { name: "HubSpot", icon: "assets/tools/hubspot.avif", tile: "full" },
+  { name: "GA4", icon: "assets/tools/ga4.avif" },
+  { name: "SQL", icon: "assets/tools/sql.avif" },
+  { name: "Excel", icon: "assets/tools/excel.avif" },
+  { name: "Apollo.io", icon: "assets/tools/apollo.avif", tile: "full" },
+  { name: "Notion", icon: "assets/tools/notion.avif" },
+  { name: "Asana", icon: "assets/tools/asana.avif", bg: "#F2F2F2" },
+  { name: "Canva", icon: "assets/tools/canva.avif", tile: "full" },
+  { name: "Brandwatch", icon: "assets/tools/brandwatch.avif" },
 ];
 
 // Clicking the headphones (or Play on the record card) plays an original lo-fi loop

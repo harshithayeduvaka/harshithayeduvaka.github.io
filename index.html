@@ -10,9 +10,12 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&family=Allura&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261110m" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles/main.css?v=20261110n" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
+<!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110n" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261110n" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -35,7 +38,7 @@
        around, click to play. Mobile: tap-to-play grid. -->
   <!-- Personal brand mark, top right (transparent PNG); links back to the top -->
   <a class="brand" href="#top" aria-label="Harshitha Yeduvaka, back to top">
-    <img src="assets/logo-hy.png" alt="" width="400" height="281" />
+    <img src="assets/logo-hy.avif" alt="" width="200" height="140" fetchpriority="high" />
   </a>
 
   <header class="hero desk" id="top">
@@ -187,6 +190,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261110m"></script>
+<script type="module" src="scripts/app.js?v=20261110n"></script>
 </body>
 </html>

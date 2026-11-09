@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110m";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110n";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110m";
+} from "./content.js?v=20261110n";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -12,7 +12,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110m";
+const ASSET_V = "20261110n";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -41,20 +41,26 @@ function boot() {
     if (done) return;
     done = true;
     gsap.timeline()
-      .to(rule, { width: "100%", duration: 0.4, ease: "power2.inOut" })
-      .to(boot, { opacity: 0, duration: 0.5, onComplete: () => boot.remove() }, "+=0.1")
+      .to(rule, { width: "100%", duration: 0.2, ease: "power2.inOut" })
+      .to(boot, { opacity: 0, duration: 0.3, onComplete: () => boot.remove() })
       .add(hero, "-=0.2");
   };
   addEventListener("keydown", finish, { once: true });
 
+  // seen it already this browser session (e.g. a refresh, or back from her CV): skip the loader
+  let seen = false;
+  try { seen = sessionStorage.getItem("hy-booted") === "1"; sessionStorage.setItem("hy-booted", "1"); } catch {}
+  if (seen) { boot.remove(); hero(); return; }
+
   if (reduced) { log.textContent = lines.join("\n"); gsap.set(rule, { width: "100%" }); finish(); return; }
 
+  // ~1s total: four lines, 0.2s apart, then a quick fade
   const tl = gsap.timeline({ onComplete: finish });
   lines.forEach((ln, i) => {
-    tl.call(() => (log.textContent += (i ? "\n" : "") + ln), null, i * 0.4);
+    tl.call(() => (log.textContent += (i ? "\n" : "") + ln), null, i * 0.2);
   });
-  tl.to(rule, { width: "72%", duration: 2.0, ease: "none" }, 0);
-  gsap.delayedCall(2.2, finish); // hard cap
+  tl.to(rule, { width: "80%", duration: 0.75, ease: "none" }, 0);
+  gsap.delayedCall(0.9, finish); // hard cap
 }
 
 // ------------------------------------------------------------------
@@ -122,12 +128,12 @@ function passKit() {
       b.innerHTML = `
       <span class="kit__img cup" aria-hidden="true">
         <span class="cup__saucer"></span><span class="cup__handle"></span>
-        <span class="cup__body"><span class="cup__crema"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span></span>
+        <span class="cup__body"><span class="cup__crema"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="eager" decoding="async" draggable="false" /></span></span>
         <span class="cup__steam"><i></i><i></i><i></i></span>
       </span>`;
     } else {
       b.innerHTML = `
-      <span class="kit__img"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
+      <span class="kit__img"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="eager" decoding="async"${k.ink ? ' fetchpriority="high"' : ""} draggable="false" />${
         k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="983" height="131" draggable="false" /></span>${
           k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
       }</span>`;
@@ -791,8 +797,8 @@ async function init() {
   }
 
   // fonts must be ready so the handwriting is measured correctly
-  // (capped at 1.5s: a slow font server must never hold the page behind the loader)
-  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]); } catch {}
+  // (capped at 0.6s: a slow font server must never hold the page behind the loader)
+  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 600))]); } catch {}
 
   // Start the loader LAST so nothing above can block it.
   boot();
