@@ -18,7 +18,7 @@ PNGs she supplied in assets/tools/ (tile: "full" for square app icons, else a li
 Folder click = assets/sounds/click.mp3 if present (her Pixabay click), else a synthesized click.
 Brand mark: assets/logo-hy.png (her HY monogram, transparent, brown #522606), fixed top LEFT
 + favicon; only a Sound on/off button (top right). No Tidy button. A top-down cappuccino (kit item `cup`, latte art in
-assets/objects/crema.jpg) replaced the coffee-ring stain; click = 2s slurp (slurp.mp3 if present, else synth) + steam wisps only (the cup
+assets/objects/crema.jpg) replaced the coffee-ring stain; click = a small gentle slurp (slurp.mp3 if present, capped 2s; else ~0.7s synth) + steam wisps only (the cup
 never hops or lifts; she found that weird).
 Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome
 never advances; inject `*{transition:none!important}` in test harnesses to see final states.

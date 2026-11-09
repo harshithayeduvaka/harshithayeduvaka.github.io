@@ -87,31 +87,32 @@ const SOUNDS = {
     n.start(t, Math.random()); n.stop(t + 0.5);
     burst(t + 0.4, { freq: 2600, q: 1, dur: 0.05, gain: 0.35 }); // the flick
   },
-  // cup: a 2-second slurp of hot coffee. Airy sucked-in noise whose pitch and
-  // loudness wobble quickly (the gurgle of liquid + air), in three little pulls.
+  // cup: one small, gentle sip of hot coffee (~0.7s). A soft breath of air drawn
+  // in through the lips, a light liquid flutter in the middle, then a quiet close.
   slurp(t) {
-    const dur = 2.0;
-    const n = noise(), bp = ctx.createBiquadFilter(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
-    bp.type = "bandpass"; bp.Q.value = 2.2;
-    hp.type = "highpass"; hp.frequency.value = 350;
-    // gurgle: the band's centre jitters between ~700 and ~2200 Hz
-    let f = t;
-    while (f < t + dur) {
-      bp.frequency.setValueAtTime(700 + Math.random() * 1500, f);
-      f += 0.025 + Math.random() * 0.035;
-    }
-    // three pulls of breath: swell, dip, swell, dip, longer swell, fade
+    const dur = 0.7;
+    // the sip: soft mid-range air whose pitch rises a little as it's drawn in
+    const n = noise(), bp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+    bp.type = "bandpass"; bp.Q.value = 1.4;
+    bp.frequency.setValueAtTime(900, t);
+    bp.frequency.exponentialRampToValueAtTime(1600, t + dur * 0.8);
+    lp.type = "lowpass"; lp.frequency.value = 3000; // no harsh hiss
     g.gain.setValueAtTime(0.0001, t);
-    [[0, 0.32], [0.35, 0.05], [0.55, 0.36], [0.9, 0.06], [1.1, 0.4], [1.75, 0.2]].forEach(([dt, v]) =>
-      g.gain.linearRampToValueAtTime(v, t + dt + 0.08));
-    g.gain.linearRampToValueAtTime(0.0001, t + dur);
-    // fast flutter on top so it bubbles rather than hisses
+    g.gain.exponentialRampToValueAtTime(0.09, t + 0.12);
+    g.gain.setValueAtTime(0.09, t + 0.4);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    // a gentle liquid flutter, only through the middle of the sip
     const lfo = ctx.createOscillator(), lg = ctx.createGain(), wob = ctx.createGain();
-    lfo.type = "triangle"; lfo.frequency.value = 23; lg.gain.value = 0.45; wob.gain.value = 0.7;
+    lfo.type = "sine"; lfo.frequency.value = 17; wob.gain.value = 0.85;
+    lg.gain.setValueAtTime(0, t);
+    lg.gain.linearRampToValueAtTime(0.25, t + 0.25);
+    lg.gain.linearRampToValueAtTime(0, t + 0.55);
     lfo.connect(lg).connect(wob.gain);
-    n.connect(hp).connect(bp).connect(g).connect(wob).connect(master);
-    n.start(t, Math.random()); n.stop(t + dur);
-    lfo.start(t); lfo.stop(t + dur);
+    n.connect(bp).connect(lp).connect(g).connect(wob).connect(master);
+    n.start(t, Math.random()); n.stop(t + dur + 0.02);
+    lfo.start(t); lfo.stop(t + dur + 0.02);
+    // the tiny soft "tup" as the lips close
+    tick(t + dur - 0.06, 420, 0.05, 0.05);
   },
   // folder: a mouse click. A sharp "press" then a softer "release" ~70ms later.
   mouseclick(t) {
