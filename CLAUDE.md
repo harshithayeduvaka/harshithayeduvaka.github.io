@@ -16,7 +16,7 @@ per project in content.js, otherwise slides are built from the project's text.
 Desk extras: a blue "toolkit" folder (top) pops `tools` (content.js) out in a fan; tool tiles are
 64x64 SVGs in assets/tools/ (HubSpot/GA4/Notion/Asana/Canva glyphs from Simple Icons, CC0;
 Excel/Apollo.io/SQL drawn by hand). A top-down cappuccino (kit item `cup`, latte art in
-assets/objects/crema.jpg) replaced the coffee-ring stain; click = clink + steam only (the cup
+assets/objects/crema.jpg) replaced the coffee-ring stain; click = steam hiss + steam wisps only (the cup
 never hops or lifts; she found that weird).
 Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome
 never advances; inject `*{transition:none!important}` in test harnesses to see final states.

@@ -100,18 +100,35 @@ const SOUNDS = {
     o.start(t); o.stop(t + 0.18);
     burst(t, { freq: 1800, q: 1, dur: 0.03, gain: 0.15 });
   },
-  // cup: spoon on porcelain, two bright partials that ring briefly
-  clink(t) {
-    [[2350, 0.22, 0.5], [3720, 0.12, 0.32], [5100, 0.05, 0.18]].forEach(([f, gain, dur]) => {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.type = "sine"; o.frequency.value = f;
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(gain, t + 0.003);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g).connect(master);
-      o.start(t); o.stop(t + dur + 0.02);
-    });
-    burst(t, { freq: 6000, q: 2, dur: 0.012, gain: 0.25 });
+  // cup: a soft hiss of steam off a hot drink. Airy high noise that swells and
+  // fades with a gentle flutter, over a faint low "whoosh" of warm air.
+  steam(t) {
+    const dur = 2.2;
+    // the hiss
+    const n = noise(), hp = ctx.createBiquadFilter(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+    hp.type = "highpass"; hp.frequency.value = 2200;
+    bp.type = "bandpass"; bp.Q.value = 0.6;
+    bp.frequency.setValueAtTime(4200, t);
+    bp.frequency.linearRampToValueAtTime(5600, t + dur); // brightens slightly as it rises
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.14, t + 0.35);
+    g.gain.setValueAtTime(0.14, t + 0.8);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    // flutter: a slow wobble in loudness so it breathes rather than buzzes
+    const lfo = ctx.createOscillator(), lfoGain = ctx.createGain(), wob = ctx.createGain();
+    lfo.frequency.value = 5.5; lfoGain.gain.value = 0.35; wob.gain.value = 1;
+    lfo.connect(lfoGain).connect(wob.gain);
+    n.connect(hp).connect(bp).connect(g).connect(wob).connect(master);
+    n.start(t, Math.random()); n.stop(t + dur + 0.05);
+    lfo.start(t); lfo.stop(t + dur + 0.05);
+    // the warm air underneath
+    const n2 = noise(), lp = ctx.createBiquadFilter(), g2 = ctx.createGain();
+    lp.type = "lowpass"; lp.frequency.value = 700;
+    g2.gain.setValueAtTime(0.0001, t);
+    g2.gain.exponentialRampToValueAtTime(0.05, t + 0.5);
+    g2.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.85);
+    n2.connect(lp).connect(g2).connect(master);
+    n2.start(t, Math.random()); n2.stop(t + dur);
   },
   // needle drop before the music starts
   needle(t) {

@@ -65,8 +65,8 @@ export const kit = [
     desk: { x: 58, y: 37, w: 15, r: 18 }, // lies across the notebook's right page
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.jpg, cup drawn in CSS).
-  // Click: porcelain clink + a curl of steam. r = where the handle points.
-  { id: "cup", label: "CAPPUCCINO", name: "Cappuccino", sound: "clink",
+  // Click: a hiss of steam (sound + wisps). r = where the handle points.
+  { id: "cup", label: "CAPPUCCINO", name: "Cappuccino", sound: "steam",
     cup: true, img: "assets/objects/crema.jpg", w: 360, h: 360,
     alt: "A cappuccino with a rosetta in the foam",
     desk: { x: 77, y: 52, w: 16, r: -20 },
