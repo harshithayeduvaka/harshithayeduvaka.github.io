@@ -196,7 +196,8 @@ export const projects = [
     found: "A real but narrow advantage: the cooperative model and local, ethical sourcing are rare and hard to copy, but only for a niche segment. ROA sat at 0% in 2023 and revenue stalled around €1.04B.",
     recommended: "Refocus on related diversification: an organic/local private label, click-and-collect and e-commerce, niche formats (zero-waste stores, a discount banner), and an SEO/SEM keyword strategy.",
     impact: "Improved cross-functional decision-making efficiency 10%.",
-    // link: "", linkLabel: "View deck",  // optional: add a URL to show a link
+    // the real team deck (PDF exported to images, assets/decks/coop/01..20.jpg)
+    slides: Array.from({ length: 20 }, (_, i) => `assets/decks/coop/${String(i + 1).padStart(2, "0")}.jpg`),
   },
   {
     id: "maya",
