@@ -72,17 +72,19 @@ export const kit = [
     note: "" },
 ];
 
-// The folder at the top of the desk: click it and these pop out (all together).
-// To add a tool: drop a 64x64 SVG tile in assets/tools/ and add a line here.
+// The "stack" folder below the notebook: click it and these pop out (all together).
+// To add a tool: put its logo in assets/tools/ and add a line here.
+// tile: "full" = the logo is already a coloured square (it fills the tile);
+//       otherwise the logo sits on a small light tile (`bg` sets its colour).
 export const tools = [
-  { name: "HubSpot", icon: "assets/tools/hubspot.svg" },
-  { name: "GA4", icon: "assets/tools/ga4.svg" },
-  { name: "SQL", icon: "assets/tools/sql.svg" },
-  { name: "Excel", icon: "assets/tools/excel.svg" },
-  { name: "Apollo.io", icon: "assets/tools/apollo.svg" },
-  { name: "Notion", icon: "assets/tools/notion.svg" },
-  { name: "Asana", icon: "assets/tools/asana.svg" },
-  { name: "Canva", icon: "assets/tools/canva.svg" },
+  { name: "HubSpot", icon: "assets/tools/hubspot.png", tile: "full" },
+  { name: "GA4", icon: "assets/tools/ga4.png" },
+  { name: "SQL", icon: "assets/tools/sql.png" },
+  { name: "Excel", icon: "assets/tools/excel.png" },
+  { name: "Apollo.io", icon: "assets/tools/apollo.png", tile: "full" },
+  { name: "Notion", icon: "assets/tools/notion.png" },
+  { name: "Asana", icon: "assets/tools/asana.png", bg: "#F2F2F2" },
+  { name: "Canva", icon: "assets/tools/canva.png", tile: "full" },
 ];
 
 // Clicking the headphones (or Play on the record card) plays an original lo-fi loop

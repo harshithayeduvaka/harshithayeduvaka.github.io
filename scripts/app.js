@@ -1,5 +1,5 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
   meta, kit, tools, experience, projects,
 } from "./content.js";
@@ -293,7 +293,7 @@ function passToolkit() {
   const folder = $("#folder"), list = $("#toolkit");
   if (!folder || !list) return;
   list.innerHTML = tools.map((t) =>
-    `<li class="tool"><img src="${t.icon}" alt="" width="64" height="64" loading="lazy" decoding="async" /><span>${t.name}</span></li>`).join("");
+    `<li class="tool"><span class="tool__tile${t.tile === "full" ? " tool__tile--full" : ""}"${t.bg ? ` style="background:${t.bg}"` : ""}><img src="${t.icon}" alt="" loading="lazy" decoding="async" /></span><span class="tool__name">${t.name}</span></li>`).join("");
   const items = $$(".tool", list);
   let open = false, tl = null;
 
@@ -338,7 +338,7 @@ function passToolkit() {
 
   folder.addEventListener("click", (e) => {
     if (e.detail) folder.blur(); // mouse click: no focus box (keyboard users keep it)
-    play("pop");
+    playFile("assets/sounds/click.mp3", "mouseclick"); // her Pixabay click if present, else synth
     if (!reduced) gsap.fromTo(folder, { scale: 1 }, { keyframes: [{ scale: 1.12, duration: 0.12 }, { scale: 1, duration: 0.4, ease: "elastic.out(1,0.4)" }] });
     set(!open);
   });

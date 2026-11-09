@@ -87,7 +87,14 @@ const SOUNDS = {
     n.start(t, Math.random()); n.stop(t + 0.5);
     burst(t + 0.4, { freq: 2600, q: 1, dur: 0.05, gain: 0.35 }); // the flick
   },
-  // folder: a soft rising "pop" as the tools spill out
+  // folder: a mouse click. A sharp "press" then a softer "release" ~70ms later.
+  mouseclick(t) {
+    burst(t, { freq: 3800, q: 4, dur: 0.012, gain: 0.9 });
+    tick(t, 1500, 0.015, 0.22);
+    burst(t + 0.07, { freq: 3000, q: 4, dur: 0.01, gain: 0.45 });
+    tick(t + 0.07, 1250, 0.012, 0.12);
+  },
+  // (kept for reference) a soft rising "pop"
   pop(t) {
     const o = ctx.createOscillator(), g = ctx.createGain();
     o.type = "sine";
@@ -141,6 +148,26 @@ export function play(key) {
   if (!SOUNDS[key]) return;
   ac();
   SOUNDS[key](ctx.currentTime + 0.01);
+}
+
+// Play a recorded sound file (e.g. assets/sounds/click.mp3). If the file is missing
+// or can't be decoded, play the synthesized `fallback` sound instead.
+const fileCache = {};
+export function playFile(url, fallback) {
+  ac();
+  if (!(url in fileCache)) {
+    fileCache[url] = fetch(url)
+      .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(r.status)))
+      .then((b) => ctx.decodeAudioData(b))
+      .catch(() => null);
+  }
+  fileCache[url].then((buf) => {
+    if (!buf) return play(fallback);
+    const s = ctx.createBufferSource();
+    s.buffer = buf;
+    s.connect(master);
+    s.start();
+  });
 }
 
 // ---------------------------------------------------------------------
