@@ -10,7 +10,8 @@ an instax camera (click = her photo slides out as a print), a pen and a record c
 Below it, the later sections ("passes": experience, ohmyATS demo, projects, skills,
 geography) and contact. She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
-no "PASS" rail labels. Timeline tags: "Foundations" (education), "The Story So Far" (work).
+no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots | entry); the group headings
+"Foundations" (education) and "The Story So Far" (work) appear once each.
 Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk extras: a blue "toolkit" folder (top) pops `tools` (content.js) out in a fan; tool tiles are
@@ -53,7 +54,7 @@ resume.pdf          downloadable CV (linked from meta.resume)
   `@media (prefers-reduced-motion: reduce)` in CSS) that shows the final static state.
 - Each pass in app.js is wrapped in try/catch at init, so one failure can't blank the page.
 - Mobile breakpoint: 860px (`isMobile` in JS, `@media (max-width: 860px)` in CSS).
-  Horizontal scroll and the physics pile fall back to stacked layouts on mobile.
+  On mobile the desk becomes a tap grid and the timeline puts dates above each entry.
 - Targeted edits over rewrites. Commit after each phase.
 
 ## Design tokens ("Coffee")

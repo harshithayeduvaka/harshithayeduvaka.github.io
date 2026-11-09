@@ -335,33 +335,40 @@ section { position: relative; }
 @keyframes cue { 0%,100%{opacity:.2;transform:translateX(-50%) scaleY(.6)} 50%{opacity:1;transform:translateX(-50%) scaleY(1)} }
 
 /* ============================================================
-   PASS 03 — Experience horizontal
+   Experience — one vertical timeline
+   [dates + city] | line with a dot per entry | [organisation, role, bullets]
    ============================================================ */
-#p03 { overflow: hidden; padding-inline: 0; }
-.track { display: flex; will-change: transform; }
-.panel {
-  flex: 0 0 100vw; min-height: 100vh;
-  display: grid; grid-template-columns: minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 64px);
-  padding: var(--gutter);
-  align-content: center;
+.timeline { --draw: 1; --col: clamp(150px, 16vw, 230px); list-style: none; position: relative; max-width: 1100px; }
+/* the line: a faint track, plus a caramel line that draws down on scroll */
+.timeline::before, .timeline::after {
+  content: ""; position: absolute; top: 8px; bottom: 0; left: calc(var(--col) + 28px); width: 2px; border-radius: 2px;
 }
-.panel__org {
-  font-size: var(--fs-52); color: var(--espresso);
-  font-variation-settings: "wght" 700, "wdth" 78;
+.timeline::before { background: var(--latte); }
+.timeline::after { background: var(--caramel); transform-origin: top; transform: scaleY(var(--draw)); }
+
+.tl__group { padding: 0 0 22px calc(var(--col) + 56px); }
+.tl__group:not(:first-child) { padding-top: 34px; }
+.tl__heading {
+  color: var(--cream); background: var(--espresso); padding: 5px 10px; border-radius: 2px;
+  width: max-content; font-weight: 500;
 }
-.panel__role { margin: 0.4em 0 1.4em; color: var(--roast); }
-.panel__dates { color: var(--espresso); }
-.panel__tag { color: var(--cream); background: var(--espresso); padding: 4px 8px; border-radius: 2px; width: max-content; margin-bottom: 1em; }
-.panel__bullets { list-style: none; max-width: 60ch; display: grid; gap: 14px; }
-.panel__bullets li { position: relative; padding-left: 22px; }
-.panel__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--caramel); }
-.p03__progress {
-  position: fixed; left: var(--gutter); right: var(--gutter); bottom: 24px; z-index: 5;
-  display: none; align-items: center; gap: 12px; color: var(--espresso);
+.tl__item {
+  position: relative; display: grid; grid-template-columns: var(--col) minmax(0, 1fr);
+  column-gap: 56px; padding-bottom: clamp(40px, 5vw, 64px);
 }
-.p03__progress .bar { flex: 1; height: 2px; background: var(--latte); }
-.p03__progress .bar i { display: block; height: 100%; width: 33%; background: var(--caramel); }
+/* the dot on the line */
+.tl__item::before {
+  content: ""; position: absolute; z-index: 1; left: calc(var(--col) + 22px); top: .55em;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--cream); border: 3px solid var(--caramel);
+}
+.tl__when { text-align: right; color: var(--espresso); padding-top: .55em; line-height: 1.6; }
+.tl__when span { display: block; color: var(--roast); opacity: .55; }
+.tl__org { font-size: var(--fs-52); color: var(--espresso); }
+.tl__role { margin: .5em 0 1.1em; color: var(--roast); }
+.tl__bullets { list-style: none; max-width: 64ch; display: grid; gap: 12px; }
+.tl__bullets li { position: relative; padding-left: 22px; }
+.tl__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--caramel); }
 
 /* ============================================================
    PASS 04 — ohmyATS demo
@@ -538,7 +545,15 @@ html.deck-open { overflow: hidden; }
    ============================================================ */
 @media (max-width: 860px) {
   /* minmax(0,1fr): stop wide children (photo, long words) from stretching the column past the screen */
-  .hero, .pass__grid, .panel { grid-template-columns: minmax(0, 1fr); }
+  .hero, .pass__grid { grid-template-columns: minmax(0, 1fr); }
+  /* timeline: line on the left, dates above each entry */
+  .timeline { --col: 0px; }
+  .timeline::before, .timeline::after { left: 6px; }
+  .tl__group { padding-left: 34px; }
+  .tl__item { grid-template-columns: minmax(0, 1fr); column-gap: 0; padding-left: 34px; }
+  .tl__item::before { left: 0; top: .2em; }
+  .tl__when { text-align: left; padding-top: 0; margin-bottom: .4em; }
+  .tl__when span { display: inline; margin-left: .8em; }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
   .demo, .p07__wrap, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   /* desk -> tap grid; no dragging (it would fight scrolling) */

@@ -345,62 +345,40 @@ function passToolkit() {
 }
 
 // ------------------------------------------------------------------
-// PASS 03 — Experience horizontal
+// Experience — vertical timeline
 // ------------------------------------------------------------------
 function pass03() {
-  const track = $("#p03Track");
+  // One vertical timeline, in the order of content.js `experience`.
+  // A group heading is printed once, where the type changes:
+  // "Foundations" before education, "The Story So Far" before work.
+  const tl = $("#timeline");
+  const heading = { education: "Foundations", work: "The Story So Far" };
+  let last = null, html = "";
   experience.forEach((e) => {
-    const panel = document.createElement("article");
-    panel.className = "panel";
-    panel.innerHTML = `
-      <div class="content">
-        <p class="panel__tag mono">${e.type === "education" ? "Foundations" : "The Story So Far"}</p>
-        <h3 class="panel__org display">${e.org}</h3>
-        <p class="panel__role mono">${e.role}<span class="panel__dates"> · ${e.dates}</span></p>
-        <ul class="panel__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
-      </div>`;
-    track.appendChild(panel);
+    if (e.type !== last) {
+      html += `<li class="tl__group"><h3 class="tl__heading mono">${heading[e.type] || ""}</h3></li>`;
+      last = e.type;
+    }
+    html += `
+      <li class="tl__item">
+        <p class="tl__when mono">${e.dates}<span>${e.city}</span></p>
+        <div class="tl__body">
+          <h4 class="tl__org display">${e.org}</h4>
+          <p class="tl__role mono">${e.role}</p>
+          <ul class="tl__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+        </div>
+      </li>`;
   });
+  tl.innerHTML = html;
 
-  if (isMobile || reduced) {
-    track.style.flexDirection = "column";
-    $$(".panel").forEach((p) => (p.style.flex = "0 0 auto"));
-    return;
-  }
-
-  const panels = $$(".panel");
-  const prog = $("#p03Progress");
-  const bar = $("#p03Progress .bar i");
-  const label = $("#p03Label");
-  prog.style.display = "flex";
-
-  const tween = gsap.to(track, {
-    x: () => -(track.scrollWidth - window.innerWidth),
-    ease: "none",
-    scrollTrigger: {
-      trigger: "#p03",
-      start: "top top",
-      end: () => "+=" + (track.scrollWidth - window.innerWidth),
-      pin: true,
-      scrub: 0.5,
-      onUpdate: (self) => {
-        const idx = Math.min(panels.length, Math.floor(self.progress * panels.length) + 1);
-        label.textContent = `${idx}/${panels.length}`;
-        bar.style.width = self.progress * 100 + "%";
-        prog.style.opacity = self.progress > 0.01 && self.progress < 0.99 ? 1 : 0;
-      },
-    },
+  if (reduced) return;
+  // the line draws down as you scroll; each entry rises in as it arrives
+  gsap.fromTo(tl, { "--draw": 0 }, {
+    "--draw": 1, ease: "none",
+    scrollTrigger: { trigger: tl, start: "top 75%", end: "bottom 60%", scrub: 0.4 },
   });
-
-  // per-panel org axis-shift (width) + bullet line-masks
-  panels.forEach((panel) => {
-    const org = panel.querySelector(".panel__org");
-    gsap.fromTo(org, { fontVariationSettings: '"wght" 700, "wdth" 62' },
-      { fontVariationSettings: '"wght" 700, "wdth" 100', ease: "none",
-        scrollTrigger: { trigger: panel, containerAnimation: tween, start: "left center", end: "center center", scrub: true } });
-    gsap.from(panel.querySelectorAll(".panel__bullets li"),
-      { yPercent: 110, opacity: 0, stagger: 0.05, duration: 0.6,
-        scrollTrigger: { trigger: panel, containerAnimation: tween, start: "left 65%" } });
+  $$(".tl__item, .tl__group", tl).forEach((it) => {
+    gsap.from(it, { y: 24, opacity: 0, duration: 0.7, scrollTrigger: { trigger: it, start: "top 85%" } });
   });
 }
 
