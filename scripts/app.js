@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109y";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109z";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109y";
+} from "./content.js?v=20261109z";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -396,29 +396,34 @@ function passToolkit() {
     `<li class="tool"><span class="tool__tile${t.tile === "full" ? " tool__tile--full" : ""}"${t.bg ? ` style="background:${t.bg}"` : ""}><img src="${t.icon}" alt="" loading="lazy" decoding="async" /></span><span class="tool__name">${t.name}</span></li>`).join("");
   const items = $$(".tool", list);
   let open = false, tl = null;
-  // park the (zero-size) tool list on the folder's current centre, including any drag offset
+  // folder centre in page space (includes any drag offset)
+  const centreX = () => folder.offsetLeft + gsap.getProperty(folder, "x") + folder.offsetWidth / 2;
+  // park the (zero-size) tool list on the folder's centre: the icons are placed around it
   const anchor = () => {
-    let left = folder.offsetLeft + gsap.getProperty(folder, "x") + folder.offsetWidth / 2;
-    // keep the whole fan on screen: if the folder is near an edge, slide the fan inwards
-    const pos = fan(), gl = list.offsetParent ? list.offsetParent.getBoundingClientRect().left : 0;
-    const minX = Math.min(...pos.map((p) => p.x)) - 40, maxX = Math.max(...pos.map((p) => p.x)) + 40;
-    const vw = document.documentElement.clientWidth;
-    if (gl + left + minX < 8) left = 8 - gl - minX;
-    if (gl + left + maxX > vw - 8) left = vw - 8 - gl - maxX;
-    list.style.left = left + "px";
+    list.style.left = centreX() + "px";
     list.style.top = folder.offsetTop + gsap.getProperty(folder, "y") + folder.offsetHeight * 0.4 + "px";
   };
 
-  // fan positions (px offsets from the folder's centre): the folder sits below the
-  // notebook, so the icons spread sideways, half to each side, along a soft curve
-  // that dips a little towards the outer ends.
+  // fan positions (px offsets from the folder's centre): icons spread sideways along a
+  // soft curve, leaving a clear gap around the folder. Normally half go each side; if
+  // one side runs out of screen, the extra icons move to the other side instead of
+  // sliding over the folder.
   const fan = () => {
-    const fw = folder.offsetWidth, n = items.length, side = Math.floor(n / 2); // odd count: extra one goes right
-    const step = Math.max(72, fw * 1.15), gap = Math.max(70, fw * 1.1);
+    const fw = folder.offsetWidth, n = items.length;
+    const step = Math.max(72, fw * 1.15), gap = Math.max(70, fw * 1.1), half = 40;
+    const gl = list.offsetParent ? list.offsetParent.getBoundingClientRect().left : 0;
+    const cx = gl + centreX(), vw = document.documentElement.clientWidth;
+    const fits = (room) => (room < gap + half ? 0 : Math.floor((room - gap - half) / step) + 1);
+    const capL = fits(cx - 8), capR = fits(vw - 8 - cx);
+    let nL = Math.floor(n / 2);                       // odd count: extra one goes right
+    nL = Math.min(nL, capL);                          // not enough room on the left
+    nL = Math.max(nL, n - capR);                      // not enough room on the right
+    nL = Math.max(0, Math.min(n, nL));
+    const nR = n - nL, deep = Math.max(nL, nR, 1);
     return items.map((_, i) => {
-      const left = i < side, j = left ? side - 1 - i : i - side; // 0 = next to the folder
+      const left = i < nL, j = left ? nL - 1 - i : i - nL; // 0 = next to the folder
       const x = (left ? -1 : 1) * (gap + j * step);
-      const k = (j + 1) / Math.ceil(n / 2);
+      const k = (j + 1) / deep;
       return { x, y: fw * 0.25 * k * k, r: (left ? -1 : 1) * k * 7 };
     });
   };
@@ -454,6 +459,10 @@ function passToolkit() {
     set(!open);
   });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && open) set(false); });
+  // clicking anywhere outside the folder and its tools closes the stack
+  document.addEventListener("pointerdown", (e) => {
+    if (open && !folder.contains(e.target) && !list.contains(e.target)) set(false);
+  });
 
   // the folder is draggable (desktop); an open fan travels with it. A press that
   // doesn't move is still a normal click (opens/closes the stack).
