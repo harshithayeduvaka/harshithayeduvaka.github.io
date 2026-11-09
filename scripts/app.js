@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109z";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110a";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109z";
+} from "./content.js?v=20261110a";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -410,11 +410,21 @@ function passToolkit() {
   // sliding over the folder.
   const fan = () => {
     const fw = folder.offsetWidth, n = items.length;
-    const step = Math.max(72, fw * 1.15), gap = Math.max(70, fw * 1.1), half = 40;
+    let step = Math.max(72, fw * 1.15);
+    const gap = Math.max(70, fw * 1.1), half = 40;
     const gl = list.offsetParent ? list.offsetParent.getBoundingClientRect().left : 0;
     const cx = gl + centreX(), vw = document.documentElement.clientWidth;
+    const roomL = cx - 8, roomR = vw - 8 - cx;
     const fits = (room) => (room < gap + half ? 0 : Math.floor((room - gap - half) / step) + 1);
-    const capL = fits(cx - 8), capR = fits(vw - 8 - cx);
+    let capL = fits(roomL), capR = fits(roomR);
+    if (capL + capR < n) {
+      // not even the two sides together fit them all: tighten the spacing evenly
+      // so every icon still fits (both sides keep the same, equal step)
+      const usable = Math.max(0, roomL - gap - half) + Math.max(0, roomR - gap - half);
+      const sides = (roomL >= gap + half ? 1 : 0) + (roomR >= gap + half ? 1 : 0);
+      step = Math.max(44, usable / Math.max(1, n - sides));
+      capL = fits(roomL); capR = fits(roomR);
+    }
     let nL = Math.floor(n / 2);                       // odd count: extra one goes right
     nL = Math.min(nL, capL);                          // not enough room on the left
     nL = Math.max(nL, n - capR);                      // not enough room on the right
@@ -426,6 +436,14 @@ function passToolkit() {
       const k = (j + 1) / deep;
       return { x, y: fw * 0.25 * k * k, r: (left ? -1 : 1) * k * 7 };
     });
+  };
+
+  // re-place an open fan around the folder's current spot (no animation)
+  const relayout = () => {
+    if (!open || isMobile) return;
+    anchor();
+    const pos = fan();
+    items.forEach((it, i) => gsap.set(it, { x: pos[i].x, y: pos[i].y, rotate: pos[i].r }));
   };
 
   const set = (on) => {
@@ -483,7 +501,7 @@ function passToolkit() {
       moved = true; folder.style.cursor = "grabbing";
       folder.style.zIndex = 56; list.style.zIndex = 57; // above the desk objects while it travels
       gsap.set(folder, { x: ox + dx, y: oy + dy });
-      if (open) anchor();
+      if (open) relayout(); // icons re-flow around the folder as it moves
     });
     const end = () => { moving = false; folder.style.cursor = "grab"; setTimeout(() => { moved = false; }, 0); };
     folder.addEventListener("pointerup", end);
@@ -492,12 +510,7 @@ function passToolkit() {
     folder.addEventListener("click", (e) => { if (moved) { e.stopImmediatePropagation(); moved = false; } }, true);
   }
   // keep an open fan attached to the folder if the window is resized
-  addEventListener("resize", () => {
-    if (!open || isMobile) return;
-    anchor();
-    const pos = fan();
-    items.forEach((it, i) => gsap.set(it, { x: pos[i].x, y: pos[i].y, rotate: pos[i].r }));
-  });
+  addEventListener("resize", relayout);
 }
 
 // ------------------------------------------------------------------
