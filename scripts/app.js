@@ -332,12 +332,12 @@ function passToolkit() {
   // notebook, so the icons spread sideways, half to each side, along a soft curve
   // that dips a little towards the outer ends.
   const fan = () => {
-    const fw = folder.offsetWidth, n = items.length, side = Math.ceil(n / 2);
+    const fw = folder.offsetWidth, n = items.length, side = Math.floor(n / 2); // odd count: extra one goes right
     const step = Math.max(72, fw * 1.15), gap = Math.max(70, fw * 1.1);
     return items.map((_, i) => {
       const left = i < side, j = left ? side - 1 - i : i - side; // 0 = next to the folder
       const x = (left ? -1 : 1) * (gap + j * step);
-      const k = (j + 1) / side;
+      const k = (j + 1) / Math.ceil(n / 2);
       return { x, y: fw * 0.25 * k * k, r: (left ? -1 : 1) * k * 7 };
     });
   };

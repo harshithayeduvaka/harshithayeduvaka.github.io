@@ -93,6 +93,7 @@ export const tools = [
   { name: "Notion", icon: "assets/tools/notion.png" },
   { name: "Asana", icon: "assets/tools/asana.png", bg: "#F2F2F2" },
   { name: "Canva", icon: "assets/tools/canva.png", tile: "full" },
+  { name: "Brandwatch", icon: "assets/tools/brandwatch.png" },
 ];
 
 // Clicking the headphones (or Play on the record card) plays an original lo-fi loop
