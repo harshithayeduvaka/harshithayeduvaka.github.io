@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110e";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110f";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110e";
+} from "./content.js?v=20261110f";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -683,6 +683,23 @@ function revealTitles() {
     if (reduced) return;
     gsap.from(t, { yPercent: 20, opacity: 0, duration: 0.8,
       scrollTrigger: { trigger: t, start: "top 85%" } });
+  });
+
+  // About + Featured Work titles: a small zoom-in on click (same feel as the notebook)
+  if (reduced) return;
+  ["#about-h", "#p05-h"].forEach((sel) => {
+    const t = $(sel);
+    if (!t) return;
+    t.style.cursor = "pointer";
+    t.style.transformOrigin = "left center";
+    t.style.width = "max-content";
+    t.addEventListener("click", () => {
+      gsap.killTweensOf(t, "scale");
+      gsap.fromTo(t, { scale: 1 }, { keyframes: [
+        { scale: 1.07, duration: 0.35, ease: "power2.out" },
+        { scale: 1, duration: 0.9, ease: "power2.inOut" },
+      ] });
+    });
   });
 }
 
