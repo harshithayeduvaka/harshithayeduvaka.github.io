@@ -256,32 +256,17 @@ function passKit() {
       });
   }
 
-  // --- notebook click: the name is written again by hand, then the title and
-  //     tagline are typed out letter by letter. No sound. ---------------------
-  let inkTl = null, inkChars = null;
+  // --- notebook click: a small zoom-in on the writing, then it settles back.
+  //     (The text is NOT rewritten on click; that only happens once, on load.) No sound.
+  let inkTl = null;
   function rewriteNotebook() {
-    const name = $(".kit__sign"), lines = $$(".kit__type");
-    if (!name || reduced) return;
-    if (!inkChars) { // split title + tagline into letters once (words kept whole for wrapping)
-      lines.forEach((l) => {
-        l.innerHTML = l.textContent.split(" ").map((w) =>
-          `<span class="ink-w">${[...w].map((c) => `<span class="ink-c">${c}</span>`).join("")}</span>`).join(" ");
-      });
-      inkChars = lines.map((l) => $$(".ink-c", l));
-    }
-    if (inkTl) inkTl.kill();
     const ink = $(".kit__ink");
-    inkTl = gsap.timeline()
-      // a small zoom-in on the whole block of writing, then it settles back
-      .fromTo(ink, { scale: 1 }, { keyframes: [
-        { scale: 1.07, duration: 0.35, ease: "power2.out" },
-        { scale: 1, duration: 0.9, ease: "power2.inOut" },
-      ] }, 0)
-      .set(inkChars.flat(), { opacity: 0 }, 0)
-      .fromTo(name, { clipPath: "inset(-30% 100% -30% -5%)" },
-        { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.4, ease: "power1.inOut" }, 0)
-      .to(inkChars[0] || [], { opacity: 1, duration: 0.01, stagger: 0.045 }, "-=0.15")
-      .to(inkChars[1] || [], { opacity: 1, duration: 0.01, stagger: 0.022 }, "+=0.1");
+    if (!ink || reduced) return;
+    if (inkTl) inkTl.kill();
+    inkTl = gsap.fromTo(ink, { scale: 1 }, { keyframes: [
+      { scale: 1.07, duration: 0.35, ease: "power2.out" },
+      { scale: 1, duration: 0.9, ease: "power2.inOut" },
+    ] });
   }
 
   // --- intro: objects settle onto the desk, then the name is written ---
