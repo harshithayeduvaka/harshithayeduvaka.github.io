@@ -52,30 +52,23 @@
     </div>
   </header>
 
-  <!-- PASS 02 (label) — About: photo + bio, filled from content.js `about` -->
+  <!-- PASS 02 (label) — About: bio (from content.js `about`) + the desk.
+       Her photo lives on the desk as an instax print next to the camera. -->
   <section class="pass about" id="about" aria-labelledby="about-h">
     <div class="pass__grid">
       <div class="rail mono">
         <span class="rail__idx">PASS 02 / 08</span>
-        <span>IDENTIFY</span>
-        <span>CANDIDATE</span>
+        <span>ABOUT</span>
       </div>
       <div class="content about__wrap">
-        <figure class="about__fig">
-          <!-- src/alt/size set from content.js; crop-mark corners are CSS -->
-          <img id="aboutPhoto" alt="" width="480" height="640" loading="lazy" decoding="async" />
-          <figcaption class="mono">FIG. 01 · CANDIDATE</figcaption>
-        </figure>
-        <div>
-          <h2 id="about-h" class="pass__title display">Hello, I'm Harshitha.</h2>
-          <div class="about__bio body-lg" id="aboutBio"></div>
-        </div>
+        <h2 id="about-h" class="pass__title display">Hello, I'm Harshitha.</h2>
+        <div class="about__bio body-lg" id="aboutBio"></div>
       </div>
-      <!-- Off-the-CV desk: objects built from content.js `kit`, record card from `music`.
-           Desktop: drag objects around, click to play. Mobile: simple 2x2 grid. -->
+      <!-- The desk: objects built from content.js `kit`, record card from `music`.
+           Desktop: drag objects around, click to play. Mobile: tap-to-play grid. -->
       <div class="kit">
         <div class="kit__bar">
-          <p class="mono kit__head">OFF THE CV <span id="kitHint">· DRAG OR CLICK AN OBJECT</span></p>
+          <p class="kit__head" id="kitHint">Drag things around, click to play</p>
           <div class="kit__tools mono">
             <button type="button" id="deskTidy">↺ Tidy</button>
             <button type="button" id="deskMute" aria-pressed="false">♪ Sound on</button>
@@ -85,9 +78,6 @@
           <div class="record" id="record">
             <div class="record__disc" aria-hidden="true"><i></i></div>
             <div class="record__meta">
-              <p class="mono record__state" id="recordState">PRESS PLAY</p>
-              <p class="record__title" id="recordTitle"></p>
-              <p class="mono record__artist" id="recordArtist"></p>
               <div class="record__actions mono">
                 <button type="button" id="recordPlay" aria-pressed="false">▶ Play</button>
                 <a id="recordLink" target="_blank" rel="noopener" hidden>Listen ↗</a>

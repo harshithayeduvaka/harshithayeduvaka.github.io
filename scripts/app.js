@@ -109,13 +109,6 @@ function hero() {
 // About — photo + bio (static; its title reveal is handled in pass07)
 // ------------------------------------------------------------------
 function passAbout() {
-  const img = $("#aboutPhoto");
-  const ph = about.photo;
-  img.src = ph.src;
-  img.srcset = `${ph.src} ${ph.w}w, ${ph.src2x} ${ph.w * 2}w`;
-  img.sizes = "(max-width: 860px) 70vw, 360px";
-  img.width = ph.w; img.height = ph.h;
-  img.alt = ph.alt;
   $("#aboutBio").innerHTML = about.paragraphs.map((t) => `<p>${t}</p>`).join("");
 }
 
@@ -130,12 +123,10 @@ function passKit() {
   const desk = !isMobile; // free-placement layout only on desktop
   let top = 10;           // z-index counter: last touched object comes to the front
   let playing = false;
-  if (!desk) $("#kitHint").textContent = "· TAP AN OBJECT";
+  if (!desk) $("#kitHint").textContent = "Tap things to play";
 
   // --- record card -------------------------------------------------
-  const rec = $("#record"), recBtn = $("#recordPlay"), recState = $("#recordState");
-  $("#recordTitle").textContent = music.title;
-  $("#recordArtist").textContent = music.artist;
+  const rec = $("#record"), recBtn = $("#recordPlay");
   if (music.link) { const a = $("#recordLink"); a.href = music.link; a.hidden = false; }
 
   // Spotify track link → official Spotify player (loaded only after the first click,
@@ -144,12 +135,11 @@ function passKit() {
   let spotify = null; // Spotify EmbedController once loaded
 
   // paint the card + headphones (no audio side effects)
-  const paint = (on, label) => {
+  const paint = (on) => {
     playing = on;
     rec.classList.toggle("is-playing", on);
     recBtn.setAttribute("aria-pressed", String(on));
     recBtn.textContent = on ? "❚❚ Pause" : "▶ Play";
-    recState.textContent = on ? `NOW PLAYING · ${label}` : "PAUSED";
     const hp = $(".kit__item--headphones");
     if (hp) hp.setAttribute("aria-pressed", String(on));
   };
@@ -157,22 +147,20 @@ function passKit() {
   function loadSpotify() {
     const box = $("#recordEmbed");
     box.hidden = false;
-    recState.textContent = "LOADING SPOTIFY…";
     window.onSpotifyIframeApiReady = (API) => {
       const el = document.createElement("div");
       box.appendChild(el);
       API.createController(el, { uri: `spotify:track:${spotifyId}`, width: "100%", height: 80 }, (c) => {
         spotify = c;
-        recState.textContent = "PRESS PLAY ON SPOTIFY";
         // keep the vinyl in sync with the real player (also when they use Spotify's own button)
-        c.addListener("playback_update", (e) => paint(!e.data.isPaused, "SPOTIFY"));
+        c.addListener("playback_update", (e) => paint(!e.data.isPaused));
         c.addListener("ready", () => c.play()); // browsers may block this; then Spotify's own ▶ works
       });
     };
     const s = document.createElement("script");
     s.src = "https://open.spotify.com/embed/iframe-api/v1";
     s.async = true;
-    s.onerror = () => { recState.textContent = "SPOTIFY BLOCKED · USE LISTEN ↗"; box.hidden = true; };
+    s.onerror = () => { box.hidden = true; }; // blocked: the Listen ↗ link still works
     document.head.appendChild(s);
   }
 
@@ -182,7 +170,7 @@ function passKit() {
       if (spotify) spotify.togglePlay();
       return;
     }
-    paint(on, "PLACEHOLDER LOOP");
+    paint(on);
     on ? startMusic() : stopMusic();
   };
   recBtn.addEventListener("click", () => setPlaying(!playing));
@@ -207,12 +195,17 @@ function passKit() {
     b.type = "button";
     b.setAttribute("aria-pressed", "false");
     b.setAttribute("aria-label", `${k.label.toLowerCase()}: ${k.alt}. Plays a sound.`);
-    b.innerHTML = `
+    if (k.print) {
+      // instax print: white frame, photo window, thicker bottom edge
+      b.setAttribute("aria-label", `Photo: ${k.alt}`);
+      b.innerHTML = `<span class="kit__img print"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>`;
+    } else {
+      b.innerHTML = `
       <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
         k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign">${k.ink.name}</span>${
           k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
-      }</span>
-      <span class="kit__label mono"><span class="kit__obj">OBJ.0${i + 1} · </span>${k.label}</span>`;
+      }</span>`;
+    }
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
       b.style.left = k.desk.x + "%";
@@ -229,11 +222,12 @@ function passKit() {
         setPlaying(!playing);
       } else {
         play(k.sound);
+        if (k.sound === "shutter") developPrint();
         const was = b.getAttribute("aria-pressed") === "true";
         $$(".kit__item:not(.kit__item--headphones)").forEach((x) => x.setAttribute("aria-pressed", "false"));
         b.setAttribute("aria-pressed", String(!was));
       }
-      note.innerHTML = `<span class="mono">OBJ.0${i + 1} · ${k.name}</span> ${k.note}`;
+      note.textContent = k.note || "";
       if (!reduced) {
         gsap.fromTo(b.querySelector("img"), { y: 0, rotate: 0 },
           { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });
@@ -271,6 +265,15 @@ function passKit() {
     }
     grid.appendChild(b);
   });
+
+  // --- camera click: flash, then the print develops again from white ---
+  function developPrint() {
+    const pr = $(".kit__item--print .print");
+    if (!pr) return;
+    pr.classList.remove("is-developing");
+    void pr.offsetWidth; // restart the CSS animation
+    pr.classList.add("is-developing");
+  }
 
   // --- the name "writes itself" onto the notebook when the desk scrolls in ---
   const sign = $(".kit__sign"), typed = $$(".kit__type");

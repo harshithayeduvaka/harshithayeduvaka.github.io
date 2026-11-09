@@ -15,7 +15,8 @@ export const meta = {
   resume: "resume.pdf",
   positioning:
     "B2B implementation professional with 2+ years managing onboarding for 65+ enterprise accounts. Cut client churn 15% and reduced onboarding cycles 30% through CRM optimisation and structured account management.",
-  tagline: "B2B implementation that turns onboarding into retention.",
+  title: "Marketing & Growth", // written under her name on the notebook
+  tagline: "Helping businesses turn marketing efforts into measurable growth.",
   available: "AVAILABLE FOR A MARKETING INTERNSHIP · PARIS · 2026",
   // Contact form. FormSubmit forwards submissions to the email in the URL.
   // The FIRST submission sends an activation email to that inbox: click it once.
@@ -38,29 +39,36 @@ export const about = {
 // The open notebook is the centrepiece with her name written across both pages;
 // the other objects sit around it. Order = stacking order (first is at the bottom).
 // desk: starting spot on the desktop layout, in % of the desk (x, y, width) + tilt in degrees.
-// sound: shutter | click | page | music.  note: your words, shown on click.
+// sound: shutter | click | page | music.
+// note: optional line in your words, shown under the desk on click. Leave "" to show nothing.
 export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
     img: "assets/objects/notebook.png", w: 960, h: 709, // transparent cut-out
     alt: "Open cream notebook with a red ribbon bookmark",
-    ink: { name: meta.name, lines: [meta.role, meta.tagline] }, // written on the pages
+    ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
     desk: { x: 14, y: 9, w: 58, r: -11 },
-    note: "[TODO: what goes in this notebook]" },
+    note: "" },
+  // Her photo as an instax print, lying by the camera. Clicking the camera re-develops it.
+  { id: "print", label: "PHOTO", name: "instax print", sound: "",
+    print: true, img: about.photo.src, w: about.photo.w, h: about.photo.h,
+    alt: about.photo.alt,
+    desk: { x: 19, y: 57, w: 13, r: -9 },
+    note: "" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
     img: "assets/objects/camera.jpg", w: 361, h: 350,
     alt: "Brown and silver instant camera",
     desk: { x: 2, y: 64, w: 19, r: 8 },
-    note: "[TODO: why this camera / what you shoot]" },
+    note: "" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.jpg", w: 560, h: 560,
     alt: "Black over-ear wireless headphones",
     desk: { x: 1, y: 3, w: 18, r: -18 },
-    note: "[TODO: one line on why you love this song]" },
+    note: "" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
     img: "assets/objects/pen.jpg", w: 447, h: 447,
     alt: "Clear retractable gel pen with black ink",
     desk: { x: 54, y: 30, w: 17, r: 18 }, // lies across the notebook's right edge
-    note: "[TODO: what you write by hand]" },
+    note: "" },
 ];
 
 // The record card next to the headphones.
