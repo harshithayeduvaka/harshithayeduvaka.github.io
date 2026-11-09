@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109s";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109u";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109s";
+} from "./content.js?v=20261109u";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -341,8 +341,8 @@ function passKit() {
         "--dx": "0px", "--dy": "0px", duration: t, ease: "power3.inOut", delay: reduced ? 0 : i * 0.04 });
     });
     gsap.to(rec, mode === "chaos"
-      ? { rotation: 0, xPercent: 6, yPercent: 10, duration: t, ease: "power3.inOut" }
-      : { rotation: 8, xPercent: 0, yPercent: 0, duration: t, ease: "power3.inOut" });
+      ? { rotation: 0, xPercent: 6, yPercent: 10, x: 0, y: 0, duration: t, ease: "power3.inOut" }
+      : { rotation: 8, xPercent: 0, yPercent: 0, x: 0, y: 0, duration: t, ease: "power3.inOut" });
     // the writing: off the notebook pages and onto the desk (or back)
     gsap.to(nbInk, { opacity: mode === "chaos" ? 0 : 1, duration: t * 0.5 });
     if (mode === "chaos") {
@@ -354,6 +354,34 @@ function passKit() {
     play("page");
   }
   modeBtns.forEach((b) => b.addEventListener("click", (e) => { if (e.detail) b.blur(); setMode(b.dataset.mode); }));
+
+  // --- the vinyl card is draggable too (desktop). It moves with GSAP x/y so its tilt
+  //     and chaos-mode offset stay intact; a press on Play that doesn't move still plays.
+  if (desk) {
+    let sx, sy, ox, oy, moving = false, moved = false;
+    rec.style.cursor = "grab";
+    rec.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      try { rec.setPointerCapture(e.pointerId); } catch {}
+      rec.style.zIndex = Math.min(++top, 55);
+      sx = e.clientX; sy = e.clientY;
+      ox = gsap.getProperty(rec, "x"); oy = gsap.getProperty(rec, "y");
+      moving = true; moved = false;
+    });
+    rec.addEventListener("pointermove", (e) => {
+      if (!moving) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!moved && Math.hypot(dx, dy) < 5) return;
+      moved = true; rec.style.cursor = "grabbing";
+      gsap.set(rec, { x: ox + dx, y: oy + dy });
+    });
+    // the click that ends a drag fires right after pointerup; clear the flag just after it
+    const end = () => { moving = false; rec.style.cursor = "grab"; setTimeout(() => { moved = false; }, 0); };
+    rec.addEventListener("pointerup", end);
+    rec.addEventListener("pointercancel", end);
+    // a drag that ends over Play must not also press it
+    recBtn.addEventListener("click", (e) => { if (moved) { e.stopImmediatePropagation(); moved = false; } }, true);
+  }
 }
 
 // ------------------------------------------------------------------

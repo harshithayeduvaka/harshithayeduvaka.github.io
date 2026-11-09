@@ -216,6 +216,7 @@ section { position: relative; }
 }
 .folder svg { width: 100%; height: auto; filter: drop-shadow(0 6px 8px rgba(43, 29, 22, .18)); }
 .folder:hover { background: color-mix(in srgb, var(--latte) 45%, transparent); }
+.folder, .record { user-select: none; -webkit-user-select: none; }
 .folder__name { font-size: 12px; color: var(--roast); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
 .folder[aria-expanded="true"] .folder__name { background: #3478F6; color: #fff; } /* selected, like Finder */
 .folder[aria-expanded="true"] .folder__front { transform: translateY(3px) scaleY(.92); transform-origin: 50% 100%; }
