@@ -49,7 +49,7 @@ export const kit = [
     alt: "Open cream notebook with a red ribbon bookmark",
     ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
     desk: { x: 19, y: 12, w: 58, r: -10 },
-    chaos: { x: 2, y: 47, w: 42, r: -17 },   // chaos mode: pushed to the bottom-left corner
+    chaos: { x: 3, y: 53, w: 38, r: 0 },   // chaos mode: pushed to the bottom-left corner
     note: "" },
   // Her photo as an instax print. Hidden until the camera is clicked; it slides out of
   // the camera and lands here (relative to wherever the camera is).
@@ -63,7 +63,7 @@ export const kit = [
     img: "assets/objects/camera.png", w: 361, h: 259, // transparent cut-out
     alt: "Brown and silver instant camera",
     desk: { x: 5, y: 67, w: 18, r: 8 },
-    chaos: { x: 5, y: 5, w: 16, r: -15 },
+    chaos: { x: 5, y: 5, w: 16, r: 0 },
     note: "" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.png", w: 413, h: 560, // transparent cut-out

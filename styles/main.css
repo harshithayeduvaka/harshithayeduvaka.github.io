@@ -354,8 +354,8 @@ section { position: relative; }
 }
 .chaos-ink > span { opacity: 0; display: block; }
 .chaos-ink__name { font-family: "Allura", cursive; font-size: 7.4cqw; line-height: 1; color: #3a2618; white-space: nowrap; }
-.chaos-ink__title { font-family: "Martian Mono", monospace; font-size: 1.7cqw; letter-spacing: .08em; color: var(--roast); margin-left: 6cqw; }
-.chaos-ink__tag { font-family: "Martian Mono", monospace; font-size: 1.15cqw; color: #4a3528; max-width: 34cqw; margin-right: 4cqw; line-height: 1.5; }
+.chaos-ink__title { font-family: "Martian Mono", monospace; font-size: 1.7cqw; letter-spacing: .08em; color: var(--roast); }
+.chaos-ink__tag { font-family: "Martian Mono", monospace; font-size: 1.15cqw; color: #4a3528; max-width: 34cqw; line-height: 1.5; }
 
 /* mode switch under the desk */
 .modes { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
@@ -364,7 +364,7 @@ section { position: relative; }
   border: 1px solid var(--latte); background: color-mix(in srgb, var(--cream) 60%, #fff);
   color: var(--roast); transition: background .2s, border-color .2s, transform .2s var(--ease-parse);
 }
-.modes__btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.modes__btn svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
 .modes__btn:hover { transform: translateY(-2px); border-color: var(--espresso); }
 .modes__btn[aria-pressed="true"] { background: var(--latte); border-color: var(--espresso); color: var(--espresso); }
 

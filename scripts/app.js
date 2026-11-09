@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109k";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109o";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109k";
+} from "./content.js?v=20261109o";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -341,13 +341,13 @@ function passKit() {
         "--dx": "0px", "--dy": "0px", duration: t, ease: "power3.inOut", delay: reduced ? 0 : i * 0.04 });
     });
     gsap.to(rec, mode === "chaos"
-      ? { rotation: -9, xPercent: 6, yPercent: 10, duration: t, ease: "power3.inOut" }
+      ? { rotation: 0, xPercent: 6, yPercent: 10, duration: t, ease: "power3.inOut" }
       : { rotation: 8, xPercent: 0, yPercent: 0, duration: t, ease: "power3.inOut" });
     // the writing: off the notebook pages and onto the desk (or back)
     gsap.to(nbInk, { opacity: mode === "chaos" ? 0 : 1, duration: t * 0.5 });
     if (mode === "chaos") {
       gsap.fromTo(chaosInk.children, { opacity: 0, y: 18, rotation: 0 },
-        { opacity: 1, y: 0, rotation: (i) => [-7, 4, -2][i], duration: t, ease: "back.out(1.6)", stagger: reduced ? 0 : 0.08, delay: t * 0.3 });
+        { opacity: 1, y: 0, rotation: 0, duration: t, ease: "back.out(1.6)", stagger: reduced ? 0 : 0.08, delay: t * 0.3 });
     } else {
       gsap.to(chaosInk.children, { opacity: 0, duration: t * 0.4 });
     }
