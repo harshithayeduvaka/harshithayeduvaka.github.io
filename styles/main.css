@@ -185,8 +185,14 @@ section { position: relative; }
 .kit__item.is-hidden { visibility: hidden; }
 .kit__img { display: block; }
 .kit__img img { width: 100%; height: auto; pointer-events: none; transition: transform .35s var(--ease-parse); }
-.kit__item:not(.kit__item--cup):hover img { transform: translateY(-5px); } /* the coffee never moves */
-.kit__item:not(.kit__item--cup).is-dragging img { transform: scale(1.04); }
+/* hover lift: the whole object moves. The polaroid lifts as one piece (frame + photo);
+   the coffee never moves. */
+.kit__item:not(.kit__item--cup):not(.kit__item--print):hover img { transform: translateY(-5px); }
+.kit__item:not(.kit__item--cup):not(.kit__item--print).is-dragging img { transform: scale(1.04); }
+.print { transition: transform .35s var(--ease-parse); }
+.print img { transition: none !important; transform: none !important; }
+.kit__item--print:hover .print { transform: translateY(-5px); }
+.kit__item--print.is-dragging .print { transform: scale(1.04); }
 
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
 .kit__item--notebook, .kit__item--camera, .kit__item--print { mix-blend-mode: normal; }
@@ -196,7 +202,7 @@ section { position: relative; }
 
 /* folder at the top of the desk (macOS-style), tools fan out of it */
 .folder {
-  position: absolute; left: 41%; top: 1.5%; z-index: 20; width: 6.5%;
+  position: absolute; left: 51%; top: 80%; z-index: 20; width: 6.5%;
   display: grid; justify-items: center; gap: 4px; padding: 6px 4px;
   border-radius: 8px; transition: background .2s;
 }

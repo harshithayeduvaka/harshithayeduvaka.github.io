@@ -151,7 +151,8 @@ function passKit() {
       }
       note.textContent = k.note || "";
       if (!reduced && !k.cup) { // the cup only steams; everything else does a little hop
-        gsap.fromTo(b.querySelector("img"), { y: 0, rotate: 0 },
+        // (the polaroid hops as one piece: frame and photo together)
+        gsap.fromTo(b.querySelector(k.print ? ".print" : "img"), { y: 0, rotate: 0 },
           { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });
       }
     });
@@ -296,14 +297,17 @@ function passToolkit() {
   const items = $$(".tool", list);
   let open = false, tl = null;
 
-  // fan positions (px offsets from the folder's centre): evenly spaced left→right
-  // along a gentle smile-shaped curve that dips below the folder
+  // fan positions (px offsets from the folder's centre): the folder sits below the
+  // notebook, so the icons spread sideways, half to each side, along a soft curve
+  // that dips a little towards the outer ends.
   const fan = () => {
-    const fw = folder.offsetWidth, n = items.length;
-    const step = Math.max(76, fw * 1.25), half = ((n - 1) / 2) * step;
+    const fw = folder.offsetWidth, n = items.length, side = Math.ceil(n / 2);
+    const step = Math.max(72, fw * 1.15), gap = Math.max(70, fw * 1.1);
     return items.map((_, i) => {
-      const x = (i - (n - 1) / 2) * step, k = x / half;
-      return { x, y: fw * 0.45 + fw * 1.25 * (1 - k * k), r: k * 9 };
+      const left = i < side, j = left ? side - 1 - i : i - side; // 0 = next to the folder
+      const x = (left ? -1 : 1) * (gap + j * step);
+      const k = (j + 1) / side;
+      return { x, y: fw * 0.25 * k * k, r: (left ? -1 : 1) * k * 7 };
     });
   };
 
@@ -318,7 +322,7 @@ function passToolkit() {
     }
     // park the list on the folder's centre, then fan the icons out from there
     list.style.left = folder.offsetLeft + folder.offsetWidth / 2 + "px";
-    list.style.top = folder.offsetTop + folder.offsetWidth * 0.4 + "px";
+    list.style.top = folder.offsetTop + folder.offsetHeight * 0.4 + "px"; // level with the folder
     const pos = fan();
     if (reduced) {
       items.forEach((it, i) => gsap.set(it, on ? { x: pos[i].x, y: pos[i].y, rotate: pos[i].r, scale: 1, opacity: 1 } : { opacity: 0 }));
@@ -339,6 +343,14 @@ function passToolkit() {
     set(!open);
   });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && open) set(false); });
+  // keep an open fan attached to the folder if the window is resized
+  addEventListener("resize", () => {
+    if (!open || isMobile) return;
+    list.style.left = folder.offsetLeft + folder.offsetWidth / 2 + "px";
+    list.style.top = folder.offsetTop + folder.offsetHeight * 0.4 + "px";
+    const pos = fan();
+    items.forEach((it, i) => gsap.set(it, { x: pos[i].x, y: pos[i].y, rotate: pos[i].r }));
+  });
 }
 
 // ------------------------------------------------------------------

@@ -13,7 +13,7 @@ no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots 
 "Foundations" (education) and "The Story So Far" (work) appear once each.
 Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
-Desk extras: a blue "toolkit" folder (top) pops `tools` (content.js) out in a fan; tool tiles are
+Desk extras: a blue "toolkit" folder (below the notebook) pops `tools` (content.js) out sideways, 4 each side; tool tiles are
 64x64 SVGs in assets/tools/ (HubSpot/GA4/Notion/Asana/Canva glyphs from Simple Icons, CC0;
 Excel/Apollo.io/SQL drawn by hand). A top-down cappuccino (kit item `cup`, latte art in
 assets/objects/crema.jpg) replaced the coffee-ring stain; click = steam hiss + steam wisps only (the cup
