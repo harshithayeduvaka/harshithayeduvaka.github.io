@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109f";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109i";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109f";
+} from "./content.js?v=20261109i";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -75,6 +75,8 @@ function passKit() {
   const desk = !isMobile; // free-placement layout only on desktop
   let top = 10;           // z-index counter: last touched object comes to the front
   let playing = false;
+  let mode = "notebook";                        // "notebook" | "chaos"
+  const place = (k) => (mode === "chaos" && k.chaos) || k.desk; // where an object sits in this mode
 
   // --- record card: plays the original loop from sound.js ------------
   const rec = $("#record"), recBtn = $("#recordPlay");
@@ -247,7 +249,7 @@ function passKit() {
     const camW = camBtn.offsetWidth - 20, camH = camW * (camSpec.h / camSpec.w);
     const camCx = camBtn.offsetLeft + camBtn.offsetWidth / 2 + camDx;
     const camCy = camBtn.offsetTop + camBtn.offsetHeight / 2 + camDy;
-    const a = (camSpec.desk.r * Math.PI) / 180, cos = Math.cos(a), sin = Math.sin(a);
+    const a = (place(camSpec).r * Math.PI) / 180, cos = Math.cos(a), sin = Math.sin(a);
     // print resting centre (no padding on the print button on desktop)
     const prCx = printBtn.offsetLeft + printBtn.offsetWidth / 2;
     const prCy = printBtn.offsetTop + printBtn.offsetHeight / 2;
@@ -266,7 +268,7 @@ function passKit() {
     printBtn.style.zIndex = top - 1; // tucked behind the camera while it ejects
     ejectTl = gsap.timeline()
       // photo top points out of the slot: rotate a quarter-turn from the camera's tilt
-      .set(printBtn, { ...at(out(0)), "--s": s, "--r": `${camSpec.desk.r + 90}deg`, clipPath: "inset(0% 0% 100% 0%)" })
+      .set(printBtn, { ...at(out(0)), "--s": s, "--r": `${place(camSpec).r + 90}deg`, clipPath: "inset(0% 0% 100% 0%)" })
       // motor pushes it out ~80% (the part outside the slot is what you see)
       .to(printBtn, { ...at(out(0.8)), clipPath: "inset(0% 0% 20% 0%)", duration: 1.3, ease: "power1.inOut" })
       // a beat, then it is pulled free...
@@ -274,7 +276,7 @@ function passKit() {
       .call(() => { printBtn.style.zIndex = ++top; })
       // ...and dropped beside the camera
       .to(printBtn, {
-        "--dx": camDx + "px", "--dy": camDy + "px", "--s": 1, "--r": `${printSpec.desk.r}deg`,
+        "--dx": camDx + "px", "--dy": camDy + "px", "--s": 1, "--r": `${place(printSpec).r}deg`,
         duration: 0.8, ease: "back.out(1.3)",
       });
   }
@@ -313,6 +315,45 @@ function passKit() {
     s.classList.remove("is-on"); void s.offsetWidth; s.classList.add("is-on");
   }
 
+  // --- desk modes: "notebook" (tidy, name written in the notebook) and "chaos"
+  //     (objects scattered and tilted; name, title and tagline spill onto the desk).
+  //     Any drag offsets are cleared so everything lands in its spot for the mode.
+  const chaosInk = $("#chaosInk");
+  const nbInk = $(".kit__ink");
+  if (chaosInk) {
+    const [title, tagline] = kit.find((k) => k.ink).ink.lines;
+    chaosInk.innerHTML = `
+      <span class="chaos-ink__name">${meta.name}</span>
+      <span class="chaos-ink__title">${title}</span>
+      <span class="chaos-ink__tag">${tagline}</span>`;
+  }
+  const modeBtns = $$(".modes__btn");
+  function setMode(next) {
+    if (next === mode) return;
+    mode = next;
+    modeBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+    grid.classList.toggle("is-chaos", mode === "chaos");
+    const t = reduced ? 0 : 0.9;
+    kit.forEach((k, i) => {
+      const b = $(`.kit__item--${k.id}`), p = place(k);
+      if (!b) return;
+      gsap.to(b, { left: p.x + "%", top: p.y + "%", width: p.w + "%", "--r": `${p.r}deg`,
+        "--dx": "0px", "--dy": "0px", duration: t, ease: "power3.inOut", delay: reduced ? 0 : i * 0.04 });
+    });
+    gsap.to(rec, mode === "chaos"
+      ? { rotation: -9, xPercent: 6, yPercent: 10, duration: t, ease: "power3.inOut" }
+      : { rotation: 8, xPercent: 0, yPercent: 0, duration: t, ease: "power3.inOut" });
+    // the writing: off the notebook pages and onto the desk (or back)
+    gsap.to(nbInk, { opacity: mode === "chaos" ? 0 : 1, duration: t * 0.5 });
+    if (mode === "chaos") {
+      gsap.fromTo(chaosInk.children, { opacity: 0, y: 18, rotation: 0 },
+        { opacity: 1, y: 0, rotation: (i) => [-7, 4, -2][i], duration: t, ease: "back.out(1.6)", stagger: reduced ? 0 : 0.08, delay: t * 0.3 });
+    } else {
+      gsap.to(chaosInk.children, { opacity: 0, duration: t * 0.4 });
+    }
+    play("page");
+  }
+  modeBtns.forEach((b) => b.addEventListener("click", (e) => { if (e.detail) b.blur(); setMode(b.dataset.mode); }));
 }
 
 // ------------------------------------------------------------------

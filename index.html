@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&family=Allura&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261109f" />
+<link rel="stylesheet" href="styles/main.css?v=20261109i" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 
 <!-- JSON-LD -->
@@ -60,12 +60,25 @@
           <span class="folder__name">stack</span>
         </button>
         <ul class="toolkit" id="toolkit" aria-label="Tools I use"></ul>
+        <!-- Chaos mode: name, title and tagline leave the notebook and land on the desk, a bit askew -->
+        <div class="chaos-ink" id="chaosInk" aria-hidden="true"></div>
         <div class="record" id="record">
           <div class="record__disc" aria-hidden="true"><i></i></div>
           <div class="record__actions mono">
             <button type="button" id="recordPlay" aria-pressed="false">▶ Play</button>
           </div>
         </div>
+      </div>
+      <!-- Desk modes: tidy notebook vs. a little chaos -->
+      <div class="modes" role="group" aria-label="Desk style">
+        <button type="button" class="modes__btn" data-mode="notebook" aria-pressed="true" title="Notebook mode">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c2.5-1 5.5-1 9 1v13c-3.5-2-6.5-2-9-1zM21 5.5c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1z"/></svg>
+          <span class="visually-hidden">Notebook mode</span>
+        </button>
+        <button type="button" class="modes__btn" data-mode="chaos" aria-pressed="false" title="Chaos mode">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3.5c3 0 4 2 5 5s2 5 5 5H20M17 14l3 3-3 3M4 17h3.5c1.4 0 2.3-.4 3-1.2M13.5 8.2c.7-.8 1.6-1.2 3-1.2H20M17 4l3 3-3 3"/></svg>
+          <span class="visually-hidden">Chaos mode</span>
+        </button>
       </div>
       <p class="kit__note" id="kitNote" aria-live="polite"></p>
     </div>
@@ -167,6 +180,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261109f"></script>
+<script type="module" src="scripts/app.js?v=20261109i"></script>
 </body>
 </html>

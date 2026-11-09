@@ -346,6 +346,28 @@ section { position: relative; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .record__actions { display: flex; justify-content: center; }
 
+/* chaos mode: the writing spilled onto the desk (sizes in cqw = % of the desk width) */
+.kit__grid { container-type: inline-size; }
+.chaos-ink {
+  position: absolute; z-index: 15; left: 22%; top: 33%; width: 44%; pointer-events: none;
+  display: grid; justify-items: center; text-align: center; gap: 1.2cqw;
+}
+.chaos-ink > span { opacity: 0; display: block; }
+.chaos-ink__name { font-family: "Allura", cursive; font-size: 7.4cqw; line-height: 1; color: #3a2618; white-space: nowrap; }
+.chaos-ink__title { font-family: "Martian Mono", monospace; font-size: 1.7cqw; letter-spacing: .08em; color: var(--roast); margin-left: 6cqw; }
+.chaos-ink__tag { font-family: "Martian Mono", monospace; font-size: 1.15cqw; color: #4a3528; max-width: 34cqw; margin-right: 4cqw; line-height: 1.5; }
+
+/* mode switch under the desk */
+.modes { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+.modes__btn {
+  width: 52px; height: 52px; display: grid; place-items: center; border-radius: 12px;
+  border: 1px solid var(--latte); background: color-mix(in srgb, var(--cream) 60%, #fff);
+  color: var(--roast); transition: background .2s, border-color .2s, transform .2s var(--ease-parse);
+}
+.modes__btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.modes__btn:hover { transform: translateY(-2px); border-color: var(--espresso); }
+.modes__btn[aria-pressed="true"] { background: var(--latte); border-color: var(--espresso); color: var(--espresso); }
+
 .kit__note { min-height: 1.5em; margin-top: .8em; text-align: center; font-size: var(--fs-18); }
 
 
@@ -578,6 +600,7 @@ html.deck-open { overflow: hidden; }
     grid-template-columns: 96px 1fr; justify-items: start; text-align: left; align-items: center; }
   .record__disc { width: 96px; }
   .record__actions { justify-content: flex-start; }
+  .modes, .chaos-ink { display: none; } /* phones: tap grid only, no chaos mode */
   .mailto { font-size: clamp(1.1rem, 5.4vw, 2.4rem); }  /* keep the address on one line on phones */
   
 /* ============================================================

@@ -40,6 +40,7 @@ export const about = {
 // The open notebook is the centrepiece with her name written across both pages;
 // the other objects sit around it. Order = stacking order (first is at the bottom).
 // desk: starting spot on the desktop layout, in % of the desk (x, y, width) + tilt in degrees.
+// chaos: where the object sits in "chaos mode" (same units). Switched with the icons under the desk.
 // sound: shutter | click | page | music.
 // note: optional line in your words, shown under the desk on click. Leave "" to show nothing.
 export const kit = [
@@ -48,6 +49,7 @@ export const kit = [
     alt: "Open cream notebook with a red ribbon bookmark",
     ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
     desk: { x: 19, y: 12, w: 58, r: -10 },
+    chaos: { x: 2, y: 47, w: 42, r: -17 },   // chaos mode: pushed to the bottom-left corner
     note: "" },
   // Her photo as an instax print. Hidden until the camera is clicked; it slides out of
   // the camera and lands here (relative to wherever the camera is).
@@ -55,21 +57,25 @@ export const kit = [
     print: true, img: about.photo.src, w: about.photo.w, h: about.photo.h,
     alt: about.photo.alt,
     desk: { x: 23, y: 57, w: 11, r: -9 },
+    chaos: { x: 61, y: 57, w: 10, r: 13 },
     note: "" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
     img: "assets/objects/camera.png", w: 361, h: 259, // transparent cut-out
     alt: "Brown and silver instant camera",
     desk: { x: 5, y: 67, w: 18, r: 8 },
+    chaos: { x: 5, y: 5, w: 16, r: -15 },
     note: "" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.png", w: 413, h: 560, // transparent cut-out
     alt: "Black over-ear wireless headphones",
     desk: { x: 6, y: 12, w: 10.5, r: -18 },
+    chaos: { x: 26, y: 3, w: 9, r: 26 },
     note: "" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
     img: "assets/objects/pen.png", w: 46, h: 373, // transparent cut-out (clear plastic)
     alt: "Clear retractable gel pen with black ink",
     desk: { x: 64.5, y: 38, w: 2.2, r: 18 }, // lies across the notebook's right page
+    chaos: { x: 63, y: 6, w: 2.2, r: 52 },
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.jpg, cup drawn in CSS).
   // Click: a 2s slurp (assets/sounds/slurp.mp3 if present) + steam wisps. r = handle direction.
@@ -77,6 +83,7 @@ export const kit = [
     cup: true, img: "assets/objects/crema.jpg", w: 360, h: 360,
     alt: "A cappuccino with a rosetta in the foam",
     desk: { x: 77, y: 52, w: 16, r: -20 },
+    chaos: { x: 76, y: 63, w: 15, r: -8 },
     note: "" },
 ];
 
