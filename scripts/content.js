@@ -17,7 +17,6 @@ export const meta = {
     "B2B implementation professional with 2+ years managing onboarding for 65+ enterprise accounts. Cut client churn 15% and reduced onboarding cycles 30% through CRM optimisation and structured account management.",
   title: "Marketing & Growth", // written under her name on the notebook
   tagline: "Helping businesses turn marketing efforts into measurable growth.",
-  available: "AVAILABLE FOR A MARKETING INTERNSHIP · PARIS · 2026",
   // Contact form. FormSubmit forwards submissions to the email in the URL.
   // The FIRST submission sends an activation email to that inbox: click it once.
   formEndpoint: "https://formsubmit.co/ajax/yeduvakaharshitha@gmail.com",
@@ -203,13 +202,6 @@ export const projects = [
     recommended: "MAYA-optimised brand strategy balancing advanced design with market familiarity.",
     impact: "Sharpened GTM execution and market accessibility.",
   },
-];
-
-export const languages = [
-  { name: "English", level: "C2", pct: 100 },
-  { name: "Telugu", level: "C2 · Native", pct: 100 },
-  { name: "Hindi", level: "C2 · Native", pct: 100 },
-  { name: "French", level: "B2", pct: 70 },
 ];
 
 

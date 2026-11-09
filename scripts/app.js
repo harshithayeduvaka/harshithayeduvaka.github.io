@@ -1,7 +1,7 @@
 // app.js — motion orchestration, desk interactions, section rendering.
 import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
-  meta, kit, tools, experience, projects, languages,
+  meta, kit, tools, experience, projects,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -370,7 +370,7 @@ function pass03() {
     }
     html += `
       <li class="tl__item">
-        <p class="tl__when mono">${e.dates}<span>${e.city}</span></p>
+        <p class="tl__when mono">${e.dates}</p>
         <div class="tl__body">
           <h4 class="tl__org display">${e.org}</h4>
           <p class="tl__role mono">${e.role}</p>
@@ -544,26 +544,9 @@ function pass05() {
 }
 
 // ------------------------------------------------------------------
-// PASS 07 — Geography + languages + contact
+// Section titles rise in as they scroll into view (fires once)
 // ------------------------------------------------------------------
-function pass07() {
-  const langs = $("#langs");
-  languages.forEach((l) => {
-    const d = document.createElement("div");
-    d.className = "lang";
-    d.innerHTML = `<div class="lang__top mono"><span>${l.name}</span><span>${l.level}</span></div><div class="lang__bar"><i data-pct="${l.pct}"></i></div>`;
-    langs.appendChild(d);
-  });
-
-  ScrollTrigger.create({
-    trigger: "#p07", start: "top 60%",
-    onEnter: () => {
-      $$(".lang__bar i").forEach((i) =>
-        gsap.to(i, { width: i.dataset.pct + "%", duration: reduced ? 0.15 : 1, ease: "power3.out" }));
-    },
-  });
-
-  // reveal titles across passes (mask-wipe, fires once)
+function revealTitles() {
   $$(".pass__title").forEach((t) => {
     if (reduced) return;
     gsap.from(t, { yPercent: 20, opacity: 0, duration: 0.8,
@@ -579,7 +562,6 @@ function contact() {
   $("#mailto").textContent = meta.email;
   $("#resume").href = meta.resume;
   $("#linkedin").href = meta.linkedin;
-  $("#closeAvail").textContent = meta.available;
   $("#buildStamp").textContent = "BUILD " + new Date().toISOString().slice(0, 16).replace("T", " ");
 
   const toast = $("#toast");
@@ -637,7 +619,7 @@ function contactForm() {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, passToolkit, pass03, pass04, pass05, pass07, contact, contactForm };
+  const passes = { passKit, passToolkit, pass03, pass04, pass05, revealTitles, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
