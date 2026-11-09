@@ -161,9 +161,9 @@ section { position: relative; }
 }
 .kit { position: relative; width: 100%; max-width: 1440px; margin-inline: auto; }
 .kit__tools { position: absolute; top: 0; right: 0; z-index: 30; display: flex; gap: 18px; }
-/* HY brand mark, fixed top left on every screen */
+/* HY brand mark, top left of the page (not fixed: it scrolls away with the content) */
 .brand {
-  position: fixed; top: clamp(10px, 1.6vw, 22px); left: var(--gutter); z-index: 60;
+  position: absolute; top: clamp(10px, 1.6vw, 22px); left: var(--gutter); z-index: 60; /* scrolls away with the page */
   width: clamp(64px, 6.5vw, 96px); display: block; border-radius: 6px;
   transition: transform .3s var(--ease-parse), opacity .3s;
 }
