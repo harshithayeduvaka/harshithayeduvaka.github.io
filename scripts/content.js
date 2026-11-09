@@ -175,8 +175,8 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/comintelli/01..24.jpg)
     slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Comintelli",
-    kind: "International Business Strategy · US Expansion",
-    when: "2026",
+    kind: "International Business Development Strategy",
+    when: "", // no date shown
     score: "12 mo",
     scoreLabel: "US ENTRY ROADMAP",
     context: "Swedish competitive-intelligence SaaS: SEK 30m ARR, flat for a year, with half its customers in North America and every decision made in Kista.",

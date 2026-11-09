@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109b";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109c";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109b";
+} from "./content.js?v=20261109c";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -436,7 +436,7 @@ function deckSlides(p) {
     `<section class="slide ${cls}"><p class="slide__label mono">${label}</p><p class="slide__body">${body}</p></section>`;
   return [
     `<section class="slide slide--cover">
-       <p class="slide__label mono">${p.kind} · ${p.when}</p>
+       <p class="slide__label mono">${[p.kind, p.when].filter(Boolean).join(" · ")}</p>
        <h3 class="slide__client display">${p.client}</h3>
        <p class="slide__score"><b>${p.score}</b><span class="mono">${p.scoreLabel}</span></p>
      </section>`,
@@ -510,7 +510,7 @@ function pass05() {
     row.setAttribute("aria-haspopup", "dialog");
     row.innerHTML = `
       <span class="work__idx mono">0${i + 1}</span>
-      <span class="work__client">${p.client}<small>${p.kind} · ${p.when}</small></span>
+      <span class="work__client">${p.client}<small>${[p.kind, p.when].filter(Boolean).join(" · ")}</small></span>
       <span class="work__score">${p.score}<small>${p.scoreLabel}</small></span>
       <span class="work__open mono">Open deck →</span>`;
     row.addEventListener("click", () => open(p, row));
