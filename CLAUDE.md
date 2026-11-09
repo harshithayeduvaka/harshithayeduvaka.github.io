@@ -16,8 +16,8 @@ per project in content.js, otherwise slides are built from the project's text.
 Desk extras: a blue "stack" folder (below the notebook) pops `tools` (content.js) out sideways, 4 each side; tool logos are
 PNGs she supplied in assets/tools/ (tile: "full" for square app icons, else a light tile).
 Folder click = assets/sounds/click.mp3 if present (her Pixabay click), else a synthesized click.
-Brand mark: assets/logo-hy.png (her HY monogram, transparent, brown #522606), fixed top right
-+ favicon; desk Tidy/Sound buttons moved to the top left. A top-down cappuccino (kit item `cup`, latte art in
+Brand mark: assets/logo-hy.png (her HY monogram, transparent, brown #522606), fixed top LEFT
++ favicon; only a Sound on/off button (top right). No Tidy button. A top-down cappuccino (kit item `cup`, latte art in
 assets/objects/crema.jpg) replaced the coffee-ring stain; click = steam hiss + steam wisps only (the cup
 never hops or lifts; she found that weird).
 Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome

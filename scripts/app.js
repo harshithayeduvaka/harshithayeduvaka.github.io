@@ -273,15 +273,6 @@ function passKit() {
     s.classList.remove("is-on"); void s.offsetWidth; s.classList.add("is-on");
   }
 
-  // --- tidy: send everything back to its starting spot ---------------
-  $("#deskTidy").addEventListener("click", () => {
-    $$(".kit__item").forEach((b, i) => {
-      if (reduced) { b.style.setProperty("--dx", "0px"); b.style.setProperty("--dy", "0px"); }
-      else gsap.to(b, { "--dx": "0px", "--dy": "0px", duration: 0.7, ease: "power3.inOut", delay: i * 0.05 });
-      b.style.zIndex = i + 1;
-    });
-    play("page");
-  });
 }
 
 // ------------------------------------------------------------------

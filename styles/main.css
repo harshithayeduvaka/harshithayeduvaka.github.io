@@ -161,10 +161,10 @@ section { position: relative; }
   padding: clamp(16px, 3vw, 40px) var(--gutter) 72px;
 }
 .kit { position: relative; width: 100%; max-width: 1440px; margin-inline: auto; }
-.kit__tools { position: absolute; top: 0; left: 0; z-index: 30; display: flex; gap: 18px; }
-/* HY brand mark, fixed top right on every screen */
+.kit__tools { position: absolute; top: 0; right: 0; z-index: 30; display: flex; gap: 18px; }
+/* HY brand mark, fixed top left on every screen */
 .brand {
-  position: fixed; top: clamp(10px, 1.6vw, 22px); right: var(--gutter); z-index: 60;
+  position: fixed; top: clamp(10px, 1.6vw, 22px); left: var(--gutter); z-index: 60;
   width: clamp(64px, 6.5vw, 96px); display: block; border-radius: 6px;
   transition: transform .3s var(--ease-parse), opacity .3s;
 }
@@ -569,7 +569,7 @@ html.deck-open { overflow: hidden; }
   .demo, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   /* desk -> tap grid; no dragging (it would fight scrolling) */
   .hero.desk { min-height: auto; padding-top: 16px; padding-bottom: 56px; }
-  .kit__tools { position: static; justify-content: flex-start; margin-bottom: 8px; padding-right: 80px; }
+  .kit__tools { position: static; justify-content: flex-end; margin-bottom: 8px; padding-left: 80px; }
   .kit__grid {
     width: 100%; aspect-ratio: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px; padding: 4px 0 12px; align-items: center;
@@ -592,7 +592,6 @@ html.deck-open { overflow: hidden; }
     grid-template-columns: 96px 1fr; justify-items: start; text-align: left; align-items: center; }
   .record__disc { width: 96px; }
   .record__actions { justify-content: flex-start; }
-  #deskTidy { display: none; }
   .mailto { font-size: clamp(1.1rem, 5.4vw, 2.4rem); }  /* keep the address on one line on phones */
   .ring-panel { position: static; }
   .demo { }
