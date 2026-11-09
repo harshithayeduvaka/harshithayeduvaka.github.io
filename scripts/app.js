@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109w";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261109y";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261109w";
+} from "./content.js?v=20261109y";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -396,6 +396,18 @@ function passToolkit() {
     `<li class="tool"><span class="tool__tile${t.tile === "full" ? " tool__tile--full" : ""}"${t.bg ? ` style="background:${t.bg}"` : ""}><img src="${t.icon}" alt="" loading="lazy" decoding="async" /></span><span class="tool__name">${t.name}</span></li>`).join("");
   const items = $$(".tool", list);
   let open = false, tl = null;
+  // park the (zero-size) tool list on the folder's current centre, including any drag offset
+  const anchor = () => {
+    let left = folder.offsetLeft + gsap.getProperty(folder, "x") + folder.offsetWidth / 2;
+    // keep the whole fan on screen: if the folder is near an edge, slide the fan inwards
+    const pos = fan(), gl = list.offsetParent ? list.offsetParent.getBoundingClientRect().left : 0;
+    const minX = Math.min(...pos.map((p) => p.x)) - 40, maxX = Math.max(...pos.map((p) => p.x)) + 40;
+    const vw = document.documentElement.clientWidth;
+    if (gl + left + minX < 8) left = 8 - gl - minX;
+    if (gl + left + maxX > vw - 8) left = vw - 8 - gl - maxX;
+    list.style.left = left + "px";
+    list.style.top = folder.offsetTop + gsap.getProperty(folder, "y") + folder.offsetHeight * 0.4 + "px";
+  };
 
   // fan positions (px offsets from the folder's centre): the folder sits below the
   // notebook, so the icons spread sideways, half to each side, along a soft curve
@@ -421,8 +433,7 @@ function passToolkit() {
       return;
     }
     // park the list on the folder's centre, then fan the icons out from there
-    list.style.left = folder.offsetLeft + folder.offsetWidth / 2 + "px";
-    list.style.top = folder.offsetTop + folder.offsetHeight * 0.4 + "px"; // level with the folder
+    anchor(); // level with the folder, wherever it has been dragged
     const pos = fan();
     if (reduced) {
       items.forEach((it, i) => gsap.set(it, on ? { x: pos[i].x, y: pos[i].y, rotate: pos[i].r, scale: 1, opacity: 1 } : { opacity: 0 }));
@@ -443,11 +454,38 @@ function passToolkit() {
     set(!open);
   });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && open) set(false); });
+
+  // the folder is draggable (desktop); an open fan travels with it. A press that
+  // doesn't move is still a normal click (opens/closes the stack).
+  if (!isMobile) {
+    let sx, sy, ox, oy, moving = false, moved = false;
+    folder.style.cursor = "grab";
+    folder.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      try { folder.setPointerCapture(e.pointerId); } catch {}
+      sx = e.clientX; sy = e.clientY;
+      ox = gsap.getProperty(folder, "x"); oy = gsap.getProperty(folder, "y");
+      moving = true; moved = false;
+    });
+    folder.addEventListener("pointermove", (e) => {
+      if (!moving) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!moved && Math.hypot(dx, dy) < 5) return;
+      moved = true; folder.style.cursor = "grabbing";
+      folder.style.zIndex = 56; list.style.zIndex = 57; // above the desk objects while it travels
+      gsap.set(folder, { x: ox + dx, y: oy + dy });
+      if (open) anchor();
+    });
+    const end = () => { moving = false; folder.style.cursor = "grab"; setTimeout(() => { moved = false; }, 0); };
+    folder.addEventListener("pointerup", end);
+    folder.addEventListener("pointercancel", end);
+    // the click that ends a drag must not toggle the stack
+    folder.addEventListener("click", (e) => { if (moved) { e.stopImmediatePropagation(); moved = false; } }, true);
+  }
   // keep an open fan attached to the folder if the window is resized
   addEventListener("resize", () => {
     if (!open || isMobile) return;
-    list.style.left = folder.offsetLeft + folder.offsetWidth / 2 + "px";
-    list.style.top = folder.offsetTop + folder.offsetHeight * 0.4 + "px";
+    anchor();
     const pos = fan();
     items.forEach((it, i) => gsap.set(it, { x: pos[i].x, y: pos[i].y, rotate: pos[i].r }));
   });
