@@ -270,10 +270,16 @@ function passKit() {
       inkChars = lines.map((l) => $$(".ink-c", l));
     }
     if (inkTl) inkTl.kill();
+    const ink = $(".kit__ink");
     inkTl = gsap.timeline()
-      .set(inkChars.flat(), { opacity: 0 })
+      // a small zoom-in on the whole block of writing, then it settles back
+      .fromTo(ink, { scale: 1 }, { keyframes: [
+        { scale: 1.07, duration: 0.35, ease: "power2.out" },
+        { scale: 1, duration: 0.9, ease: "power2.inOut" },
+      ] }, 0)
+      .set(inkChars.flat(), { opacity: 0 }, 0)
       .fromTo(name, { clipPath: "inset(-30% 100% -30% -5%)" },
-        { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.4, ease: "power1.inOut" })
+        { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.4, ease: "power1.inOut" }, 0)
       .to(inkChars[0] || [], { opacity: 1, duration: 0.01, stagger: 0.045 }, "-=0.15")
       .to(inkChars[1] || [], { opacity: 1, duration: 0.01, stagger: 0.022 }, "+=0.1");
   }
