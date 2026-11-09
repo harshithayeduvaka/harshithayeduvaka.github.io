@@ -113,6 +113,7 @@ export const experience = [
     dates: "Mar 2026 – Present",
     type: "work",
     org: "ohmyATS",
+    link: "https://ohmyats.lovable.app/", // the org name links here (opens in a new tab)
     role: "Founder & Developer",
     city: "Paris",
     accent: "signal-red",
