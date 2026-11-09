@@ -130,22 +130,21 @@ section { position: relative; }
 #boot {
   position: fixed; inset: 0; z-index: 200;
   background: var(--cream);
-  display: flex; flex-direction: column; justify-content: flex-end;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch;
   padding: var(--gutter);
   transition: opacity 0.6s var(--ease-parse);
 }
 #boot.done { opacity: 0; pointer-events: none; }
-#boot .boot__log { color: var(--espresso); max-width: 640px; }
+/* one stack, top to bottom: status lines, progress bar, skip hint.
+   The log reserves room for all 4 lines, so nothing shifts as each one appears. */
+#boot .boot__log {
+  order: 1; color: var(--espresso); max-width: 640px; margin: 0;
+  line-height: 1.7; min-height: calc(4 * 1.7em); white-space: pre;
+}
 #boot .boot__log b { color: var(--caramel); font-weight: 500; }
-.boot__rule {
-  position: absolute; left: var(--gutter); right: var(--gutter);
-  bottom: calc(var(--gutter) + 3.5rem);
-  height: 2px; background: var(--latte);
-}
-.boot__rule i {
-  display: block; height: 100%; width: 0; background: var(--espresso);
-}
-.boot__skip { margin-top: 12px; opacity: 0.5; }
+.boot__rule { order: 2; height: 2px; margin-top: 18px; background: var(--latte); }
+.boot__rule i { display: block; height: 100%; width: 0; background: var(--espresso); }
+.boot__skip { order: 3; margin-top: 12px; opacity: 0.5; }
 
 /* ============================================================
    Hero — the desk (first screen)
