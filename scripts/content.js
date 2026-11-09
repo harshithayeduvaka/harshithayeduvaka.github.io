@@ -26,6 +26,14 @@ export const meta = {
 export const about = {
   photo: { src: "assets/harshitha-480.jpg", src2x: "assets/harshitha-960.jpg", w: 480, h: 640,
            alt: "Harshitha Yeduvaka smiling, standing on a tree-lined street in a yellow dress" },
+  // The "About ⌘" section near the bottom of the page (her words).
+  title: "About",
+  paragraphs: [
+    "I’m a marketing and business development professional based in Paris, and I’m at my best when something doesn’t quite make sense yet.",
+    "A dip in a chart, a campaign that should have worked, a market nobody has cracked: that’s where I get curious. I like pulling a problem apart, asking the slightly annoying questions, and putting it back together in a way people can actually act on.",
+    "I believe good marketing starts with listening, to the data and to the people behind it. The numbers tell you what; conversations tell you why.",
+    "When I’m not working, I’m either reading about consumer psychology or losing at chess online.",
+  ],
 };
 
 // The desk = the first screen (layout ref: jackiehu.design).

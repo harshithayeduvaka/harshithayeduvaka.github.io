@@ -1,7 +1,7 @@
 // app.js — motion orchestration, desk interactions, section rendering.
 import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
-  meta, kit, tools, experience, projects,
+  meta, about, kit, tools, experience, projects,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -577,6 +577,13 @@ function pass05() {
 // ------------------------------------------------------------------
 // Section titles rise in as they scroll into view (fires once)
 // ------------------------------------------------------------------
+function passAboutMe() {
+  const body = $("#aboutBody");
+  if (!body) return;
+  // first paragraph is the lead (set larger); the rest are normal body text
+  body.innerHTML = about.paragraphs.map((p, i) => `<p${i === 0 ? ' class="about-me__lead"' : ""}>${p}</p>`).join("");
+}
+
 function revealTitles() {
   $$(".pass__title").forEach((t) => {
     if (reduced) return;
@@ -650,7 +657,7 @@ function contactForm() {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, passToolkit, pass03, pass04, pass05, revealTitles, contact, contactForm };
+  const passes = { passKit, passToolkit, pass03, pass04, pass05, passAboutMe, revealTitles, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }

@@ -455,6 +455,12 @@ section { position: relative; }
    PASS 07 — Geography + contact
    ============================================================ */
 
+/* About ⌘ (near the bottom) */
+.about-me__cmd { color: var(--caramel); font-weight: 400; font-size: .7em; vertical-align: .12em; margin-left: .1em; }
+.about-me__body { display: grid; gap: 1.1em; max-width: 62ch; }
+.about-me__body p { font-size: var(--fs-18); line-height: 1.65; color: var(--roast); }
+.about-me__body .about-me__lead { font-family: "Fraunces", serif; font-size: var(--fs-34); line-height: 1.25; color: var(--espresso); max-width: 28ch; margin-bottom: .3em; }
+
 .close { text-align: center; padding-block: var(--pass-pad); padding-inline: var(--gutter); }
 .mailto {
   font-family: "Fraunces"; font-weight: 800;
