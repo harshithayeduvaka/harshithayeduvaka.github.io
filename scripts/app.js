@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110c";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110e";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110c";
+} from "./content.js?v=20261110e";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -654,39 +654,27 @@ function passAboutMe() {
   const body = $("#aboutBody");
   if (!body) return;
   body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
-  // "flicker": each paragraph switches on like an old bulb as the section scrolls in (once).
-  // CSS animation, triggered by adding .is-lit; the heading is left alone.
+  // "pool water": the text ripples gently, like letters seen through moving water.
+  // An SVG turbulence filter displaces the text; its noise drifts slowly over time.
+  // Runs only while the text is on screen (and the tab is visible); off for reduced motion.
   if (reduced) return;
-  const ps = $$("p", body);
-  ps.forEach((p, i) => { p.classList.add("flicker"); p.style.animationDelay = `${i * 0.18}s`; });
-  ScrollTrigger.create({ trigger: body, start: "top 80%", once: true,
-    onEnter: () => ps.forEach((p) => p.classList.add("is-lit")) });
-
-  // ...and it keeps flickering while the text is on screen, like a slightly faulty neon:
-  // every few seconds one random paragraph stutters briefly (≈0.7s), then holds steady.
-  // Paused whenever the section is off screen or the tab is hidden.
-  let visible = false, timer = 0;
-  const tick = () => {
-    if (!visible || document.hidden) return;
-    const p = ps[Math.floor(Math.random() * ps.length)];
-    if (p.classList.contains("is-lit")) {
-      p.classList.remove("buzz"); void p.offsetWidth; p.classList.add("buzz");
-    }
-    timer = setTimeout(tick, 1800 + Math.random() * 2600); // 1.8–4.4s apart: never rapid flashing
+  const turb = $("#poolTurb");
+  if (!turb) return;
+  body.classList.add("is-pool");
+  let raf = 0, visible = false;
+  const t0 = performance.now();
+  const frame = (now) => {
+    const t = (now - t0) / 1000;
+    // two slow, out-of-step waves: gentle swell, never choppy
+    const fx = 0.004 + 0.0015 * Math.sin(t * 0.55);
+    const fy = 0.016 + 0.005 * Math.sin(t * 0.83 + 1.3);
+    turb.setAttribute("baseFrequency", `${fx.toFixed(5)} ${fy.toFixed(5)}`);
+    raf = requestAnimationFrame(frame);
   };
-  // on screen = any part of the text is inside the window (same scroll engine as the rest of the site)
-  ScrollTrigger.create({
-    trigger: body, start: "top bottom", end: "bottom top",
-    onToggle: (self) => {
-      visible = self.isActive;
-      clearTimeout(timer);
-      if (visible) timer = setTimeout(tick, 2200); // let the first switch-on finish
-    },
-  });
-  document.addEventListener("visibilitychange", () => {
-    clearTimeout(timer);
-    if (!document.hidden && visible) timer = setTimeout(tick, 1500);
-  });
+  const run = (on) => { cancelAnimationFrame(raf); if (on && !document.hidden) raf = requestAnimationFrame(frame); };
+  ScrollTrigger.create({ trigger: body, start: "top bottom", end: "bottom top",
+    onToggle: (self) => { visible = self.isActive; run(visible); } });
+  document.addEventListener("visibilitychange", () => run(visible));
 }
 
 function revealTitles() {
