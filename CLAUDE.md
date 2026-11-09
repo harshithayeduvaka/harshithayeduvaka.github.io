@@ -33,7 +33,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 ## Run locally
 ```
 cd ~/Desktop/harshitha-yeduvaka.github.io
-python3 -m http.server 8000     # then open http://localhost:8000
+python3 serve.py               # then open http://localhost:8000 (no-cache dev server)
 ```
 A server is required: ES modules don't load from `file://`.
 
