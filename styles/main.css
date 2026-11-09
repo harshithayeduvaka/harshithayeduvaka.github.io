@@ -1,0 +1,433 @@
+/* ============================================================
+   PARSE — Harshitha Yeduvaka portfolio
+   Design system: "Blueprint / Signal"
+   ============================================================ */
+
+/* ---- Tokens ------------------------------------------------ */
+:root {
+  --ultramarine: #1B21D8;
+  --chalk:       #F1F2F6;
+  --graphite:    #141519;
+  --saffron:     #F0A202;
+  --paper-blue:  #C8CEE6;
+  --signal-red:  #E2372B;
+
+  /* fluid type scale */
+  --fs-11: clamp(0.6875rem, 0.66rem + 0.14vw, 0.75rem);
+  --fs-13: clamp(0.8125rem, 0.79rem + 0.12vw, 0.875rem);
+  --fs-16: clamp(1rem, 0.97rem + 0.15vw, 1.125rem);
+  --fs-18: clamp(1.125rem, 1.06rem + 0.28vw, 1.25rem);
+  --fs-24: clamp(1.375rem, 1.24rem + 0.6vw, 1.6rem);
+  --fs-34: clamp(1.75rem, 1.4rem + 1.7vw, 2.35rem);
+  --fs-52: clamp(2.4rem, 1.8rem + 3vw, 3.6rem);
+  --fs-84: clamp(3rem, 2rem + 5.5vw, 5.6rem);
+  --fs-hero: clamp(3rem, 1.5rem + 11vw, 13vw);
+
+  /* spacing */
+  --gutter: clamp(20px, 6vw, 88px);
+  --rail-w: clamp(64px, 8vw, 132px);
+  --pass-pad: clamp(96px, 13vw, 210px);
+
+  --ease-parse: cubic-bezier(0.16, 0.84, 0.44, 1);
+
+  --measure: 68ch;
+}
+
+/* ---- Reset ------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--chalk);
+  color: var(--graphite);
+  font-family: "Inter Tight", system-ui, sans-serif;
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+::selection { background: var(--ultramarine); color: var(--chalk); }
+
+/* ---- Type helpers ----------------------------------------- */
+.display {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  font-variation-settings: "wght" 700, "wdth" 100, "opsz" 40;
+}
+.mono {
+  font-family: "Martian Mono", monospace;
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+.body-lg { font-size: var(--fs-18); max-width: var(--measure); }
+.eyebrow { color: var(--ultramarine); }
+
+/* ---- Focus / a11y ----------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--saffron);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+.skip {
+  position: fixed; top: -100%; left: 12px; z-index: 999;
+  background: var(--graphite); color: var(--chalk);
+  padding: 10px 16px; border-radius: 4px;
+}
+.skip:focus { top: 12px; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ============================================================
+   Layout scaffold
+   ============================================================ */
+.pass {
+  position: relative;
+  padding-block: var(--pass-pad);
+  padding-inline: var(--gutter);
+  border-top: 1px solid var(--paper-blue);
+}
+.pass__grid {
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  gap: clamp(20px, 4vw, 64px);
+  max-width: 1600px;
+  margin-inline: auto;
+}
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ultramarine);
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  height: max-content;
+}
+.rail span { color: var(--graphite); opacity: 0.55; }
+.rail .rail__idx { color: var(--ultramarine); opacity: 1; font-weight: 700; }
+
+.content { min-width: 0; }
+.pass__title {
+  font-size: var(--fs-84);
+  margin-bottom: 0.5em;
+}
+
+/* ============================================================
+   Fixed WebGL canvas (token field)
+   ============================================================ */
+#field {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  opacity: 0.6;
+  pointer-events: none;
+}
+main { position: relative; z-index: 1; }
+section { position: relative; }
+/* Hero lets the stream through; later passes sit on a translucent chalk
+   wash so the stream reads *behind* the copy, never through it. */
+.hero { background: transparent; }
+.pass { background: color-mix(in srgb, var(--chalk) 88%, transparent); }
+.close { background: color-mix(in srgb, var(--chalk) 88%, transparent); }
+.panel { background: color-mix(in srgb, var(--chalk) 85%, transparent); }
+
+/* ============================================================
+   PASS 00 — Preloader
+   ============================================================ */
+#boot {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--chalk);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: var(--gutter);
+  transition: opacity 0.6s var(--ease-parse);
+}
+#boot.done { opacity: 0; pointer-events: none; }
+#boot .boot__log { color: var(--ultramarine); max-width: 640px; }
+#boot .boot__log b { color: var(--saffron); font-weight: 500; }
+.boot__rule {
+  position: absolute; left: var(--gutter); right: var(--gutter);
+  bottom: calc(var(--gutter) + 3.5rem);
+  height: 2px; background: var(--paper-blue);
+}
+.boot__rule i {
+  display: block; height: 100%; width: 0; background: var(--ultramarine);
+}
+.boot__skip { margin-top: 12px; opacity: 0.5; }
+
+/* ============================================================
+   PASS 01 — Hero
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  gap: clamp(20px, 4vw, 64px);
+  align-content: center;
+  padding: var(--gutter);
+  padding-top: max(var(--gutter), 12vh);
+  max-width: 1600px;
+  margin-inline: auto;
+}
+.hero__name {
+  font-size: var(--fs-hero);
+  color: var(--ultramarine);
+  margin-bottom: 0.35em;
+}
+.hero__name .ch { display: inline-block; will-change: transform; }
+.hero__strap { margin-bottom: 1.5em; }
+.hero__strap .divider { color: var(--paper-blue); }
+.hero__positioning {
+  font-size: var(--fs-24);
+  max-width: 24ch;
+  line-height: 1.25;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 500;
+  font-variation-settings: "wght" 500, "wdth" 92;
+}
+.mask-line { overflow: hidden; display: block; }
+.mask-line > * { display: block; will-change: transform; }
+
+.hero__cue {
+  position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%);
+  width: 1px; height: 44px; background: var(--ultramarine);
+  animation: cue 1.25s var(--ease-parse) infinite;
+}
+@keyframes cue { 0%,100%{opacity:.2;transform:translateX(-50%) scaleY(.6)} 50%{opacity:1;transform:translateX(-50%) scaleY(1)} }
+
+/* live tokens/sec cursor readout */
+#cursor {
+  position: fixed; z-index: 50; top: 0; left: 0;
+  transform: translate(-50%, -160%);
+  color: var(--ultramarine); pointer-events: none;
+  padding: 3px 6px; background: rgba(241,242,246,0.7);
+  backdrop-filter: none; white-space: nowrap;
+  opacity: 0; transition: opacity 0.3s;
+}
+@media (hover: none) { #cursor { display: none; } }
+
+/* ============================================================
+   PASS 02 — Positioning extraction
+   ============================================================ */
+.p02__wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(24px, 5vw, 80px); align-items: start; }
+.p02__para {
+  font-size: var(--fs-34);
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 500;
+  line-height: 1.28;
+  font-variation-settings: "wght" 500, "wdth" 95;
+}
+.p02__para mark {
+  background: none; color: inherit;
+  position: relative; white-space: nowrap;
+  transition: color 0.4s var(--ease-parse);
+}
+.p02__para mark.lit {
+  box-shadow: inset 0 0 0 2px var(--saffron);
+  padding: 0 4px; border-radius: 2px;
+}
+.p02__para.spent { color: var(--paper-blue); }
+.ledger {
+  position: sticky; top: 15vh;
+  background: var(--graphite); color: var(--chalk);
+  padding: clamp(20px, 3vw, 36px);
+  border-radius: 4px;
+}
+.ledger h3 { color: var(--paper-blue); margin-bottom: 1.2em; }
+.ledger__row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0; border-top: 1px solid rgba(200,206,230,0.15);
+  opacity: 0; transform: translateY(8px);
+}
+.ledger__row .v { font-family: "Bricolage Grotesque"; font-weight: 700; font-size: var(--fs-34); color: var(--saffron); }
+.ledger__row .l { color: var(--paper-blue); text-align: right; }
+
+/* ============================================================
+   PASS 03 — Experience horizontal
+   ============================================================ */
+#p03 { overflow: hidden; padding-inline: 0; }
+.track { display: flex; will-change: transform; }
+.panel {
+  flex: 0 0 100vw; min-height: 100vh;
+  display: grid; grid-template-columns: var(--rail-w) 1fr;
+  gap: clamp(20px, 4vw, 64px);
+  padding: var(--gutter);
+  align-content: center;
+}
+.panel__year { font-size: var(--fs-84); color: var(--paper-blue); font-family:"Martian Mono"; letter-spacing: 0; }
+.panel__org {
+  font-size: var(--fs-52); color: var(--ultramarine);
+  font-variation-settings: "wght" 700, "wdth" 78;
+}
+.panel__role { margin: 0.4em 0 1.4em; color: var(--graphite); }
+.panel__bullets { list-style: none; max-width: 60ch; display: grid; gap: 14px; }
+.panel__bullets li { position: relative; padding-left: 22px; }
+.panel__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--saffron); }
+.panel__city {
+  position: absolute; right: var(--gutter); bottom: 8vh;
+  font-size: var(--fs-52); color: var(--paper-blue);
+  font-family: "Bricolage Grotesque"; font-weight: 800; opacity: 0.6;
+}
+.p03__progress {
+  position: fixed; left: var(--gutter); right: var(--gutter); bottom: 24px; z-index: 5;
+  display: none; align-items: center; gap: 12px; color: var(--ultramarine);
+}
+.p03__progress .bar { flex: 1; height: 2px; background: var(--paper-blue); }
+.p03__progress .bar i { display: block; height: 100%; width: 33%; background: var(--saffron); }
+
+/* ============================================================
+   PASS 04 — ohmyATS demo
+   ============================================================ */
+.demo { display: grid; grid-template-columns: 1fr 380px; gap: clamp(28px, 4vw, 64px); align-items: start; }
+.demo__field { display: grid; gap: 6px; margin-bottom: 18px; }
+.demo__field label { color: var(--ultramarine); }
+.demo__field textarea {
+  width: 100%; min-height: 110px; resize: vertical;
+  background: var(--chalk); color: var(--graphite);
+  border: 2px solid var(--paper-blue); border-radius: 4px;
+  padding: 12px 14px; font: inherit; font-size: var(--fs-16);
+}
+.demo__field textarea:focus { border-color: var(--ultramarine); }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ultramarine); color: var(--chalk);
+  padding: 14px 28px; border-radius: 4px; font-family: "Martian Mono";
+  text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--fs-13);
+  min-height: 44px; transition: transform 0.18s var(--ease-parse);
+}
+.btn:hover { transform: translateY(-2px); }
+.ring-panel {
+  background: var(--graphite); border-radius: 6px; padding: 28px;
+  display: grid; justify-items: center; gap: 18px; position: sticky; top: 12vh;
+}
+.ring-wrap { position: relative; width: 240px; height: 240px; }
+.ring-wrap svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+.ring-wrap .track-c { fill: none; stroke: rgba(200,206,230,0.18); stroke-width: 10; }
+.ring-wrap .prog-c { fill: none; stroke: var(--saffron); stroke-width: 10; stroke-linecap: round; }
+.ring-wrap.bloom .prog-c { filter: drop-shadow(0 0 8px var(--saffron)); }
+.ring-num {
+  position: absolute; inset: 0; display: grid; place-content: center;
+  font-family: "Bricolage Grotesque"; font-weight: 800; font-size: 3.4rem; color: var(--chalk);
+}
+.ring-num small { display:block; text-align:center; font-family:"Martian Mono"; font-size:.7rem; color: var(--paper-blue); letter-spacing:.08em; margin-top:4px; }
+.demo__out { color: var(--paper-blue); text-align: center; min-height: 1.4em; }
+.demo__out .miss { color: var(--signal-red); }
+.demo__note { color: var(--graphite); opacity: 0.7; max-width: 46ch; margin-top: 22px; }
+
+/* ============================================================
+   PASS 05 — Projects (parser output rows)
+   ============================================================ */
+.work { display: grid; gap: 2px; border: 1px solid var(--paper-blue); border-radius: 6px; overflow: hidden; }
+.work__row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;
+  padding: clamp(20px, 3vw, 34px); background: var(--chalk);
+  cursor: pointer; transition: background 0.3s var(--ease-parse);
+  border-bottom: 1px solid var(--paper-blue);
+}
+.work__row:last-child { border-bottom: none; }
+.work__row:hover, .work__row[aria-expanded="true"] { background: var(--paper-blue); }
+.work__idx { color: var(--ultramarine); }
+.work__client { font-family: "Bricolage Grotesque"; font-weight: 700; font-size: var(--fs-34); }
+.work__client small { display:block; font-family:"Inter Tight"; font-weight:400; font-size: var(--fs-13); color: var(--graphite); opacity: .65; text-transform:none; letter-spacing:0; }
+.work__score { font-family:"Bricolage Grotesque"; font-weight:800; font-size: var(--fs-34); color: var(--saffron); text-align:right; }
+.work__score small { display:block; font-family:"Martian Mono"; font-size:.62rem; color: var(--ultramarine); }
+.work__detail {
+  grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 24px;
+  height: 0; overflow: hidden; opacity: 0; padding-top: 0;
+  transition: opacity 0.4s var(--ease-parse);
+}
+.work__detail dt { color: var(--ultramarine); margin-bottom: 6px; }
+.work__detail dd { max-width: 40ch; }
+.work__detail .proj { color: var(--saffron); }
+.work__row[aria-expanded="true"] .work__detail { height: auto; opacity: 1; padding-top: 24px; }
+
+/* ============================================================
+   PASS 06 — Skills
+   ============================================================ */
+#skills-pile { position: relative; height: 420px; border: 1px solid var(--paper-blue); border-radius: 6px; overflow: hidden; background: var(--chalk); }
+.chip {
+  position: absolute; padding: 10px 16px; border-radius: 999px;
+  background: var(--ultramarine); color: var(--chalk);
+  font-family: "Martian Mono"; font-size: var(--fs-11); text-transform: uppercase; letter-spacing: 0.08em;
+  white-space: nowrap; user-select: none; will-change: transform;
+}
+.chip[data-cat="0"] { background: var(--ultramarine); }
+.chip[data-cat="1"] { background: var(--graphite); }
+.chip[data-cat="2"] { background: var(--saffron); color: var(--graphite); }
+.chip[data-cat="3"] { background: var(--paper-blue); color: var(--graphite); }
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.filters button { border: 1px solid var(--ultramarine); color: var(--ultramarine); padding: 8px 16px; border-radius: 999px; font-family:"Martian Mono"; font-size: var(--fs-11); text-transform: uppercase; letter-spacing:.08em; min-height:40px; }
+.filters button.active { background: var(--ultramarine); color: var(--chalk); }
+.skills-fallback { list-style: none; display: grid; gap: 22px; }
+.skills-fallback li b { color: var(--ultramarine); }
+[hidden] { display: none !important; }
+
+/* ============================================================
+   PASS 07 — Geography + contact
+   ============================================================ */
+.p07__wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,5vw,72px); align-items: center; }
+#globe { width: 100%; aspect-ratio: 1; min-height: 320px; }
+.langs { display: grid; gap: 14px; margin-top: 28px; }
+.lang { display: grid; gap: 6px; }
+.lang__top { display: flex; justify-content: space-between; }
+.lang__bar { height: 4px; background: var(--paper-blue); border-radius: 2px; overflow: hidden; }
+.lang__bar i { display: block; height: 100%; background: var(--ultramarine); width: 0; }
+
+.close { text-align: center; padding-block: var(--pass-pad); }
+.close__avail { color: var(--ultramarine); margin-bottom: 1.5em; }
+.mailto {
+  font-family: "Bricolage Grotesque"; font-weight: 800;
+  font-size: var(--fs-84); color: var(--graphite); display: inline-block;
+  transition: color 0.3s, transform 0.2s var(--ease-parse);
+  will-change: transform; word-break: break-word;
+}
+.mailto:hover { color: var(--ultramarine); }
+.contact-actions { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 2em; }
+.contact-actions a { border-bottom: 2px solid var(--paper-blue); padding-bottom: 4px; transition: border-color .3s; }
+.contact-actions a:hover { border-color: var(--ultramarine); }
+
+#toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translate(-50%, 20px);
+  background: var(--graphite); color: var(--chalk); padding: 12px 20px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: all 0.3s var(--ease-parse); z-index: 100;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+footer { padding: 48px var(--gutter); color: var(--ultramarine); display: flex; flex-wrap: wrap; gap: 12px 40px; border-top: 1px solid var(--paper-blue); }
+footer span { color: var(--graphite); opacity: 0.55; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 860px) {
+  .hero, .pass__grid, .panel { grid-template-columns: 1fr; }
+  .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+  .p02__wrap, .demo, .p07__wrap { grid-template-columns: 1fr; }
+  .ledger, .ring-panel, .ledger.sticky { position: static; }
+  .demo { }
+  .ring-panel { order: -1; }
+  .work__row { grid-template-columns: auto 1fr; }
+  .work__score { grid-column: 2; text-align: left; }
+  .panel__city { position: static; opacity: 0.4; margin-top: 24px; }
+}
+
+/* ============================================================
+   Reduced motion — first-class, composed static state
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition-duration: 0.15s !important; }
+  .hero__cue { display: none; }
+  #cursor { display: none; }
+  .ledger__row { opacity: 1; transform: none; }
+}

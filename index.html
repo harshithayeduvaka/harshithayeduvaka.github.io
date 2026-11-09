@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Harshitha Yeduvaka — Marketing · B2B Implementation · Paris</title>
+<meta name="description" content="B2B implementation professional. 2+ years, 65+ enterprise accounts, churn −15%, onboarding cycles −30%. Seeking a marketing internship in Paris, 2026." />
+<link rel="canonical" href="/" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400..800&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles/main.css" />
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Harshitha Yeduvaka","jobTitle":"B2B Implementation & Marketing Professional","email":"mailto:yeduvakaharshitha@gmail.com","telephone":"+33745577349","address":{"@type":"PostalAddress","addressLocality":"Paris","addressCountry":"France"},"alumniOf":"SKEMA Business School","knowsLanguage":["English","French","Hindi","Telugu"]}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- WebGL token field (decorative) -->
+<canvas id="field" aria-hidden="true"></canvas>
+<div id="cursor" class="mono" aria-hidden="true">TOKENS/SEC 0</div>
+
+<!-- PASS 00 — Boot -->
+<div id="boot" aria-hidden="true">
+  <div class="boot__rule"><i></i></div>
+  <pre class="boot__log mono" id="bootLog"></pre>
+  <div class="boot__skip mono">Press any key to skip</div>
+</div>
+
+<main id="main">
+  <!-- PASS 01 — Hero -->
+  <header class="hero" id="p01">
+    <div class="rail mono">
+      <span class="rail__idx">PASS 01 / 07</span>
+      <span>48.8566° N</span>
+      <span>2.3522° E</span>
+      <span>PARSE v1.0</span>
+    </div>
+    <div class="content">
+      <h1 class="hero__name display" id="heroName" aria-label="Harshitha Yeduvaka">
+        <span class="line" data-word="HARSHITHA"></span>
+        <span class="line" data-word="YEDUVAKA"></span>
+      </h1>
+      <p class="hero__strap mono"><span class="reveal">MARKETING <span class="divider">·</span> B2B IMPLEMENTATION <span class="divider">·</span> PARIS</span></p>
+      <p class="hero__positioning mask-line"><span>B2B implementation that turns onboarding into retention.</span></p>
+      <div class="hero__cue" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <!-- PASS 02 — Positioning extraction -->
+  <section class="pass" id="p02" aria-labelledby="p02-h">
+    <div class="pass__grid">
+      <div class="rail mono">
+        <span class="rail__idx">PASS 02 / 07</span>
+        <span>EXTRACT</span>
+        <span>SIGNAL</span>
+      </div>
+      <div class="content">
+        <p class="mono eyebrow" id="p02-h" style="margin-bottom:2em">THE PARSER READS THE SUMMARY AND KEEPS ONLY WHAT MOVED</p>
+        <div class="p02__wrap">
+          <p class="p02__para" id="p02Para">
+            B2B implementation professional with <mark data-i="0">2+ years</mark> managing onboarding for
+            <mark data-i="1">65+ enterprise accounts</mark>. Cut client churn
+            <mark data-i="2">15%</mark> and reduced onboarding cycles
+            <mark data-i="3">30%</mark> through CRM optimisation and structured account management.
+          </p>
+          <aside class="ledger" aria-label="Extracted metrics">
+            <h3 class="mono">LEDGER · EXTRACTED SIGNAL</h3>
+            <div id="ledgerRows"></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASS 03 — Experience horizontal -->
+  <section class="pass" id="p03" aria-labelledby="p03-h">
+    <h2 id="p03-h" class="visually-hidden">Experience</h2>
+    <div class="track" id="p03Track"></div>
+    <div class="p03__progress mono" id="p03Progress">
+      <span id="p03Label">PASS 03 · 1/3</span>
+      <span class="bar"><i></i></span>
+    </div>
+  </section>
+
+  <!-- PASS 04 — ohmyATS demo -->
+  <section class="pass" id="p04" aria-labelledby="p04-h">
+    <div class="pass__grid">
+      <div class="rail mono">
+        <span class="rail__idx">PASS 04 / 07</span>
+        <span>ohmyATS</span>
+        <span>LIVE</span>
+      </div>
+      <div class="content">
+        <h2 id="p04-h" class="pass__title display">The engine, in miniature.</h2>
+        <div class="demo">
+          <form class="demo__inputs" id="demoForm">
+            <div class="demo__field">
+              <label class="mono" for="jd">Job description</label>
+              <textarea id="jd" aria-describedby="demoOut">We are hiring a growth marketer to run attribution and GTM. You will own Meta Ads, cohort analysis, CRM segmentation and lead scoring, improving ROI with A/B testing.</textarea>
+            </div>
+            <div class="demo__field">
+              <label class="mono" for="cv">Your CV bullet</label>
+              <textarea id="cv">Ran A/B tests on Meta Ads and CRM segmentation; refined lead scoring and improved ROI through structured account management.</textarea>
+            </div>
+            <button class="btn" type="submit">▸ Parse</button>
+            <p class="demo__note">This is a simplified version of the engine behind <strong>ohmyATS</strong>. The real one is trained on 100+ profiles and reads three languages.</p>
+          </form>
+          <div class="ring-panel">
+            <div class="ring-wrap" id="ringWrap">
+              <svg viewBox="0 0 240 240" aria-hidden="true">
+                <circle class="track-c" cx="120" cy="120" r="105"></circle>
+                <circle class="prog-c" id="ringProg" cx="120" cy="120" r="105"></circle>
+              </svg>
+              <div class="ring-num" id="ringNum">0%<small>MATCH</small></div>
+            </div>
+            <p class="demo__out mono" id="demoOut" aria-live="polite" role="status">RUN THE PARSER</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASS 05 — Projects -->
+  <section class="pass" id="p05" aria-labelledby="p05-h">
+    <div class="pass__grid">
+      <div class="rail mono">
+        <span class="rail__idx">PASS 05 / 07</span>
+        <span>RESULTS</span>
+      </div>
+      <div class="content">
+        <h2 id="p05-h" class="pass__title display">Case studies parse on demand.</h2>
+        <div class="work" id="workList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASS 06 — Skills -->
+  <section class="pass" id="p06" aria-labelledby="p06-h">
+    <div class="pass__grid">
+      <div class="rail mono">
+        <span class="rail__idx">PASS 06 / 07</span>
+        <span>CLASSIFY</span>
+      </div>
+      <div class="content">
+        <h2 id="p06-h" class="pass__title display">The parser sorts the toolkit.</h2>
+        <div class="filters mono" id="skillFilters" role="group" aria-label="Filter skills"></div>
+        <div id="skills-pile" aria-hidden="true"></div>
+        <ul class="skills-fallback" id="skillsFallback"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASS 07 — Geography + contact -->
+  <section class="pass" id="p07" aria-labelledby="p07-h">
+    <div class="pass__grid">
+      <div class="rail mono">
+        <span class="rail__idx">PASS 07 / 07</span>
+        <span>RESOLVE</span>
+      </div>
+      <div class="content">
+        <h2 id="p07-h" class="pass__title display">Hyderabad → Berlin → Paris.</h2>
+        <div class="p07__wrap">
+          <div id="globe" role="img" aria-label="Route from Hyderabad to Berlin to Paris"></div>
+          <div>
+            <p class="body-lg">Three cities, three roles, one arc — enterprise onboarding to growth marketing to building the product itself.</p>
+            <div class="langs" id="langs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Close -->
+  <section class="close" id="close" aria-labelledby="closeH">
+    <p class="close__avail mono" id="closeAvail">AVAILABLE FOR A MARKETING INTERNSHIP · PARIS · 2026</p>
+    <h2 id="closeH" class="visually-hidden">Contact</h2>
+    <a class="mailto" id="mailto" href="mailto:yeduvakaharshitha@gmail.com">yeduvakaharshitha@gmail.com</a>
+    <div class="contact-actions mono">
+      <button id="copyEmail">Copy email</button>
+      <a id="linkedin" href="https://www.linkedin.com/in/harshithayeduvaka/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a id="resume" href="" download>Résumé PDF ↓</a>
+      <a href="tel:+33745577349">+33 745577349</a>
+    </div>
+  </section>
+</main>
+
+<footer class="mono">
+  <span>Designed &amp; built in Paris</span>
+  <span id="buildStamp"></span>
+  <span>Made with Three.js · GSAP · Lenis · zero frameworks</span>
+</footer>
+
+<div id="toast" class="mono" role="status" aria-live="polite">Copied</div>
+
+<!-- GSAP + Lenis (self-hosted, no CDN) -->
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+
+<!-- Three.js via importmap (self-hosted) -->
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+<script type="module" src="scripts/app.js"></script>
+</body>
+</html>
