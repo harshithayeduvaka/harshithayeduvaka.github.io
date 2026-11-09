@@ -38,7 +38,7 @@ cd ~/Desktop/harshitha-yeduvaka.github.io
 python3 serve.py               # then open http://localhost:8000 (no-cache dev server)
 ```
 A server is required: ES modules don't load from `file://`.
-Cache busting: index.html and app.js imports carry `?v=YYYYMMDDx`. Bump it (all 4 places)
+Cache busting: index.html, app.js imports and ASSET_V (desk images + signature) carry `?v=YYYYMMDDx`. Bump all
 after editing CSS/JS so browsers fetch fresh files.
 
 ## Files

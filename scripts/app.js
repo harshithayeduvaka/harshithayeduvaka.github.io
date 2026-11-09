@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110k";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110l";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110k";
+} from "./content.js?v=20261110l";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -11,6 +11,8 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+// bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
+const ASSET_V = "20261110l";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -113,20 +115,20 @@ function passKit() {
       // Hidden until the camera is clicked.
       b.setAttribute("aria-label", `Photo: ${k.alt}`);
       b.classList.add("is-hidden");
-      b.innerHTML = `<span class="kit__img print"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>`;
+      b.innerHTML = `<span class="kit__img print"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>`;
     } else if (k.cup) {
       // cappuccino from above: saucer, cup + handle, real latte art, steam (on click)
       b.setAttribute("aria-label", `${k.alt}. Plays a sound.`);
       b.innerHTML = `
       <span class="kit__img cup" aria-hidden="true">
         <span class="cup__saucer"></span><span class="cup__handle"></span>
-        <span class="cup__body"><span class="cup__crema"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span></span>
+        <span class="cup__body"><span class="cup__crema"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span></span>
         <span class="cup__steam"><i></i><i></i><i></i></span>
       </span>`;
     } else {
       b.innerHTML = `
-      <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
-        k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign"><img src="assets/signature.png" alt="" width="983" height="131" draggable="false" /></span>${
+      <span class="kit__img"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
+        k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="983" height="131" draggable="false" /></span>${
           k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
       }</span>`;
     }
@@ -323,7 +325,7 @@ function passKit() {
   if (chaosInk) {
     const [title, tagline] = kit.find((k) => k.ink).ink.lines;
     chaosInk.innerHTML = `
-      <span class="chaos-ink__name"><img src="assets/signature.png" alt="" width="983" height="131" draggable="false" /></span>
+      <span class="chaos-ink__name"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="983" height="131" draggable="false" /></span>
       <span class="chaos-ink__title">${title}</span>
       <span class="chaos-ink__tag">${tagline}</span>`;
   }
