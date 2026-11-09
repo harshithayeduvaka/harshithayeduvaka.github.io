@@ -163,9 +163,10 @@ function passKit() {
       box.appendChild(el);
       API.createController(el, { uri: `spotify:track:${spotifyId}`, width: "100%", height: 80 }, (c) => {
         spotify = c;
+        recState.textContent = "PRESS PLAY ON SPOTIFY";
         // keep the vinyl in sync with the real player (also when they use Spotify's own button)
         c.addListener("playback_update", (e) => paint(!e.data.isPaused, "SPOTIFY"));
-        c.addListener("ready", () => { recState.textContent = "PRESS PLAY"; c.play(); });
+        c.addListener("ready", () => c.play()); // browsers may block this; then Spotify's own ▶ works
       });
     };
     const s = document.createElement("script");
@@ -208,9 +209,10 @@ function passKit() {
     b.setAttribute("aria-label", `${k.label.toLowerCase()}: ${k.alt}. Plays a sound.`);
     b.innerHTML = `
       <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
-        k.ink ? `<span class="kit__ink" aria-hidden="true">${k.ink.split(" ").map((w) => `<span>${w}</span>`).join("")}</span>` : ""
+        k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign">${k.ink.name}</span>${
+          k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
       }</span>
-      <span class="kit__label mono">OBJ.0${i + 1} · ${k.label}</span>`;
+      <span class="kit__label mono"><span class="kit__obj">OBJ.0${i + 1} · </span>${k.label}</span>`;
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
       b.style.left = k.desk.x + "%";
@@ -271,13 +273,13 @@ function passKit() {
   });
 
   // --- the name "writes itself" onto the notebook when the desk scrolls in ---
-  const ink = $$(".kit__ink span");
-  if (ink.length && !reduced) {
-    gsap.set(ink, { clipPath: "inset(-20% 100% -20% 0)" });
-    gsap.to(ink, {
-      clipPath: "inset(-20% 0% -20% 0)", duration: 1.1, ease: "power1.inOut", stagger: 0.9,
-      scrollTrigger: { trigger: grid, start: "top 70%" },
-    });
+  const sign = $(".kit__sign"), typed = $$(".kit__type");
+  if (sign && !reduced) {
+    gsap.set(sign, { clipPath: "inset(-30% 100% -30% -5%)" });
+    gsap.set(typed, { opacity: 0, y: 6 });
+    gsap.timeline({ scrollTrigger: { trigger: grid, start: "top 70%" } })
+      .to(sign, { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.6, ease: "power1.inOut" })
+      .to(typed, { opacity: 1, y: 0, duration: 0.5, stagger: 0.25 }, "-=0.2");
   }
 
   // --- tidy: send everything back to its starting spot ---------------

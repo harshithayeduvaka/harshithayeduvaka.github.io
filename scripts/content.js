@@ -15,6 +15,7 @@ export const meta = {
   resume: "resume.pdf",
   positioning:
     "B2B implementation professional with 2+ years managing onboarding for 65+ enterprise accounts. Cut client churn 15% and reduced onboarding cycles 30% through CRM optimisation and structured account management.",
+  tagline: "B2B implementation that turns onboarding into retention.",
   available: "AVAILABLE FOR A MARKETING INTERNSHIP · PARIS · 2026",
   // Contact form. FormSubmit forwards submissions to the email in the URL.
   // The FIRST submission sends an activation email to that inbox: click it once.
@@ -33,32 +34,33 @@ export const about = {
   ],
 };
 
-// "Off the CV" desk under the About bio. Order = stacking order (first is at the bottom).
-// Objects cluster around the notebook (ref: jackiehu.design).
+// "Off the CV" desk under the About bio (layout ref: jackiehu.design).
+// The open notebook is the centrepiece with her name written across both pages;
+// the other objects sit around it. Order = stacking order (first is at the bottom).
 // desk: starting spot on the desktop layout, in % of the desk (x, y, width) + tilt in degrees.
 // sound: shutter | click | page | music.  note: your words, shown on click.
 export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
-    img: "assets/objects/notebook.jpg", w: 560, h: 420,
+    img: "assets/objects/notebook.png", w: 960, h: 709, // transparent cut-out
     alt: "Open cream notebook with a red ribbon bookmark",
-    ink: meta.name, // handwritten on the right-hand page (one line per word)
-    desk: { x: 5, y: 8, w: 50, r: -5 },
+    ink: { name: meta.name, lines: [meta.role, meta.tagline] }, // written on the pages
+    desk: { x: 14, y: 9, w: 58, r: -11 },
     note: "[TODO: what goes in this notebook]" },
-  { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
-    img: "assets/objects/pen.jpg", w: 447, h: 447,
-    alt: "Clear retractable gel pen with black ink",
-    desk: { x: 40, y: 30, w: 14, r: 38 },
-    note: "[TODO: what you write by hand]" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
     img: "assets/objects/camera.jpg", w: 361, h: 350,
     alt: "Brown and silver instant camera",
-    desk: { x: 39, y: 57, w: 21, r: 9 },
+    desk: { x: 2, y: 64, w: 19, r: 8 },
     note: "[TODO: why this camera / what you shoot]" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.jpg", w: 560, h: 560,
     alt: "Black over-ear wireless headphones",
-    desk: { x: 55, y: 1, w: 20, r: -14 },
+    desk: { x: 1, y: 3, w: 18, r: -18 },
     note: "[TODO: one line on why you love this song]" },
+  { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
+    img: "assets/objects/pen.jpg", w: 447, h: 447,
+    alt: "Clear retractable gel pen with black ink",
+    desk: { x: 54, y: 30, w: 17, r: 18 }, // lies across the notebook's right edge
+    note: "[TODO: what you write by hand]" },
 ];
 
 // The record card next to the headphones.
@@ -70,7 +72,7 @@ export const kit = [
 export const music = {
   title: "Coffee & Chill",
   artist: "Cloudchord",
-  link: "", // [TODO: paste the Spotify track link here]
+  link: "https://open.spotify.com/track/2C7VA1VMLDgeNjr4i3h0V1",
 };
 
 // Metrics the parser extracts in Pass 02 (real numbers she moved).
