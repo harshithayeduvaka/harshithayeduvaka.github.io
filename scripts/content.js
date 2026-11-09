@@ -33,6 +33,27 @@ export const about = {
   ],
 };
 
+// "Off the CV" objects under the About bio. Click = reveal note (+ sound, next phase).
+// sound: key for the click sound (wired up later). note: your words, shown on click.
+export const kit = [
+  { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
+    img: "assets/objects/camera.jpg", w: 361, h: 350,
+    alt: "Brown and silver instant camera",
+    note: "[TODO: why this camera / what you shoot]" },
+  { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
+    img: "assets/objects/headphones.jpg", w: 560, h: 560,
+    alt: "Black over-ear wireless headphones",
+    note: "[TODO: the song you recommend, artist + title]" },
+  { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
+    img: "assets/objects/pen.jpg", w: 447, h: 447,
+    alt: "Clear retractable gel pen with black ink",
+    note: "[TODO: what you write by hand]" },
+  { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
+    img: "assets/objects/notebook.jpg", w: 560, h: 420,
+    alt: "Open cream notebook with a red ribbon bookmark",
+    note: "[TODO: what goes in this notebook]" },
+];
+
 // Metrics the parser extracts in Pass 02 (real numbers she moved).
 export const metrics = [
   { value: "2+ yrs", label: "METRIC · EXPERIENCE" },

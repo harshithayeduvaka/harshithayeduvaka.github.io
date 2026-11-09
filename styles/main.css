@@ -242,6 +242,41 @@ section { position: relative; }
 .about__fig figcaption { color: var(--ultramarine); margin-top: 10px; }
 .about__bio { display: grid; gap: 1em; margin-top: 1.4em; }
 
+/* Off-the-CV objects: product shots on white, multiplied onto chalk so the
+   white backdrop disappears. Hovered/pressed object gets saffron crop marks. */
+.kit { grid-column: 2; margin-top: clamp(56px, 8vw, 120px); }
+.kit__head { color: var(--ultramarine); margin-bottom: 1.4em; }
+.kit__head span { color: var(--graphite); opacity: .55; }
+/* `main` is its own stacking context (z-index:1), so the grid paints solid chalk
+   for the multiply blend to work against. */
+.kit__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 3vw, 40px); background: var(--chalk); }
+.kit__item { position: relative; display: grid; grid-template-rows: auto auto; gap: 12px; justify-items: center; padding: 14px; text-align: center; }
+.kit__img { display: block; height: clamp(110px, 14vw, 200px); width: 100%; }
+.kit__img img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform .35s var(--ease-parse); }
+/* these two photos have off-white/grey backdrops: lift them to pure white so multiply drops them */
+.kit__item--camera img { filter: brightness(1.07) contrast(1.06); }
+.kit__item--notebook img { filter: brightness(1.13) contrast(1.12); }
+.kit__item:hover img { transform: translateY(-6px) rotate(-2deg); }
+.kit__label { color: var(--graphite); opacity: .6; transition: opacity .2s, color .2s; }
+.kit__item:hover .kit__label, .kit__item[aria-pressed="true"] .kit__label { opacity: 1; color: var(--ultramarine); }
+.kit__item::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .2s;
+  --c: var(--saffron); --l: 18px; --t: 2px;
+  background:
+    linear-gradient(var(--c) 0 0) top left / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) top left / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) top right / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) top right / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) bottom left / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) bottom left / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) bottom right / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) bottom right / var(--t) var(--l);
+  background-repeat: no-repeat;
+}
+.kit__item:hover::before, .kit__item[aria-pressed="true"]::before { opacity: 1; }
+.kit__note { min-height: 3em; margin-top: 1.2em; max-width: var(--measure); font-size: var(--fs-18); }
+.kit__note .mono { color: var(--ultramarine); margin-right: .6em; }
+
 /* ============================================================
    PASS 02 — Positioning extraction
    ============================================================ */
@@ -455,6 +490,8 @@ footer span { color: var(--graphite); opacity: 0.55; }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
   .p02__wrap, .demo, .p07__wrap, .about__wrap, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   .about__fig { max-width: 320px; }
+  .kit { grid-column: 1; }
+  .kit__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mailto { font-size: clamp(1.1rem, 5.4vw, 2.4rem); }  /* keep the address on one line on phones */
   .ledger, .ring-panel, .ledger.sticky { position: static; }
   .demo { }
@@ -472,4 +509,5 @@ footer span { color: var(--graphite); opacity: 0.55; }
   .hero__cue { display: none; }
   #cursor { display: none; }
   .ledger__row { opacity: 1; transform: none; }
+  .kit__item:hover img { transform: none; }
 }

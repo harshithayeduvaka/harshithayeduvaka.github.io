@@ -1,7 +1,7 @@
 // app.js — motion orchestration, demo logic, wiring.
 import { initField, initGlobe } from "./webgl.js";
 import {
-  meta, about, metrics, experience, projects, skills, languages,
+  meta, about, kit, metrics, experience, projects, skills, languages,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -116,6 +116,37 @@ function passAbout() {
   img.width = ph.w; img.height = ph.h;
   img.alt = ph.alt;
   $("#aboutBio").innerHTML = about.paragraphs.map((t) => `<p>${t}</p>`).join("");
+}
+
+// ------------------------------------------------------------------
+// Off-the-CV objects (About). Click: lift + show note.
+// Fires a "kit:select" event with the sound key; sounds plug in there later.
+// ------------------------------------------------------------------
+function passKit() {
+  const grid = $("#kitGrid");
+  const note = $("#kitNote");
+  kit.forEach((k, i) => {
+    const b = document.createElement("button");
+    b.className = `kit__item kit__item--${k.id}`;
+    b.type = "button";
+    b.setAttribute("aria-pressed", "false");
+    b.dataset.sound = k.sound;
+    b.innerHTML = `
+      <span class="kit__img"><img src="${k.img}" alt="${k.alt}" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" /></span>
+      <span class="kit__label mono">OBJ.0${i + 1} · ${k.label}</span>`;
+    b.addEventListener("click", () => {
+      const was = b.getAttribute("aria-pressed") === "true";
+      $$(".kit__item").forEach((x) => x.setAttribute("aria-pressed", "false"));
+      b.setAttribute("aria-pressed", String(!was));
+      note.innerHTML = was ? "" : `<span class="mono">OBJ.0${i + 1} · ${k.name}</span> ${k.note}`;
+      if (!reduced) {
+        gsap.fromTo(b.querySelector("img"), { y: 0, rotate: 0 },
+          { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });
+      }
+      document.dispatchEvent(new CustomEvent("kit:select", { detail: { id: k.id, sound: k.sound, on: !was } }));
+    });
+    grid.appendChild(b);
+  });
 }
 
 // ------------------------------------------------------------------
@@ -521,7 +552,7 @@ async function init() {
   buildHeroChars();
 
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passAbout, pass02, pass03, pass04, pass05, pass06, pass07, contact, contactForm };
+  const passes = { passAbout, passKit, pass02, pass03, pass04, pass05, pass06, pass07, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
