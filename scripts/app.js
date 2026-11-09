@@ -1,5 +1,4 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { initGlobe } from "./webgl.js";
 import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
   meta, kit, tools, experience, projects, languages,
@@ -14,18 +13,16 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 // ------------------------------------------------------------------
-// Single shared RAF: Lenis + GSAP ticker + the globe renderer
+// Single shared RAF: Lenis + GSAP ticker
 // ------------------------------------------------------------------
 let lenis;
 if (!reduced) {
   lenis = new Lenis({ lerp: 0.1, duration: 1.2, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
 }
-let globe;
 
 gsap.ticker.add((time) => {
   if (lenis) lenis.raf(time * 1000);
-  if (globe && globe.render) globe.render(time);
 });
 gsap.ticker.lagSmoothing(0);
 
@@ -153,7 +150,7 @@ function passKit() {
         if (k.cup) steam(b);
       }
       note.textContent = k.note || "";
-      if (!reduced) {
+      if (!reduced && !k.cup) { // the cup only steams; everything else does a little hop
         gsap.fromTo(b.querySelector("img"), { y: 0, rotate: 0 },
           { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });
       }
@@ -546,12 +543,9 @@ function pass07() {
     langs.appendChild(d);
   });
 
-  globe = initGlobe($("#globe"));
-
   ScrollTrigger.create({
     trigger: "#p07", start: "top 60%",
     onEnter: () => {
-      if (globe.startArcs) globe.startArcs();
       $$(".lang__bar i").forEach((i) =>
         gsap.to(i, { width: i.dataset.pct + "%", duration: reduced ? 0.15 : 1, ease: "power3.out" }));
     },

@@ -212,18 +212,4 @@ export const languages = [
   { name: "French", level: "B2", pct: 70 },
 ];
 
-// Hyderabad → Berlin → Paris. Content, not trivia.
-export const geography = [
-  { city: "Hyderabad", lat: 17.385, lon: 78.4867, year: "2023", role: "Keka HR" },
-  { city: "Berlin", lat: 52.52, lon: 13.405, year: "2025", role: "NOMAD X" },
-  { city: "Paris", lat: 48.8566, lon: 2.3522, year: "2026", role: "SKEMA · ohmyATS" },
-];
 
-// Real words the token stream carries.
-export const corpus = [
-  "churn −15%", "65+ accounts", "Meta Ads", "CLV", "onboarding", "MAYA",
-  "Zivame", "attribution", "GTM", "A/B", "lead scoring", "ROI", "HubSpot",
-  "segmentation", "SEO/SEM", "+17%", "cohort", "Dior", "Porter", "GA4",
-  "pipeline", "+15% open", "engagement", "brand-fit", "ATS", "SQL",
-  "Future Group", "positioning", "CRM audit", "+12%", "conversion",
-];

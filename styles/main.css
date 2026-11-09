@@ -185,8 +185,8 @@ section { position: relative; }
 .kit__item.is-hidden { visibility: hidden; }
 .kit__img { display: block; }
 .kit__img img { width: 100%; height: auto; pointer-events: none; transition: transform .35s var(--ease-parse); }
-.kit__item:hover img { transform: translateY(-5px); }
-.kit__item.is-dragging img { transform: scale(1.04); }
+.kit__item:not(.kit__item--cup):hover img { transform: translateY(-5px); } /* the coffee never moves */
+.kit__item:not(.kit__item--cup).is-dragging img { transform: scale(1.04); }
 
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
 .kit__item--notebook, .kit__item--camera, .kit__item--print { mix-blend-mode: normal; }
@@ -437,9 +437,7 @@ section { position: relative; }
 /* ============================================================
    PASS 07 — Geography + contact
    ============================================================ */
-.p07__wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,5vw,72px); align-items: center; }
-#globe { width: 100%; aspect-ratio: 1; min-height: 320px; }
-.langs { display: grid; gap: 14px; margin-top: 28px; }
+.langs { display: grid; gap: 14px; max-width: 640px; }
 .lang { display: grid; gap: 6px; }
 .lang__top { display: flex; justify-content: space-between; }
 .lang__bar { height: 4px; background: var(--latte); border-radius: 2px; overflow: hidden; }
@@ -555,7 +553,7 @@ html.deck-open { overflow: hidden; }
   .tl__when { text-align: left; padding-top: 0; margin-bottom: .4em; }
   .tl__when span { display: inline; margin-left: .8em; }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-  .demo, .p07__wrap, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
+  .demo, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   /* desk -> tap grid; no dragging (it would fight scrolling) */
   .hero.desk { min-height: auto; padding-top: 16px; padding-bottom: 56px; }
   .kit__tools { position: static; justify-content: flex-end; margin-bottom: 8px; }

@@ -7,8 +7,7 @@ Audience: marketing hiring managers and recruiters (FR/EU), plus startup founder
 Concept: **a coffee-coded desk**. The first screen is a desk (ref: jackiehu.design):
 an open notebook with her name, title and tagline written on it, plus headphones (music),
 an instax camera (click = her photo slides out as a print), a pen and a record card.
-Below it, the later sections ("passes": experience, ohmyATS demo, projects, skills,
-geography) and contact. She asked for: no CV-copy intro, no object labels/numbers,
+Below it: experience timeline, ohmyATS demo, case studies, languages, contact. She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
 no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots | entry); the group headings
 "Foundations" (education) and "The Story So Far" (work) appear once each.
@@ -17,13 +16,15 @@ per project in content.js, otherwise slides are built from the project's text.
 Desk extras: a blue "toolkit" folder (top) pops `tools` (content.js) out in a fan; tool tiles are
 64x64 SVGs in assets/tools/ (HubSpot/GA4/Notion/Asana/Canva glyphs from Simple Icons, CC0;
 Excel/Apollo.io/SQL drawn by hand). A top-down cappuccino (kit item `cup`, latte art in
-assets/objects/crema.jpg) replaced the coffee-ring stain; click = clink + steam.
+assets/objects/crema.jpg) replaced the coffee-ring stain; click = clink + steam only (the cup
+never hops or lifts; she found that weird).
 Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome
 never advances; inject `*{transition:none!important}` in test harnesses to see final states.
 
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.
-- Vendored libraries in `vendor/` (no CDN): GSAP 3.13 + ScrollTrigger, Lenis 1.1.13, Three.js r170.
+- Vendored libraries in `vendor/` (no CDN): GSAP 3.13 + ScrollTrigger, Lenis 1.1.13. (Three.js removed
+  with the globe.)
 - Hosting: GitHub Pages from `main` (repo `harshithayeduvaka/harshitha-yeduvaka.github.io`).
 
 ## Run locally
@@ -39,7 +40,6 @@ index.html          markup skeleton for every pass (sections are filled by JS)
 styles/main.css     all styles; design tokens live in :root at the top
 scripts/content.js  ALL editable content (desk objects, jobs, projects, skills, links)
 scripts/app.js      animation orchestration + section rendering + ohmyATS demo
-scripts/webgl.js    wireframe globe (Three.js); initField is unused legacy
 scripts/sound.js    Web Audio synth: desk click sounds + original lo-fi loop (no audio files)
 assets/             her photo (the instax print) and desk objects (assets/objects/; notebook
                     and camera are transparent PNG cut-outs)
