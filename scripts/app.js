@@ -149,7 +149,9 @@ function passKit() {
       if (k.sound === "music") {
         setPlaying(!playing);
       } else {
-        play(k.sound);
+        // cup: her Pixabay slurp if saved as assets/sounds/slurp.mp3, else the synth; always 2s
+        if (k.cup) playFile("assets/sounds/slurp.mp3", "slurp", 2);
+        else play(k.sound);
         if (k.sound === "shutter") ejectPrint();
         if (k.cup) steam(b);
       }

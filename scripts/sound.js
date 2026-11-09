@@ -87,6 +87,32 @@ const SOUNDS = {
     n.start(t, Math.random()); n.stop(t + 0.5);
     burst(t + 0.4, { freq: 2600, q: 1, dur: 0.05, gain: 0.35 }); // the flick
   },
+  // cup: a 2-second slurp of hot coffee. Airy sucked-in noise whose pitch and
+  // loudness wobble quickly (the gurgle of liquid + air), in three little pulls.
+  slurp(t) {
+    const dur = 2.0;
+    const n = noise(), bp = ctx.createBiquadFilter(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
+    bp.type = "bandpass"; bp.Q.value = 2.2;
+    hp.type = "highpass"; hp.frequency.value = 350;
+    // gurgle: the band's centre jitters between ~700 and ~2200 Hz
+    let f = t;
+    while (f < t + dur) {
+      bp.frequency.setValueAtTime(700 + Math.random() * 1500, f);
+      f += 0.025 + Math.random() * 0.035;
+    }
+    // three pulls of breath: swell, dip, swell, dip, longer swell, fade
+    g.gain.setValueAtTime(0.0001, t);
+    [[0, 0.32], [0.35, 0.05], [0.55, 0.36], [0.9, 0.06], [1.1, 0.4], [1.75, 0.2]].forEach(([dt, v]) =>
+      g.gain.linearRampToValueAtTime(v, t + dt + 0.08));
+    g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    // fast flutter on top so it bubbles rather than hisses
+    const lfo = ctx.createOscillator(), lg = ctx.createGain(), wob = ctx.createGain();
+    lfo.type = "triangle"; lfo.frequency.value = 23; lg.gain.value = 0.45; wob.gain.value = 0.7;
+    lfo.connect(lg).connect(wob.gain);
+    n.connect(hp).connect(bp).connect(g).connect(wob).connect(master);
+    n.start(t, Math.random()); n.stop(t + dur);
+    lfo.start(t); lfo.stop(t + dur);
+  },
   // folder: a mouse click. A sharp "press" then a softer "release" ~70ms later.
   mouseclick(t) {
     burst(t, { freq: 3800, q: 4, dur: 0.012, gain: 0.9 });
@@ -153,7 +179,7 @@ export function play(key) {
 // Play a recorded sound file (e.g. assets/sounds/click.mp3). If the file is missing
 // or can't be decoded, play the synthesized `fallback` sound instead.
 const fileCache = {};
-export function playFile(url, fallback) {
+export function playFile(url, fallback, maxDur = 0) {
   ac();
   if (!(url in fileCache)) {
     fileCache[url] = fetch(url)
@@ -163,10 +189,15 @@ export function playFile(url, fallback) {
   }
   fileCache[url].then((buf) => {
     if (!buf) return play(fallback);
-    const s = ctx.createBufferSource();
+    const s = ctx.createBufferSource(), g = ctx.createGain(), t = ctx.currentTime;
     s.buffer = buf;
-    s.connect(master);
-    s.start();
+    s.connect(g).connect(master);
+    s.start(t);
+    if (maxDur) { // cut to maxDur seconds with a short fade, so it never clicks off
+      g.gain.setValueAtTime(1, t + maxDur - 0.15);
+      g.gain.linearRampToValueAtTime(0, t + maxDur);
+      s.stop(t + maxDur + 0.02);
+    }
   });
 }
 
