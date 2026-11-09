@@ -178,7 +178,7 @@ section { position: relative; }
 
 /* the desk itself: as large as fits the screen, same proportions everywhere */
 .kit__grid {
-  position: relative; overflow: hidden;
+  position: relative; /* no overflow clipping: objects can be dragged off the desk, anywhere on the page */
   width: min(100%, calc((100svh - 110px) * 1.45)); aspect-ratio: 1.45; margin-inline: auto;
   background: var(--cream);
 }

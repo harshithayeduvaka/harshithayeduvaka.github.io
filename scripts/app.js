@@ -163,32 +163,53 @@ function passKit() {
       }
     });
 
-    // drag (desktop only). Offsets live in --dx/--dy so the tilt stays intact.
+    // drag (desktop only). Objects can go anywhere on the page, not just the desk:
+    // they're only kept inside the page itself (left/right edges, top/bottom of the
+    // document). Dragging near the top/bottom of the window scrolls the page, so an
+    // object can be carried down into any section. Offsets live in --dx/--dy so the
+    // tilt stays intact.
     if (desk) {
-      let sx, sy, ox, oy, minX, maxX, minY, maxY, moving = false;
+      let sx, sy, sScroll, ox, oy, minX, maxX, minY, maxY, moving = false, px = 0, py = 0, raf = 0;
+      const scrollY = () => (lenis ? lenis.scroll : window.scrollY);
+      const place = () => {
+        const dx = px - sx, dy = py + scrollY() - (sy + sScroll); // page-space movement
+        b.style.setProperty("--dx", Math.min(maxX, Math.max(minX, ox + dx)) + "px");
+        b.style.setProperty("--dy", Math.min(maxY, Math.max(minY, oy + dy)) + "px");
+      };
+      const edgeScroll = () => { // auto-scroll while the pointer is near the window's top/bottom
+        if (!moving || !dragged) return;
+        const zone = 70, h = window.innerHeight;
+        const v = py > h - zone ? (py - (h - zone)) / zone : py < zone ? -(zone - py) / zone : 0;
+        if (v) {
+          const to = scrollY() + v * 18;
+          if (lenis) lenis.scrollTo(to, { immediate: true }); else window.scrollTo(0, to);
+          place();
+        }
+        raf = requestAnimationFrame(edgeScroll);
+      };
       b.addEventListener("pointerdown", (e) => {
         if (e.button !== 0) return;
         try { b.setPointerCapture(e.pointerId); } catch {} // keeps the drag even if the cursor outruns the object
-        b.style.zIndex = ++top;
-        sx = e.clientX; sy = e.clientY;
+        b.style.zIndex = Math.min(++top, 55); // above every section, below the logo
+        sx = px = e.clientX; sy = py = e.clientY; sScroll = scrollY();
         ox = parseFloat(b.style.getPropertyValue("--dx")) || 0;
         oy = parseFloat(b.style.getPropertyValue("--dy")) || 0;
-        // keep at least ~40% of the object on the desk
-        const d = grid.getBoundingClientRect(), r = b.getBoundingClientRect();
-        minX = ox + (d.left - r.left) - r.width * 0.6;  maxX = ox + (d.right - r.right) + r.width * 0.6;
-        minY = oy + (d.top - r.top) - r.height * 0.6;   maxY = oy + (d.bottom - r.bottom) + r.height * 0.6;
+        // limits: stay within the page (a quarter of the object may hang off the side)
+        const r = b.getBoundingClientRect(), docW = document.documentElement.clientWidth;
+        const docTop = r.top + scrollY(), docH = document.documentElement.scrollHeight;
+        minX = ox - r.left - r.width * 0.25;            maxX = ox + (docW - r.right) + r.width * 0.25;
+        minY = oy - docTop;                             maxY = oy + (docH - docTop - r.height);
         moving = true; dragged = false;
       });
       b.addEventListener("pointermove", (e) => {
         if (!moving) return;
-        const dx = e.clientX - sx, dy = e.clientY - sy;
-        if (!dragged && Math.hypot(dx, dy) < 5) return; // tiny jitter still counts as a click
-        dragged = true;
+        px = e.clientX; py = e.clientY;
+        if (!dragged && Math.hypot(px - sx, py - sy) < 5) return; // tiny jitter still counts as a click
+        if (!dragged) { dragged = true; raf = requestAnimationFrame(edgeScroll); }
         b.classList.add("is-dragging");
-        b.style.setProperty("--dx", Math.min(maxX, Math.max(minX, ox + dx)) + "px");
-        b.style.setProperty("--dy", Math.min(maxY, Math.max(minY, oy + dy)) + "px");
+        place();
       });
-      const end = () => { moving = false; b.classList.remove("is-dragging"); };
+      const end = () => { moving = false; cancelAnimationFrame(raf); b.classList.remove("is-dragging"); };
       b.addEventListener("pointerup", end);
       b.addEventListener("pointercancel", end);
     }

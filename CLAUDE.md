@@ -56,6 +56,7 @@ resume.pdf          downloadable CV (linked from meta.resume)
   `@media (prefers-reduced-motion: reduce)` in CSS) that shows the final static state.
 - Each pass in app.js is wrapped in try/catch at init, so one failure can't blank the page.
 - Mobile breakpoint: 860px (`isMobile` in JS, `@media (max-width: 860px)` in CSS).
+  Desk objects drag anywhere on the page (desktop); dragging near the window edge auto-scrolls.
   On mobile the desk becomes a tap grid and the timeline puts dates above each entry.
 - Targeted edits over rewrites. Commit after each phase.
 
