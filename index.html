@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Harshitha Yeduvaka — Marketing · B2B Implementation · Paris</title>
-<meta name="description" content="B2B implementation professional. 2+ years, 65+ enterprise accounts, churn −15%, onboarding cycles −30%. Seeking a marketing internship in Paris, 2026." />
+<title>Harshitha Yeduvaka — Marketing & Growth · Paris</title>
+<meta name="description" content="Harshitha Yeduvaka, Marketing &amp; Growth in Paris. Helping businesses turn marketing efforts into measurable growth." />
 <link rel="canonical" href="/" />
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400..800&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&family=Allura&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&family=Allura&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles/main.css" />
 
 <!-- JSON-LD -->
@@ -21,10 +21,6 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<!-- WebGL token field (decorative) -->
-<canvas id="field" aria-hidden="true"></canvas>
-<div id="cursor" class="mono" aria-hidden="true">TOKENS/SEC 0</div>
-
 <!-- PASS 00 — Boot -->
 <div id="boot" aria-hidden="true">
   <div class="boot__rule"><i></i></div>
@@ -33,97 +29,35 @@
 </div>
 
 <main id="main">
-  <!-- PASS 01 — Hero -->
-  <header class="hero" id="p01">
-    <div class="rail mono">
-      <span class="rail__idx">PASS 01 / 08</span>
-      <span>48.8566° N</span>
-      <span>2.3522° E</span>
-      <span>PARSE v1.0</span>
+  <!-- Hero — the desk. The notebook carries her name, title and tagline; objects are
+       built from content.js `kit`, the record card plays the music. Desktop: drag objects
+       around, click to play. Mobile: tap-to-play grid. -->
+  <header class="hero desk" id="top">
+    <h1 class="visually-hidden">Harshitha Yeduvaka — Marketing &amp; Growth</h1>
+    <div class="kit">
+      <div class="kit__tools mono">
+        <button type="button" id="deskTidy">↺ Tidy up</button>
+        <button type="button" id="deskMute" aria-pressed="false">♪ Sound on</button>
+      </div>
+      <div class="kit__grid" id="kitGrid">
+        <div class="record" id="record">
+          <div class="record__disc" aria-hidden="true"><i></i></div>
+          <div class="record__actions mono">
+            <button type="button" id="recordPlay" aria-pressed="false">▶ Play</button>
+          </div>
+        </div>
+      </div>
+      <p class="kit__note" id="kitNote" aria-live="polite"></p>
     </div>
-    <div class="content">
-      <h1 class="hero__name display" id="heroName" aria-label="Harshitha Yeduvaka">
-        <span class="line" data-word="HARSHITHA"></span>
-        <span class="line" data-word="YEDUVAKA"></span>
-      </h1>
-      <p class="hero__strap mono"><span class="reveal">MARKETING <span class="divider">·</span> B2B IMPLEMENTATION <span class="divider">·</span> PARIS</span></p>
-      <p class="hero__positioning mask-line"><span>B2B implementation that turns onboarding into retention.</span></p>
-      <div class="hero__cue" aria-hidden="true"></div>
-    </div>
+    <div class="hero__cue" aria-hidden="true"></div>
   </header>
-
-  <!-- PASS 02 (label) — About: bio (from content.js `about`) + the desk.
-       Her photo lives on the desk as an instax print next to the camera. -->
-  <section class="pass about" id="about" aria-labelledby="about-h">
-    <div class="pass__grid">
-      <div class="rail mono">
-        <span class="rail__idx">PASS 02 / 08</span>
-        <span>ABOUT</span>
-      </div>
-      <div class="content about__wrap">
-        <h2 id="about-h" class="pass__title display">Hello, I'm Harshitha.</h2>
-        <div class="about__bio body-lg" id="aboutBio"></div>
-      </div>
-      <!-- The desk: objects built from content.js `kit`, record card from `music`.
-           Desktop: drag objects around, click to play. Mobile: tap-to-play grid. -->
-      <div class="kit">
-        <div class="kit__bar">
-          <p class="kit__head" id="kitHint">Drag things around, click to play</p>
-          <div class="kit__tools mono">
-            <button type="button" id="deskTidy">↺ Tidy</button>
-            <button type="button" id="deskMute" aria-pressed="false">♪ Sound on</button>
-          </div>
-        </div>
-        <div class="kit__grid" id="kitGrid">
-          <div class="record" id="record">
-            <div class="record__disc" aria-hidden="true"><i></i></div>
-            <div class="record__meta">
-              <div class="record__actions mono">
-                <button type="button" id="recordPlay" aria-pressed="false">▶ Play</button>
-                <a id="recordLink" target="_blank" rel="noopener" hidden>Listen ↗</a>
-              </div>
-            </div>
-            <!-- Spotify player is injected here on first play (only if music.link is a Spotify track) -->
-            <div class="record__embed" id="recordEmbed" hidden></div>
-          </div>
-        </div>
-        <p class="kit__note" id="kitNote" aria-live="polite"></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- PASS 02 — Positioning extraction -->
-  <section class="pass" id="p02" aria-labelledby="p02-h">
-    <div class="pass__grid">
-      <div class="rail mono">
-        <span class="rail__idx">PASS 03 / 08</span>
-        <span>EXTRACT</span>
-        <span>SIGNAL</span>
-      </div>
-      <div class="content">
-        <p class="mono eyebrow" id="p02-h" style="margin-bottom:2em">THE PARSER READS THE SUMMARY AND KEEPS ONLY WHAT MOVED</p>
-        <div class="p02__wrap">
-          <p class="p02__para" id="p02Para">
-            B2B implementation professional with <mark data-i="0">2+ years</mark> managing onboarding for
-            <mark data-i="1">65+ enterprise accounts</mark>. Cut client churn
-            <mark data-i="2">15%</mark> and reduced onboarding cycles
-            <mark data-i="3">30%</mark> through CRM optimisation and structured account management.
-          </p>
-          <aside class="ledger" aria-label="Extracted metrics">
-            <h3 class="mono">LEDGER · EXTRACTED SIGNAL</h3>
-            <div id="ledgerRows"></div>
-          </aside>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- PASS 03 — Experience horizontal -->
   <section class="pass" id="p03" aria-labelledby="p03-h">
     <h2 id="p03-h" class="visually-hidden">Experience and education</h2>
     <div class="track" id="p03Track"></div>
     <div class="p03__progress mono" id="p03Progress">
-      <span id="p03Label">PASS 04 · 1/4</span>
+      <span id="p03Label">PASS 01 · 1/4</span>
       <span class="bar"><i></i></span>
     </div>
   </section>
@@ -132,7 +66,7 @@
   <section class="pass" id="p04" aria-labelledby="p04-h">
     <div class="pass__grid">
       <div class="rail mono">
-        <span class="rail__idx">PASS 05 / 08</span>
+        <span class="rail__idx">PASS 02 / 05</span>
         <span>ohmyATS</span>
         <span>LIVE</span>
       </div>
@@ -170,7 +104,7 @@
   <section class="pass" id="p05" aria-labelledby="p05-h">
     <div class="pass__grid">
       <div class="rail mono">
-        <span class="rail__idx">PASS 06 / 08</span>
+        <span class="rail__idx">PASS 03 / 05</span>
         <span>RESULTS</span>
       </div>
       <div class="content">
@@ -184,7 +118,7 @@
   <section class="pass" id="p06" aria-labelledby="p06-h">
     <div class="pass__grid">
       <div class="rail mono">
-        <span class="rail__idx">PASS 07 / 08</span>
+        <span class="rail__idx">PASS 04 / 05</span>
         <span>CLASSIFY</span>
       </div>
       <div class="content">
@@ -200,7 +134,7 @@
   <section class="pass" id="p07" aria-labelledby="p07-h">
     <div class="pass__grid">
       <div class="rail mono">
-        <span class="rail__idx">PASS 08 / 08</span>
+        <span class="rail__idx">PASS 05 / 05</span>
         <span>RESOLVE</span>
       </div>
       <div class="content">

@@ -230,7 +230,7 @@ function llToVec(lat, lon, r) {
 }
 
 export function initGlobe(container) {
-  if (lowEnd) { container.innerHTML = '<div class="mono" style="padding:24px;color:var(--ultramarine)">HYDERABAD → BERLIN → PARIS</div>'; return { render: () => {} }; }
+  if (lowEnd) { container.innerHTML = '<div class="mono" style="padding:24px;color:var(--espresso)">HYDERABAD → BERLIN → PARIS</div>'; return { render: () => {} }; }
   const w = container.clientWidth || 360;
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(DPR);
@@ -247,7 +247,7 @@ export function initGlobe(container) {
   const R = 1.4;
   const wire = new THREE.LineSegments(
     new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(R, 3)),
-    new THREE.LineBasicMaterial({ color: 0x1b21d8, transparent: true, opacity: 0.28 })
+    new THREE.LineBasicMaterial({ color: 0x5a3825, transparent: true, opacity: 0.3 })
   );
   const group = new THREE.Group();
   group.add(wire);
@@ -262,7 +262,7 @@ export function initGlobe(container) {
     const pts = curve.getPoints(80);
     const g = new THREE.BufferGeometry().setFromPoints(pts);
     g.setDrawRange(0, 0);
-    const line = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0xf0a202, linewidth: 2 }));
+    const line = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0xa8692e, linewidth: 2 }));
     group.add(line);
     arcs.push({ line, total: pts.length, progress: 0 });
   }
@@ -270,7 +270,7 @@ export function initGlobe(container) {
     const v = llToVec(city.lat, city.lon, R);
     const dot = new THREE.Mesh(
       new THREE.SphereGeometry(0.035, 12, 12),
-      new THREE.MeshBasicMaterial({ color: 0x1b21d8 })
+      new THREE.MeshBasicMaterial({ color: 0x5a3825 })
     );
     dot.position.copy(v);
     group.add(dot);

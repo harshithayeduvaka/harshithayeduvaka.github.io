@@ -1,8 +1,8 @@
-// app.js — motion orchestration, demo logic, wiring.
-import { initField, initGlobe } from "./webgl.js";
+// app.js — motion orchestration, desk interactions, section rendering.
+import { initGlobe } from "./webgl.js";
 import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
-  meta, about, kit, music, metrics, experience, projects, skills, languages,
+  meta, kit, experience, projects, skills, languages,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -14,35 +14,29 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 // ------------------------------------------------------------------
-// Single shared RAF: Lenis + GSAP ticker + WebGL renderers
+// Single shared RAF: Lenis + GSAP ticker + the globe renderer
 // ------------------------------------------------------------------
 let lenis;
 if (!reduced) {
   lenis = new Lenis({ lerp: 0.1, duration: 1.2, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
 }
-let field, globe;
+let globe;
 
 gsap.ticker.add((time) => {
   if (lenis) lenis.raf(time * 1000);
-  if (field && field.render) field.render(time);
   if (globe && globe.render) globe.render(time);
 });
 gsap.ticker.lagSmoothing(0);
 
 // ------------------------------------------------------------------
-// Boot (PASS 00)
+// Boot — a short "brewing" loader, then the desk intro plays
 // ------------------------------------------------------------------
 function boot() {
   const boot = $("#boot");
   const log = $("#bootLog");
   const rule = $(".boot__rule i");
-  const lines = [
-    "LOADING CORPUS…",
-    "TOKENS 2,417",
-    "LANGUAGES EN · FR · HI · TE",
-    "READY",
-  ];
+  const lines = ["GRINDING BEANS…", "BLOOMING · 30S", "POURING OVER…", "ENJOY ☕"];
   let done = false;
   const finish = () => {
     if (done) return;
@@ -65,57 +59,18 @@ function boot() {
 }
 
 // ------------------------------------------------------------------
-// PASS 01 — Hero
+// Hero = the desk. Objects settle onto the desk, then the name is
+// written onto the notebook. (Timeline is built in passKit.)
 // ------------------------------------------------------------------
-function buildHeroChars() {
-  $$("#heroName .line").forEach((line) => {
-    const word = line.dataset.word;
-    line.innerHTML = "";
-    const inner = document.createElement("span");
-    inner.style.display = "inline-block";
-    [...word].forEach((ch) => {
-      const s = document.createElement("span");
-      s.className = "ch";
-      s.textContent = ch;
-      inner.appendChild(s);
-    });
-    line.appendChild(inner);
-  });
-}
-
+let deskIntro = null;
 function hero() {
-  const chars = $$("#heroName .ch");
-  const tl = gsap.timeline();
-  if (reduced) {
-    gsap.set(chars, { y: 0, opacity: 1 });
-    gsap.set(".hero__strap .reveal, .hero__positioning span", { y: 0 });
-    if (field) field.condense(1);
-    return;
-  }
-  // token-condense: field snaps onto the name, holds, relaxes
-  tl.fromTo(chars,
-    { yPercent: 115 },
-    { yPercent: 0, duration: 0.9, stagger: 0.03, ease: "power4.out" }, 0);
-  if (field && field.uniforms) {
-    tl.to(field.uniforms.uCondense, { value: 1, duration: 1.2, ease: "power2.inOut" }, 0)
-      .to(field.uniforms.uCondense, { value: 0.12, duration: 1.0, ease: "power1.inOut" }, 1.7)
-      .call(() => field.dropRed(), null, 1.9); // signal-red #1: "generic CV" falls
-  }
-  tl.from(".hero__strap .reveal", { yPercent: 120, duration: 0.7 }, 0.5)
-    .from(".hero__positioning span", { yPercent: 120, duration: 0.7 }, 0.7);
+  if (deskIntro) deskIntro.play();
 }
 
 // ------------------------------------------------------------------
-// About — photo + bio (static; its title reveal is handled in pass07)
-// ------------------------------------------------------------------
-function passAbout() {
-  $("#aboutBio").innerHTML = about.paragraphs.map((t) => `<p>${t}</p>`).join("");
-}
-
-// ------------------------------------------------------------------
-// Off-the-CV desk (About). Desktop: objects scattered on a grid-paper desk,
-// draggable; a click (without dragging) plays the object's sound and shows its
-// note. Headphones toggle the record card. Mobile: static 2x2 grid, tap to play.
+// The desk. Desktop: objects laid out around the notebook, draggable; a click
+// (without dragging) plays the object's sound. Headphones toggle the music.
+// Clicking the camera ejects her photo as an instax print. Mobile: tap grid.
 // ------------------------------------------------------------------
 function passKit() {
   const grid = $("#kitGrid");
@@ -123,61 +78,20 @@ function passKit() {
   const desk = !isMobile; // free-placement layout only on desktop
   let top = 10;           // z-index counter: last touched object comes to the front
   let playing = false;
-  if (!desk) $("#kitHint").textContent = "Tap things to play";
 
-  // --- record card -------------------------------------------------
+  // --- record card: plays the original loop from sound.js ------------
   const rec = $("#record"), recBtn = $("#recordPlay");
-  if (music.link) { const a = $("#recordLink"); a.href = music.link; a.hidden = false; }
-
-  // Spotify track link → official Spotify player (loaded only after the first click,
-  // so no third-party script runs until a visitor asks for music).
-  const spotifyId = (music.link.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?track\/([A-Za-z0-9]+)/) || [])[1];
-  let spotify = null; // Spotify EmbedController once loaded
-
-  // paint the card + headphones (no audio side effects)
-  const paint = (on) => {
+  const setPlaying = (on) => {
     playing = on;
     rec.classList.toggle("is-playing", on);
     recBtn.setAttribute("aria-pressed", String(on));
     recBtn.textContent = on ? "❚❚ Pause" : "▶ Play";
     const hp = $(".kit__item--headphones");
     if (hp) hp.setAttribute("aria-pressed", String(on));
-  };
-
-  function loadSpotify() {
-    const box = $("#recordEmbed");
-    box.hidden = false;
-    window.onSpotifyIframeApiReady = (API) => {
-      const el = document.createElement("div");
-      box.appendChild(el);
-      API.createController(el, { uri: `spotify:track:${spotifyId}`, width: "100%", height: 80 }, (c) => {
-        spotify = c;
-        // keep the vinyl in sync with the real player (also when they use Spotify's own button)
-        c.addListener("playback_update", (e) => paint(!e.data.isPaused));
-        c.addListener("ready", () => c.play()); // browsers may block this; then Spotify's own ▶ works
-      });
-    };
-    const s = document.createElement("script");
-    s.src = "https://open.spotify.com/embed/iframe-api/v1";
-    s.async = true;
-    s.onerror = () => { box.hidden = true; }; // blocked: the Listen ↗ link still works
-    document.head.appendChild(s);
-  }
-
-  const setPlaying = (on) => {
-    if (spotifyId) {
-      if (on && !spotify) { play("needle"); loadSpotify(); return; }
-      if (spotify) spotify.togglePlay();
-      return;
-    }
-    paint(on);
     on ? startMusic() : stopMusic();
   };
   recBtn.addEventListener("click", () => setPlaying(!playing));
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden || !playing) return;
-    if (spotify) spotify.pause(); else setPlaying(false);
-  });
+  document.addEventListener("visibilitychange", () => { if (document.hidden && playing) setPlaying(false); });
 
   // --- sound toggle --------------------------------------------------
   const mute = $("#deskMute");
@@ -196,8 +110,10 @@ function passKit() {
     b.setAttribute("aria-pressed", "false");
     b.setAttribute("aria-label", `${k.label.toLowerCase()}: ${k.alt}. Plays a sound.`);
     if (k.print) {
-      // instax print: white frame, photo window, thicker bottom edge
+      // instax print: white frame, photo window, thicker bottom edge.
+      // Hidden until the camera is clicked.
       b.setAttribute("aria-label", `Photo: ${k.alt}`);
+      b.classList.add("is-hidden");
       b.innerHTML = `<span class="kit__img print"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>`;
     } else {
       b.innerHTML = `
@@ -206,6 +122,7 @@ function passKit() {
           k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
       }</span>`;
     }
+    if (k.id === "camera") b.setAttribute("aria-label", "Camera: take a photo");
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
       b.style.left = k.desk.x + "%";
@@ -222,10 +139,7 @@ function passKit() {
         setPlaying(!playing);
       } else {
         play(k.sound);
-        if (k.sound === "shutter") developPrint();
-        const was = b.getAttribute("aria-pressed") === "true";
-        $$(".kit__item:not(.kit__item--headphones)").forEach((x) => x.setAttribute("aria-pressed", "false"));
-        b.setAttribute("aria-pressed", String(!was));
+        if (k.sound === "shutter") ejectPrint();
       }
       note.textContent = k.note || "";
       if (!reduced) {
@@ -266,22 +180,68 @@ function passKit() {
     grid.appendChild(b);
   });
 
-  // --- camera click: flash, then the print develops again from white ---
+  // --- camera click: the print slides out of the camera's top slot (white,
+  //     like a real instax), then drops beside the camera and develops ---------
+  const printBtn = $(".kit__item--print"), camBtn = $(".kit__item--camera");
+  const printSpec = kit.find((k) => k.print), camSpec = kit.find((k) => k.id === "camera");
+  let ejectTl = null;
+
   function developPrint() {
-    const pr = $(".kit__item--print .print");
-    if (!pr) return;
+    const pr = printBtn.querySelector(".print");
     pr.classList.remove("is-developing");
     void pr.offsetWidth; // restart the CSS animation
     pr.classList.add("is-developing");
   }
 
-  // --- the name "writes itself" onto the notebook when the desk scrolls in ---
+  function ejectPrint() {
+    if (!printBtn || !camBtn) return;
+    if (ejectTl) ejectTl.kill();
+    printBtn.classList.remove("is-hidden");
+    developPrint();
+    if (reduced) return;
+    if (!desk) { // phones: the print just slides in next to the camera
+      gsap.fromTo(printBtn, { opacity: 0, "--s": 0.8 }, { opacity: 1, "--s": 1, duration: 0.6 });
+      return;
+    }
+    const v = (el, n) => parseFloat(el.style.getPropertyValue(n)) || 0;
+    const camDx = v(camBtn, "--dx"), camDy = v(camBtn, "--dy");
+    // centres at rest (offsets ignore transforms)
+    const camCx = camBtn.offsetLeft + camBtn.offsetWidth / 2 + camDx;
+    const slotY = camBtn.offsetTop + camBtn.offsetHeight * 0.14 + camDy; // top edge of the body
+    const prCx = printBtn.offsetLeft + printBtn.offsetWidth / 2;
+    const prCy = printBtn.offsetTop + printBtn.offsetHeight / 2;
+    const s = Math.min(1, (camBtn.offsetWidth * 0.5) / printBtn.offsetWidth); // print ≈ half the camera's width
+    const hS = printBtn.offsetHeight * s;
+
+    camBtn.style.zIndex = ++top;
+    printBtn.style.zIndex = top - 1; // tucked behind the camera while it ejects
+    ejectTl = gsap.timeline()
+      .set(printBtn, {
+        "--dx": camCx - prCx + "px", "--dy": slotY + hS / 2 - prCy + "px",
+        "--s": s, "--r": `${camSpec.desk.r}deg`, clipPath: "inset(0% 0% 100% 0%)",
+      })
+      // slides up out of the slot: the part above the slot is revealed as it rises
+      .to(printBtn, { "--dy": slotY - hS / 2 - prCy + "px", clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power1.inOut" })
+      .call(() => { printBtn.style.zIndex = ++top; }, null, "+=0.15")
+      // ...then it is pulled out and dropped beside the camera
+      .to(printBtn, {
+        "--dx": camDx + "px", "--dy": camDy + "px", "--s": 1, "--r": `${printSpec.desk.r}deg`,
+        duration: 0.75, ease: "back.out(1.4)",
+      });
+  }
+
+  // --- intro: objects settle onto the desk, then the name is written ---
   const sign = $(".kit__sign"), typed = $$(".kit__type");
-  if (sign && !reduced) {
-    gsap.set(sign, { clipPath: "inset(-30% 100% -30% -5%)" });
+  const settle = $$(".kit__item:not(.kit__item--print)");
+  if (!reduced) {
+    gsap.set(settle, { opacity: 0, "--s": 1.12 });
+    gsap.set(rec, { opacity: 0 });
+    if (sign) gsap.set(sign, { clipPath: "inset(-30% 100% -30% -5%)" });
     gsap.set(typed, { opacity: 0, y: 6 });
-    gsap.timeline({ scrollTrigger: { trigger: grid, start: "top 70%" } })
-      .to(sign, { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.6, ease: "power1.inOut" })
+    deskIntro = gsap.timeline({ paused: true })
+      .to(settle, { opacity: 1, "--s": 1, duration: 0.7, stagger: 0.09, ease: "power2.out" })
+      .to(rec, { opacity: 1, duration: 0.6 }, "-=0.4")
+      .to(sign, { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.6, ease: "power1.inOut" }, "-=0.2")
       .to(typed, { opacity: 1, y: 0, duration: 0.5, stagger: 0.25 }, "-=0.2");
   }
 
@@ -293,46 +253,6 @@ function passKit() {
       b.style.zIndex = i + 1;
     });
     play("page");
-  });
-}
-
-// ------------------------------------------------------------------
-// PASS 02 — Positioning extraction (pinned, scrubbed)
-// ------------------------------------------------------------------
-function pass02() {
-  const marks = $$("#p02Para mark");
-  const para = $("#p02Para");
-  const rowsWrap = $("#ledgerRows");
-  metrics.forEach((m) => {
-    const r = document.createElement("div");
-    r.className = "ledger__row";
-    r.innerHTML = `<span class="v">${m.value}</span><span class="l mono">${m.label}</span>`;
-    rowsWrap.appendChild(r);
-  });
-  const rows = $$(".ledger__row");
-
-  if (reduced) {
-    marks.forEach((m) => m.classList.add("lit"));
-    gsap.set(rows, { opacity: 1, y: 0 });
-    return;
-  }
-
-  ScrollTrigger.create({
-    trigger: "#p02",
-    start: "top top",
-    end: "+=180%",
-    pin: true,
-    scrub: 0.6,
-    onUpdate: (self) => {
-      const p = self.progress;
-      const revealed = Math.min(marks.length, Math.floor(p / 0.22));
-      marks.forEach((m, i) => {
-        const on = i < revealed;
-        m.classList.toggle("lit", on);
-        gsap.set(rows[i], { opacity: on ? 1 : 0, y: on ? 0 : 8 });
-      });
-      para.classList.toggle("spent", p > 0.85);
-    },
   });
 }
 
@@ -379,7 +299,7 @@ function pass03() {
       scrub: 0.5,
       onUpdate: (self) => {
         const idx = Math.min(panels.length, Math.floor(self.progress * panels.length) + 1);
-        label.textContent = `PASS 04 · ${idx}/${panels.length}`;
+        label.textContent = `PASS 01 · ${idx}/${panels.length}`;
         bar.style.width = self.progress * 100 + "%";
         prog.style.opacity = self.progress > 0.01 && self.progress < 0.99 ? 1 : 0;
       },
@@ -681,38 +601,19 @@ function contactForm() {
   });
 }
 
-// live tokens/sec cursor
-function cursorReadout() {
-  if (reduced || !matchMedia("(hover: hover)").matches || !field) return;
-  const cur = $("#cursor");
-  addEventListener("pointermove", (e) => {
-    cur.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-160%)`;
-    cur.style.opacity = "1";
-  });
-  gsap.ticker.add(() => { cur.textContent = `TOKENS/SEC ${field.tps()}`; });
-}
-
 // ------------------------------------------------------------------
 // Boot everything
 // ------------------------------------------------------------------
 async function init() {
-  buildHeroChars();
-
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passAbout, passKit, pass02, pass03, pass04, pass05, pass06, pass07, contact, contactForm };
+  const passes = { passKit, pass03, pass04, pass05, pass06, pass07, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
 
-  // fonts must be ready before sampling letterforms for the token targets
-  try { await document.fonts.ready; } catch {}
-  try {
-    field = initField($("#field"));
-  } catch (e) {
-    console.error("[field] WebGL failed, hiding canvas:", e);
-    const c = $("#field"); if (c) c.style.display = "none";
-  }
-  try { cursorReadout(); } catch (e) { console.error(e); }
+  // fonts must be ready so the handwriting is measured correctly
+  // (capped at 1.5s: a slow font server must never hold the page behind the loader)
+  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]); } catch {}
 
   // Start the loader LAST so nothing above can block it.
   boot();

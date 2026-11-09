@@ -23,19 +23,13 @@ export const meta = {
   formEndpoint: "https://formsubmit.co/ajax/yeduvakaharshitha@gmail.com",
 };
 
-// About (PASS 02). Every fact here comes from the CV. Rewrite in your own voice.
+// Her photo: shown on the desk as an instax print that comes out of the camera.
 export const about = {
   photo: { src: "assets/harshitha-480.jpg", src2x: "assets/harshitha-960.jpg", w: 480, h: 640,
            alt: "Harshitha Yeduvaka smiling, standing on a tree-lined street in a yellow dress" },
-  paragraphs: [
-    "I started in B2B implementation at Keka HR in Hyderabad, onboarding 65+ enterprise accounts and learning what makes a client stay.",
-    "In Berlin, at NOMAD X COLLECTIVE, I moved into growth marketing: A/B-tested email sequences, Meta Ads and campaign attribution.",
-    "Now I'm in Paris, doing an MSc in International Marketing & Business Development at SKEMA and building ohmyATS, a tool that helps graduates get their CVs past ATS screening.",
-    "[TODO: one line in your own words: the kind of marketing team you want to join, and why]",
-  ],
 };
 
-// "Off the CV" desk under the About bio (layout ref: jackiehu.design).
+// The desk = the first screen (layout ref: jackiehu.design).
 // The open notebook is the centrepiece with her name written across both pages;
 // the other objects sit around it. Order = stacking order (first is at the bottom).
 // desk: starting spot on the desktop layout, in % of the desk (x, y, width) + tilt in degrees.
@@ -46,50 +40,35 @@ export const kit = [
     img: "assets/objects/notebook.png", w: 960, h: 709, // transparent cut-out
     alt: "Open cream notebook with a red ribbon bookmark",
     ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
-    desk: { x: 14, y: 9, w: 58, r: -11 },
+    desk: { x: 19, y: 12, w: 58, r: -10 },
     note: "" },
-  // Her photo as an instax print, lying by the camera. Clicking the camera re-develops it.
+  // Her photo as an instax print. Hidden until the camera is clicked; it slides out of
+  // the camera and lands here (relative to wherever the camera is).
   { id: "print", label: "PHOTO", name: "instax print", sound: "",
     print: true, img: about.photo.src, w: about.photo.w, h: about.photo.h,
     alt: about.photo.alt,
-    desk: { x: 19, y: 57, w: 13, r: -9 },
+    desk: { x: 23, y: 57, w: 11, r: -9 },
     note: "" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
-    img: "assets/objects/camera.jpg", w: 361, h: 350,
+    img: "assets/objects/camera.png", w: 361, h: 259, // transparent cut-out
     alt: "Brown and silver instant camera",
-    desk: { x: 2, y: 64, w: 19, r: 8 },
+    desk: { x: 5, y: 67, w: 18, r: 8 },
     note: "" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.jpg", w: 560, h: 560,
     alt: "Black over-ear wireless headphones",
-    desk: { x: 1, y: 3, w: 18, r: -18 },
+    desk: { x: 4, y: 12, w: 15, r: -18 },
     note: "" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
     img: "assets/objects/pen.jpg", w: 447, h: 447,
     alt: "Clear retractable gel pen with black ink",
-    desk: { x: 54, y: 30, w: 17, r: 18 }, // lies across the notebook's right edge
+    desk: { x: 58, y: 37, w: 15, r: 18 }, // lies across the notebook's right page
     note: "" },
 ];
 
-// The record card next to the headphones.
-// link = a Spotify TRACK link (Spotify app → ⋯ → Share → Copy Song Link), e.g.
-//   "https://open.spotify.com/track/XXXXXXXXXXXXXXXXXXXXXX"
-// With a Spotify link, the headphones open the official Spotify player on the card
-// (30-second preview for visitors not logged in to Spotify, full song if they are).
-// Until then, they play an original placeholder loop generated in scripts/sound.js.
-export const music = {
-  title: "Coffee & Chill",
-  artist: "Cloudchord",
-  link: "https://open.spotify.com/track/2C7VA1VMLDgeNjr4i3h0V1",
-};
-
-// Metrics the parser extracts in Pass 02 (real numbers she moved).
-export const metrics = [
-  { value: "2+ yrs", label: "METRIC · EXPERIENCE" },
-  { value: "65+", label: "METRIC · ENTERPRISE ACCOUNTS" },
-  { value: "−15%", label: "METRIC · CLIENT CHURN" },
-  { value: "−30%", label: "METRIC · ONBOARDING CYCLE" },
-];
+// Clicking the headphones (or Play on the record card) plays an original lo-fi loop
+// generated in scripts/sound.js. No Spotify / third-party player.
+// The song she loves, kept for reference: "Coffee & Chill" by Cloudchord.
 
 // Reverse chronology — a parser walking back through history.
 // type: "work" | "education" (education panels get their own label).
