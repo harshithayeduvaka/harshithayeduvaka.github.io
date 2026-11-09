@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110a";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110c";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110a";
+} from "./content.js?v=20261110c";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -661,6 +661,32 @@ function passAboutMe() {
   ps.forEach((p, i) => { p.classList.add("flicker"); p.style.animationDelay = `${i * 0.18}s`; });
   ScrollTrigger.create({ trigger: body, start: "top 80%", once: true,
     onEnter: () => ps.forEach((p) => p.classList.add("is-lit")) });
+
+  // ...and it keeps flickering while the text is on screen, like a slightly faulty neon:
+  // every few seconds one random paragraph stutters briefly (≈0.7s), then holds steady.
+  // Paused whenever the section is off screen or the tab is hidden.
+  let visible = false, timer = 0;
+  const tick = () => {
+    if (!visible || document.hidden) return;
+    const p = ps[Math.floor(Math.random() * ps.length)];
+    if (p.classList.contains("is-lit")) {
+      p.classList.remove("buzz"); void p.offsetWidth; p.classList.add("buzz");
+    }
+    timer = setTimeout(tick, 1800 + Math.random() * 2600); // 1.8–4.4s apart: never rapid flashing
+  };
+  // on screen = any part of the text is inside the window (same scroll engine as the rest of the site)
+  ScrollTrigger.create({
+    trigger: body, start: "top bottom", end: "bottom top",
+    onToggle: (self) => {
+      visible = self.isActive;
+      clearTimeout(timer);
+      if (visible) timer = setTimeout(tick, 2200); // let the first switch-on finish
+    },
+  });
+  document.addEventListener("visibilitychange", () => {
+    clearTimeout(timer);
+    if (!document.hidden && visible) timer = setTimeout(tick, 1500);
+  });
 }
 
 function revealTitles() {
