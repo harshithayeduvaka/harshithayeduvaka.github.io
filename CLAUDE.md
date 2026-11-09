@@ -57,9 +57,11 @@ Spacing: `--gutter`, `--rail-w`, `--pass-pad` (all clamp-based). Easing: `--ease
 ## Phase plan (approve each with "next"; commit at the end of each)
 - **Phase 0, Plan** ✅ Stack stays plain HTML/CSS/ES modules (already built; Astro adds a
   build step for no gain on a one-page site on GitHub Pages).
-- **Phase 1, Baseline**: commit the existing build; add `.gitignore` entries; fix the
+- **Phase 1, Baseline** ✅ commit the existing build; add `.gitignore` entries; fix the
   relative `canonical` (needs the absolute `https://harshithayeduvaka.github.io/` URL).
-- **Phase 2, Missing sections**, matched against the brief:
+- **Phase 2, Missing sections** ✅ About pass with photo (`assets/`), SKEMA as an
+  `type: "education"` timeline panel, `mine`/`link` fields on projects, FormSubmit form
+  (`meta.formEndpoint`; needs one-time activation from the inbox). Original notes:
   - About + photo: a short bio block in Pass 02 or the hero. Needs her photo (`[TODO]`).
   - Education: SKEMA MSc in the Pass 03 timeline. Dates and details come from resume.pdf.
   - Project links/images: optional `link`/`image` fields in `projects`, hidden when empty.
@@ -71,5 +73,9 @@ Spacing: `--gutter`, `--rail-w`, `--pass-pad` (all clamp-based). Easing: `--ease
 - **Phase 5, Deploy**: GitHub Pages from `main`, custom domain via CNAME (optional).
 
 ## Known gaps
-Open TODOs: `meta.portfolio` URL, profile photo, project links, Formspree ID, OG image,
-favicon, sitemap.
+Open TODOs: `meta.portfolio` URL, About closing line (`about.paragraphs`), more projects
+and their links, FormSubmit activation, OG image, favicon, sitemap, absolute canonical URL.
+Note: the repo is `harshitha-yeduvaka.github.io` under user `harshithayeduvaka`. The names
+differ, so GitHub Pages serves it as a project site at
+`harshithayeduvaka.github.io/harshitha-yeduvaka.github.io/` unless the repo is renamed (Phase 5).
+Headless-Chrome testing: the window can't go below 500px wide; test phones via an iframe of fixed width.

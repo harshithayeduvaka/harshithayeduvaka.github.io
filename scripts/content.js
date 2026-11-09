@@ -16,6 +16,21 @@ export const meta = {
   positioning:
     "B2B implementation professional with 2+ years managing onboarding for 65+ enterprise accounts. Cut client churn 15% and reduced onboarding cycles 30% through CRM optimisation and structured account management.",
   available: "AVAILABLE FOR A MARKETING INTERNSHIP · PARIS · 2026",
+  // Contact form. FormSubmit forwards submissions to the email in the URL.
+  // The FIRST submission sends an activation email to that inbox: click it once.
+  formEndpoint: "https://formsubmit.co/ajax/yeduvakaharshitha@gmail.com",
+};
+
+// About (PASS 02). Every fact here comes from the CV. Rewrite in your own voice.
+export const about = {
+  photo: { src: "assets/harshitha-480.jpg", src2x: "assets/harshitha-960.jpg", w: 480, h: 640,
+           alt: "Harshitha Yeduvaka smiling, standing on a tree-lined street in a yellow dress" },
+  paragraphs: [
+    "I started in B2B implementation at Keka HR in Hyderabad, onboarding 65+ enterprise accounts and learning what makes a client stay.",
+    "In Berlin, at NOMAD X COLLECTIVE, I moved into growth marketing: A/B-tested email sequences, Meta Ads and campaign attribution.",
+    "Now I'm in Paris, doing an MSc in International Marketing & Business Development at SKEMA and building ohmyATS, a tool that helps graduates get their CVs past ATS screening.",
+    "[TODO: one line in your own words: the kind of marketing team you want to join, and why]",
+  ],
 };
 
 // Metrics the parser extracts in Pass 02 (real numbers she moved).
@@ -27,9 +42,12 @@ export const metrics = [
 ];
 
 // Reverse chronology — a parser walking back through history.
+// type: "work" | "education" (education panels get their own label).
 export const experience = [
   {
     year: "2026",
+    dates: "Mar 2026 – Present",
+    type: "work",
     org: "ohmyATS",
     role: "Founder & Developer",
     city: "Paris",
@@ -44,6 +62,8 @@ export const experience = [
   },
   {
     year: "2025",
+    dates: "Aug 2025 – Jan 2026",
+    type: "work",
     org: "NOMAD X COLLECTIVE",
     role: "Marketing Intern",
     city: "Berlin",
@@ -56,7 +76,23 @@ export const experience = [
     ],
   },
   {
+    year: "2024",
+    dates: "2024 – 2027",
+    type: "education",
+    org: "SKEMA Business School",
+    role: "MSc International Marketing & Business Development",
+    city: "Paris",
+    accent: "ultramarine",
+    vocab: ["Brand Strategy", "GTM", "Market Research", "ROI"],
+    bullets: [
+      "Relevant coursework: Brand Strategy, Design-Led Marketing, GTM Strategy, Market Research, ROI Analysis.",
+      "Consulting projects for Dior, Coop Atlantique and an eco-packaging brand (see Case studies below).",
+    ],
+  },
+  {
     year: "2023",
+    dates: "Jan 2023 – Jul 2024",
+    type: "work",
     org: "Keka HR Technologies",
     role: "Implementation Consultant",
     city: "Hyderabad",
@@ -91,11 +127,13 @@ export const projects = [
     when: "Sep–Dec 2024",
     score: "10%",
     scoreLabel: "DECISION-MAKING EFFICIENCY",
-    context: "Competitive strategy inside a live business simulation.",
-    audited: "Competitive advantage via Porter's Five Forces across the simulated market.",
-    found: "Under-exploited search demand and unclear cross-functional priorities.",
-    recommended: "Actionable SEO/SEM keyword strategy tied to decision cadence.",
+    context: "Four-person consultancy report on Coop Atlantique, a cooperative retailer with 185 stores across western France, for SKEMA's business simulation.",
+    mine: "Resources & capabilities, the VRIN analysis, and the verdict on whether Coop Atlantique has a competitive advantage.",
+    audited: "Porter's Five Forces (rivalry 2.875/3 and buyer power 2/3, both high), VRIN, and ROS/ROA/asset turnover against Carrefour, Auchan, Casino and Aldi.",
+    found: "A real but narrow advantage: the cooperative model and local, ethical sourcing are rare and hard to copy, but only for a niche segment. ROA sat at 0% in 2023 and revenue stalled around €1.04B.",
+    recommended: "Refocus on related diversification: an organic/local private label, click-and-collect and e-commerce, niche formats (zero-waste stores, a discount banner), and an SEO/SEM keyword strategy.",
     impact: "Improved cross-functional decision-making efficiency 10%.",
+    // link: "", linkLabel: "View deck",  // optional: add a URL to show a link
   },
   {
     id: "maya",

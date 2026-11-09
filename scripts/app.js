@@ -1,7 +1,7 @@
 // app.js — motion orchestration, demo logic, wiring.
 import { initField, initGlobe } from "./webgl.js";
 import {
-  meta, metrics, experience, projects, skills, languages,
+  meta, about, metrics, experience, projects, skills, languages,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -105,6 +105,20 @@ function hero() {
 }
 
 // ------------------------------------------------------------------
+// About — photo + bio (static; its title reveal is handled in pass07)
+// ------------------------------------------------------------------
+function passAbout() {
+  const img = $("#aboutPhoto");
+  const ph = about.photo;
+  img.src = ph.src;
+  img.srcset = `${ph.src} ${ph.w}w, ${ph.src2x} ${ph.w * 2}w`;
+  img.sizes = "(max-width: 860px) 70vw, 360px";
+  img.width = ph.w; img.height = ph.h;
+  img.alt = ph.alt;
+  $("#aboutBio").innerHTML = about.paragraphs.map((t) => `<p>${t}</p>`).join("");
+}
+
+// ------------------------------------------------------------------
 // PASS 02 — Positioning extraction (pinned, scrubbed)
 // ------------------------------------------------------------------
 function pass02() {
@@ -153,11 +167,11 @@ function pass03() {
     const panel = document.createElement("article");
     panel.className = "panel";
     panel.innerHTML = `
-      <div class="rail mono"><span class="rail__idx">${e.year}</span><span>${e.city.toUpperCase()}</span></div>
+      <div class="rail mono"><span class="rail__idx">${e.year}</span><span>${e.city.toUpperCase()}</span>${e.type === "education" ? '<span class="panel__tag">EDUCATION</span>' : ""}</div>
       <div class="content">
         <p class="panel__year">${e.year}</p>
         <h3 class="panel__org display">${e.org}</h3>
-        <p class="panel__role mono">${e.role}</p>
+        <p class="panel__role mono">${e.role}<span class="panel__dates"> · ${e.dates}</span></p>
         <ul class="panel__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
         <span class="panel__city">${e.city}</span>
       </div>`;
@@ -187,7 +201,7 @@ function pass03() {
       scrub: 0.5,
       onUpdate: (self) => {
         const idx = Math.min(panels.length, Math.floor(self.progress * panels.length) + 1);
-        label.textContent = `PASS 03 · ${idx}/${panels.length}`;
+        label.textContent = `PASS 04 · ${idx}/${panels.length}`;
         bar.style.width = self.progress * 100 + "%";
         prog.style.opacity = self.progress > 0.01 && self.progress < 0.99 ? 1 : 0;
       },
@@ -279,10 +293,12 @@ function pass05() {
       <span class="work__score">${p.score}<small>${p.scoreLabel}</small></span>
       <dl class="work__detail">
         <div><dt class="mono">CONTEXT</dt><dd>${p.context}</dd></div>
+        ${p.mine ? `<div><dt class="mono">MY PART</dt><dd>${p.mine}</dd></div>` : ""}
         <div><dt class="mono">AUDITED</dt><dd>${p.audited}</dd></div>
         <div><dt class="mono">FOUND</dt><dd>${p.found}</dd></div>
         <div><dt class="mono">RECOMMENDED</dt><dd>${p.recommended}</dd></div>
         <div><dt class="mono">PROJECTED IMPACT</dt><dd class="proj">${p.impact}</dd></div>
+        ${p.link ? `<div><dt class="mono">LINK</dt><dd><a class="work__link" href="${p.link}" target="_blank" rel="noopener">${p.linkLabel || "Open"} ↗</a></dd></div>` : ""}
       </dl>`;
     const toggle = () => {
       const open = row.getAttribute("aria-expanded") === "true";
@@ -290,7 +306,7 @@ function pass05() {
       row.setAttribute("aria-expanded", String(!open));
       ScrollTrigger.refresh();
     };
-    row.addEventListener("click", toggle);
+    row.addEventListener("click", (e) => { if (!e.target.closest("a")) toggle(); });
     row.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
     });
@@ -455,6 +471,38 @@ function contact() {
   }
 }
 
+// Contact form: POST to FormSubmit via fetch, report status inline.
+function contactForm() {
+  const form = $("#contactForm");
+  const status = $("#cfStatus");
+  const btn = form.querySelector("button");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form._honey.value) return; // bot
+    btn.disabled = true;
+    status.className = "contact-form__status mono";
+    status.textContent = "SENDING…";
+    try {
+      const res = await fetch(meta.formEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || String(data.success) === "false") throw new Error(data.message || res.status);
+      form.reset();
+      status.classList.add("ok");
+      status.textContent = "SENT · THANK YOU, I'LL REPLY SOON";
+    } catch (err) {
+      console.error("[contactForm]", err);
+      status.classList.add("err");
+      status.textContent = `COULDN'T SEND · PLEASE EMAIL ${meta.email.toUpperCase()}`;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 // live tokens/sec cursor
 function cursorReadout() {
   if (reduced || !matchMedia("(hover: hover)").matches || !field) return;
@@ -473,7 +521,7 @@ async function init() {
   buildHeroChars();
 
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { pass02, pass03, pass04, pass05, pass06, pass07, contact };
+  const passes = { passAbout, pass02, pass03, pass04, pass05, pass06, pass07, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }

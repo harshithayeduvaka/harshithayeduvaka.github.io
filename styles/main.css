@@ -218,6 +218,31 @@ section { position: relative; }
 @media (hover: none) { #cursor { display: none; } }
 
 /* ============================================================
+   About — photo with parser crop marks + bio
+   ============================================================ */
+.about { background: color-mix(in srgb, var(--chalk) 88%, transparent); }
+.about__wrap { display: grid; grid-template-columns: minmax(220px, 360px) 1fr; gap: clamp(28px, 5vw, 88px); align-items: center; }
+.about__fig { position: relative; padding: 14px; }
+.about__fig img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; background: var(--paper-blue); }
+/* four saffron corner ticks, like a detection bounding box */
+.about__fig::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  --c: var(--saffron); --l: 26px; --t: 2px;
+  background:
+    linear-gradient(var(--c) 0 0) top left / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) top left / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) top right / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) top right / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) bottom left / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) bottom left / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) bottom right / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) bottom right / var(--t) var(--l);
+  background-repeat: no-repeat;
+}
+.about__fig figcaption { color: var(--ultramarine); margin-top: 10px; }
+.about__bio { display: grid; gap: 1em; margin-top: 1.4em; }
+
+/* ============================================================
    PASS 02 — Positioning extraction
    ============================================================ */
 .p02__wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(24px, 5vw, 80px); align-items: start; }
@@ -271,6 +296,8 @@ section { position: relative; }
   font-variation-settings: "wght" 700, "wdth" 78;
 }
 .panel__role { margin: 0.4em 0 1.4em; color: var(--graphite); }
+.panel__dates { color: var(--ultramarine); }
+.rail .panel__tag { color: var(--chalk); background: var(--ultramarine); opacity: 1; padding: 3px 6px; border-radius: 2px; width: max-content; }
 .panel__bullets { list-style: none; max-width: 60ch; display: grid; gap: 14px; }
 .panel__bullets li { position: relative; padding-left: 22px; }
 .panel__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--saffron); }
@@ -292,12 +319,15 @@ section { position: relative; }
 .demo { display: grid; grid-template-columns: 1fr 380px; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .demo__field { display: grid; gap: 6px; margin-bottom: 18px; }
 .demo__field label { color: var(--ultramarine); }
+.demo__field input,
 .demo__field textarea {
   width: 100%; min-height: 110px; resize: vertical;
   background: var(--chalk); color: var(--graphite);
   border: 2px solid var(--paper-blue); border-radius: 4px;
   padding: 12px 14px; font: inherit; font-size: var(--fs-16);
 }
+.demo__field input { min-height: 48px; }
+.demo__field input:focus,
 .demo__field textarea:focus { border-color: var(--ultramarine); }
 .btn {
   display: inline-flex; align-items: center; gap: 10px;
@@ -384,7 +414,7 @@ section { position: relative; }
 .lang__bar { height: 4px; background: var(--paper-blue); border-radius: 2px; overflow: hidden; }
 .lang__bar i { display: block; height: 100%; background: var(--ultramarine); width: 0; }
 
-.close { text-align: center; padding-block: var(--pass-pad); }
+.close { text-align: center; padding-block: var(--pass-pad); padding-inline: var(--gutter); }
 .close__avail { color: var(--ultramarine); margin-bottom: 1.5em; }
 .mailto {
   font-family: "Bricolage Grotesque"; font-weight: 800;
@@ -396,6 +426,15 @@ section { position: relative; }
 .contact-actions { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 2em; }
 .contact-actions a { border-bottom: 2px solid var(--paper-blue); padding-bottom: 4px; transition: border-color .3s; }
 .contact-actions a:hover { border-color: var(--ultramarine); }
+
+.contact-form { max-width: 720px; margin: clamp(56px, 8vw, 96px) auto 0; text-align: left; }
+.contact-form__head { color: var(--ultramarine); text-align: center; margin-bottom: 1.6em; }
+.contact-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.contact-form .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+.contact-form__status { margin-top: 14px; min-height: 1.5em; color: var(--graphite); }
+.contact-form__status.ok { color: var(--ultramarine); }
+.contact-form__status.err { color: var(--signal-red); }
+.work__link { color: var(--ultramarine); border-bottom: 2px solid currentColor; }
 
 #toast {
   position: fixed; bottom: 28px; left: 50%; transform: translate(-50%, 20px);
@@ -411,9 +450,12 @@ footer span { color: var(--graphite); opacity: 0.55; }
    Responsive
    ============================================================ */
 @media (max-width: 860px) {
-  .hero, .pass__grid, .panel { grid-template-columns: 1fr; }
+  /* minmax(0,1fr): stop wide children (photo, long words) from stretching the column past the screen */
+  .hero, .pass__grid, .panel { grid-template-columns: minmax(0, 1fr); }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-  .p02__wrap, .demo, .p07__wrap { grid-template-columns: 1fr; }
+  .p02__wrap, .demo, .p07__wrap, .about__wrap, .contact-form__row { grid-template-columns: minmax(0, 1fr); }
+  .about__fig { max-width: 320px; }
+  .mailto { font-size: clamp(1.1rem, 5.4vw, 2.4rem); }  /* keep the address on one line on phones */
   .ledger, .ring-panel, .ledger.sticky { position: static; }
   .demo { }
   .ring-panel { order: -1; }
