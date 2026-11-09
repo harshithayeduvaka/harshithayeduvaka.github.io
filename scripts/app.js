@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110f";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110g";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110f";
+} from "./content.js?v=20261110g";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -685,7 +685,8 @@ function revealTitles() {
       scrollTrigger: { trigger: t, start: "top 85%" } });
   });
 
-  // About + Featured Work titles: a small zoom-in on click (same feel as the notebook)
+  // About + Featured Work titles: zoom in slightly while hovered (back on leave),
+  // and a small zoom "pulse" on click/tap (also works on touch screens without hover)
   if (reduced) return;
   ["#about-h", "#p05-h"].forEach((sel) => {
     const t = $(sel);
@@ -693,12 +694,26 @@ function revealTitles() {
     t.style.cursor = "pointer";
     t.style.transformOrigin = "left center";
     t.style.width = "max-content";
+    let hovering = false;
+    t.addEventListener("pointerenter", (e) => {
+      if (e.pointerType !== "mouse") return;
+      hovering = true;
+      gsap.to(t, { scale: 1.06, duration: 0.4, ease: "power2.out", overwrite: true });
+    });
+    t.addEventListener("pointerleave", (e) => {
+      if (e.pointerType !== "mouse") return;
+      hovering = false;
+      gsap.to(t, { scale: 1, duration: 0.5, ease: "power2.inOut", overwrite: true });
+    });
     t.addEventListener("click", () => {
-      gsap.killTweensOf(t, "scale");
+      if (hovering) { // already zoomed by hover: a little extra bounce
+        gsap.fromTo(t, { scale: 1.06 }, { keyframes: [{ scale: 1.1, duration: 0.18 }, { scale: 1.06, duration: 0.4, ease: "power2.inOut" }], overwrite: true });
+        return;
+      }
       gsap.fromTo(t, { scale: 1 }, { keyframes: [
         { scale: 1.07, duration: 0.35, ease: "power2.out" },
         { scale: 1, duration: 0.9, ease: "power2.inOut" },
-      ] });
+      ], overwrite: true });
     });
   });
 }
