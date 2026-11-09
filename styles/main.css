@@ -318,7 +318,7 @@ section { position: relative; }
 
 /* record card: a vinyl drawn in CSS, spins while the music plays */
 .record {
-  position: absolute; right: 4%; top: 7%; z-index: 0;
+  position: absolute; right: 4%; top: 7%; z-index: 2; /* above the notebook (z 1) so its shadow never falls on the card */
   width: min(22%, 260px); padding: 18px 18px 14px;
   transform: rotate(8deg);
   display: grid; gap: 12px; justify-items: center; text-align: center;
