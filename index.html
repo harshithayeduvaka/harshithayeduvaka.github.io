@@ -71,10 +71,30 @@
           <div class="about__bio body-lg" id="aboutBio"></div>
         </div>
       </div>
-      <!-- Off-the-CV objects: buttons built from content.js `kit` -->
+      <!-- Off-the-CV desk: objects built from content.js `kit`, record card from `music`.
+           Desktop: drag objects around, click to play. Mobile: simple 2x2 grid. -->
       <div class="kit">
-        <p class="mono kit__head">OFF THE CV <span>· CLICK AN OBJECT</span></p>
-        <div class="kit__grid" id="kitGrid"></div>
+        <div class="kit__bar">
+          <p class="mono kit__head">OFF THE CV <span id="kitHint">· DRAG OR CLICK AN OBJECT</span></p>
+          <div class="kit__tools mono">
+            <button type="button" id="deskTidy">↺ Tidy</button>
+            <button type="button" id="deskMute" aria-pressed="false">♪ Sound on</button>
+          </div>
+        </div>
+        <div class="kit__grid" id="kitGrid">
+          <div class="record" id="record">
+            <div class="record__disc" aria-hidden="true"><i></i></div>
+            <div class="record__meta">
+              <p class="mono record__state" id="recordState">PRESS PLAY</p>
+              <p class="record__title" id="recordTitle"></p>
+              <p class="mono record__artist" id="recordArtist"></p>
+              <div class="record__actions mono">
+                <button type="button" id="recordPlay" aria-pressed="false">▶ Play</button>
+                <a id="recordLink" target="_blank" rel="noopener" hidden>Listen ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
         <p class="kit__note" id="kitNote" aria-live="polite"></p>
       </div>
     </div>

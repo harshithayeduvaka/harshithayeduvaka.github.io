@@ -33,26 +33,39 @@ export const about = {
   ],
 };
 
-// "Off the CV" objects under the About bio. Click = reveal note (+ sound, next phase).
-// sound: key for the click sound (wired up later). note: your words, shown on click.
+// "Off the CV" desk under the About bio. Order = stacking order (first is at the bottom).
+// desk: starting spot on the desktop layout, in % of the desk (x, y, width) + tilt in degrees.
+// sound: shutter | click | page | music.  note: your words, shown on click.
 export const kit = [
+  { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
+    img: "assets/objects/notebook.jpg", w: 560, h: 420,
+    alt: "Open cream notebook with a red ribbon bookmark",
+    desk: { x: 3, y: 12, w: 40, r: -7 },
+    note: "[TODO: what goes in this notebook]" },
+  { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
+    img: "assets/objects/pen.jpg", w: 447, h: 447,
+    alt: "Clear retractable gel pen with black ink",
+    desk: { x: 29, y: 2, w: 17, r: 28 },
+    note: "[TODO: what you write by hand]" },
   { id: "camera", label: "CAMERA", name: "instax mini Evo", sound: "shutter",
     img: "assets/objects/camera.jpg", w: 361, h: 350,
     alt: "Brown and silver instant camera",
+    desk: { x: 40, y: 48, w: 24, r: 7 },
     note: "[TODO: why this camera / what you shoot]" },
   { id: "headphones", label: "HEADPHONES", name: "Over-ears", sound: "music",
     img: "assets/objects/headphones.jpg", w: 560, h: 560,
     alt: "Black over-ear wireless headphones",
-    note: "[TODO: the song you recommend, artist + title]" },
-  { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
-    img: "assets/objects/pen.jpg", w: 447, h: 447,
-    alt: "Clear retractable gel pen with black ink",
-    note: "[TODO: what you write by hand]" },
-  { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
-    img: "assets/objects/notebook.jpg", w: 560, h: 420,
-    alt: "Open cream notebook with a red ribbon bookmark",
-    note: "[TODO: what goes in this notebook]" },
+    desk: { x: 52, y: 3, w: 25, r: -12 },
+    note: "[TODO: one line on why you love this song]" },
 ];
+
+// The record card next to the headphones. Until `link` is set, the headphones play
+// an original placeholder loop generated in code (scripts/sound.js).
+export const music = {
+  title: "[TODO: song title]",
+  artist: "[TODO: artist]",
+  link: "", // e.g. a Spotify or YouTube URL; shows a "Listen" link on the card
+};
 
 // Metrics the parser extracts in Pass 02 (real numbers she moved).
 export const metrics = [

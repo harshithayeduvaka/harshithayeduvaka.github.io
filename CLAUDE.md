@@ -26,6 +26,8 @@ styles/main.css     all styles; design tokens live in :root at the top
 scripts/content.js  ALL editable content (bio, metrics, jobs, projects, skills, links)
 scripts/app.js      animation orchestration + section rendering + ohmyATS demo
 scripts/webgl.js    token-field background + wireframe globe (Three.js)
+scripts/sound.js    Web Audio synth: desk click sounds + placeholder music loop (no audio files)
+assets/             photo (About) and desk object photos (assets/objects/)
 vendor/             third-party libs, never edit
 resume.pdf          downloadable CV (linked from meta.resume)
 ```

@@ -1,7 +1,8 @@
 // app.js — motion orchestration, demo logic, wiring.
 import { initField, initGlobe } from "./webgl.js";
+import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
-  meta, about, kit, metrics, experience, projects, skills, languages,
+  meta, about, kit, music, metrics, experience, projects, skills, languages,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -119,33 +120,122 @@ function passAbout() {
 }
 
 // ------------------------------------------------------------------
-// Off-the-CV objects (About). Click: lift + show note.
-// Fires a "kit:select" event with the sound key; sounds plug in there later.
+// Off-the-CV desk (About). Desktop: objects scattered on a grid-paper desk,
+// draggable; a click (without dragging) plays the object's sound and shows its
+// note. Headphones toggle the record card. Mobile: static 2x2 grid, tap to play.
 // ------------------------------------------------------------------
 function passKit() {
   const grid = $("#kitGrid");
   const note = $("#kitNote");
+  const desk = !isMobile; // free-placement layout only on desktop
+  let top = 10;           // z-index counter: last touched object comes to the front
+  let playing = false;
+  if (!desk) $("#kitHint").textContent = "· TAP AN OBJECT";
+
+  // --- record card -------------------------------------------------
+  const rec = $("#record"), recBtn = $("#recordPlay"), recState = $("#recordState");
+  $("#recordTitle").textContent = music.title;
+  $("#recordArtist").textContent = music.artist;
+  if (music.link) { const a = $("#recordLink"); a.href = music.link; a.hidden = false; }
+  const setPlaying = (on) => {
+    playing = on;
+    rec.classList.toggle("is-playing", on);
+    recBtn.setAttribute("aria-pressed", String(on));
+    recBtn.textContent = on ? "❚❚ Pause" : "▶ Play";
+    recState.textContent = on ? "NOW PLAYING · PLACEHOLDER LOOP" : "PAUSED";
+    const hp = $(".kit__item--headphones");
+    if (hp) hp.setAttribute("aria-pressed", String(on));
+    on ? startMusic() : stopMusic();
+  };
+  recBtn.addEventListener("click", () => setPlaying(!playing));
+  document.addEventListener("visibilitychange", () => { if (document.hidden && playing) setPlaying(false); });
+
+  // --- sound toggle --------------------------------------------------
+  const mute = $("#deskMute");
+  const paintMute = () => {
+    mute.setAttribute("aria-pressed", String(isMuted()));
+    mute.textContent = isMuted() ? "♪ Sound off" : "♪ Sound on";
+  };
+  mute.addEventListener("click", () => { setMuted(!isMuted()); paintMute(); });
+  paintMute();
+
+  // --- objects -------------------------------------------------------
   kit.forEach((k, i) => {
     const b = document.createElement("button");
     b.className = `kit__item kit__item--${k.id}`;
     b.type = "button";
     b.setAttribute("aria-pressed", "false");
-    b.dataset.sound = k.sound;
+    b.setAttribute("aria-label", `${k.label.toLowerCase()}: ${k.alt}. Plays a sound.`);
     b.innerHTML = `
-      <span class="kit__img"><img src="${k.img}" alt="${k.alt}" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" /></span>
+      <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>
       <span class="kit__label mono">OBJ.0${i + 1} · ${k.label}</span>`;
+    b.style.setProperty("--r", `${k.desk.r}deg`);
+    if (desk) {
+      b.style.left = k.desk.x + "%";
+      b.style.top = k.desk.y + "%";
+      b.style.width = k.desk.w + "%";
+      b.style.zIndex = i + 1;
+    }
+
+    // click = activate (keyboard Enter/Space also lands here)
+    let dragged = false;
     b.addEventListener("click", () => {
-      const was = b.getAttribute("aria-pressed") === "true";
-      $$(".kit__item").forEach((x) => x.setAttribute("aria-pressed", "false"));
-      b.setAttribute("aria-pressed", String(!was));
-      note.innerHTML = was ? "" : `<span class="mono">OBJ.0${i + 1} · ${k.name}</span> ${k.note}`;
+      if (dragged) { dragged = false; return; } // that was the end of a drag
+      if (k.sound === "music") {
+        setPlaying(!playing);
+      } else {
+        play(k.sound);
+        const was = b.getAttribute("aria-pressed") === "true";
+        $$(".kit__item:not(.kit__item--headphones)").forEach((x) => x.setAttribute("aria-pressed", "false"));
+        b.setAttribute("aria-pressed", String(!was));
+      }
+      note.innerHTML = `<span class="mono">OBJ.0${i + 1} · ${k.name}</span> ${k.note}`;
       if (!reduced) {
         gsap.fromTo(b.querySelector("img"), { y: 0, rotate: 0 },
           { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });
       }
-      document.dispatchEvent(new CustomEvent("kit:select", { detail: { id: k.id, sound: k.sound, on: !was } }));
     });
+
+    // drag (desktop only). Offsets live in --dx/--dy so the tilt stays intact.
+    if (desk) {
+      let sx, sy, ox, oy, minX, maxX, minY, maxY, moving = false;
+      b.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        try { b.setPointerCapture(e.pointerId); } catch {} // keeps the drag even if the cursor outruns the object
+        b.style.zIndex = ++top;
+        sx = e.clientX; sy = e.clientY;
+        ox = parseFloat(b.style.getPropertyValue("--dx")) || 0;
+        oy = parseFloat(b.style.getPropertyValue("--dy")) || 0;
+        // keep at least ~40% of the object on the desk
+        const d = grid.getBoundingClientRect(), r = b.getBoundingClientRect();
+        minX = ox + (d.left - r.left) - r.width * 0.6;  maxX = ox + (d.right - r.right) + r.width * 0.6;
+        minY = oy + (d.top - r.top) - r.height * 0.6;   maxY = oy + (d.bottom - r.bottom) + r.height * 0.6;
+        moving = true; dragged = false;
+      });
+      b.addEventListener("pointermove", (e) => {
+        if (!moving) return;
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (!dragged && Math.hypot(dx, dy) < 5) return; // tiny jitter still counts as a click
+        dragged = true;
+        b.classList.add("is-dragging");
+        b.style.setProperty("--dx", Math.min(maxX, Math.max(minX, ox + dx)) + "px");
+        b.style.setProperty("--dy", Math.min(maxY, Math.max(minY, oy + dy)) + "px");
+      });
+      const end = () => { moving = false; b.classList.remove("is-dragging"); };
+      b.addEventListener("pointerup", end);
+      b.addEventListener("pointercancel", end);
+    }
     grid.appendChild(b);
+  });
+
+  // --- tidy: send everything back to its starting spot ---------------
+  $("#deskTidy").addEventListener("click", () => {
+    $$(".kit__item").forEach((b, i) => {
+      if (reduced) { b.style.setProperty("--dx", "0px"); b.style.setProperty("--dy", "0px"); }
+      else gsap.to(b, { "--dx": "0px", "--dy": "0px", duration: 0.7, ease: "power3.inOut", delay: i * 0.05 });
+      b.style.zIndex = i + 1;
+    });
+    play("page");
   });
 }
 
