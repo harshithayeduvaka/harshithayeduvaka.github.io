@@ -298,6 +298,7 @@ section { position: relative; }
 }
 .kit__sign + .kit__type { margin-top: 4.5cqw; font-size: 3.4cqw; letter-spacing: .06em; color: var(--roast); }
 .kit__type + .kit__type { margin-top: 1.4cqw; max-width: 88%; }
+.ink-w { display: inline-block; white-space: nowrap; } /* typed letter by letter on click; words never split */
 
 /* instax mini print: warm white frame, 3:4 photo window, deeper bottom margin */
 .print {

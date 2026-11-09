@@ -142,6 +142,10 @@ function passKit() {
     b.addEventListener("click", (e) => {
       if (dragged) { dragged = false; return; } // that was the end of a drag
       if (e.detail) b.blur(); // mouse click: no focus box (keyboard users keep it)
+      if (k.ink) { // notebook: the writing replays (no sound, the book itself stays still)
+        rewriteNotebook();
+        return;
+      }
       if (k.sound === "music") {
         setPlaying(!playing);
       } else {
@@ -250,6 +254,28 @@ function passKit() {
         "--dx": camDx + "px", "--dy": camDy + "px", "--s": 1, "--r": `${printSpec.desk.r}deg`,
         duration: 0.8, ease: "back.out(1.3)",
       });
+  }
+
+  // --- notebook click: the name is written again by hand, then the title and
+  //     tagline are typed out letter by letter. No sound. ---------------------
+  let inkTl = null, inkChars = null;
+  function rewriteNotebook() {
+    const name = $(".kit__sign"), lines = $$(".kit__type");
+    if (!name || reduced) return;
+    if (!inkChars) { // split title + tagline into letters once (words kept whole for wrapping)
+      lines.forEach((l) => {
+        l.innerHTML = l.textContent.split(" ").map((w) =>
+          `<span class="ink-w">${[...w].map((c) => `<span class="ink-c">${c}</span>`).join("")}</span>`).join(" ");
+      });
+      inkChars = lines.map((l) => $$(".ink-c", l));
+    }
+    if (inkTl) inkTl.kill();
+    inkTl = gsap.timeline()
+      .set(inkChars.flat(), { opacity: 0 })
+      .fromTo(name, { clipPath: "inset(-30% 100% -30% -5%)" },
+        { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.4, ease: "power1.inOut" })
+      .to(inkChars[0] || [], { opacity: 1, duration: 0.01, stagger: 0.045 }, "-=0.15")
+      .to(inkChars[1] || [], { opacity: 1, duration: 0.01, stagger: 0.022 }, "+=0.1");
   }
 
   // --- intro: objects settle onto the desk, then the name is written ---
