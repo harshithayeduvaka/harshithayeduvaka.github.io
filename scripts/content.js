@@ -221,7 +221,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/maya/01..10.jpg)
     slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Eco-Packaging",
-    kind: "Strategic Branding · The MAYA Principle",
+    kind: "Strategic Branding",
     when: "", // no date shown
     score: "GTM",
     scoreLabel: "GO-TO-MARKET STRATEGY",
