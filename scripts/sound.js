@@ -87,6 +87,32 @@ const SOUNDS = {
     n.start(t, Math.random()); n.stop(t + 0.5);
     burst(t + 0.4, { freq: 2600, q: 1, dur: 0.05, gain: 0.35 }); // the flick
   },
+  // folder: a soft rising "pop" as the tools spill out
+  pop(t) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(320, t);
+    o.frequency.exponentialRampToValueAtTime(880, t + 0.09);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.35, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    o.connect(g).connect(master);
+    o.start(t); o.stop(t + 0.18);
+    burst(t, { freq: 1800, q: 1, dur: 0.03, gain: 0.15 });
+  },
+  // cup: spoon on porcelain, two bright partials that ring briefly
+  clink(t) {
+    [[2350, 0.22, 0.5], [3720, 0.12, 0.32], [5100, 0.05, 0.18]].forEach(([f, gain, dur]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(gain, t + 0.003);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(master);
+      o.start(t); o.stop(t + dur + 0.02);
+    });
+    burst(t, { freq: 6000, q: 2, dur: 0.012, gain: 0.25 });
+  },
   // needle drop before the music starts
   needle(t) {
     tick(t, 90, 0.08, 0.4);

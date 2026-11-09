@@ -40,6 +40,21 @@
         <button type="button" id="deskMute" aria-pressed="false">♪ Sound on</button>
       </div>
       <div class="kit__grid" id="kitGrid">
+        <!-- Folder: tools from content.js `tools` pop out of it (app.js passToolkit) -->
+        <button type="button" class="folder" id="folder" aria-expanded="false" aria-controls="toolkit">
+          <svg viewBox="0 0 64 52" aria-hidden="true">
+            <defs>
+              <linearGradient id="folderFront" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#9AD3FA"/><stop offset="1" stop-color="#5FAAE6"/>
+              </linearGradient>
+            </defs>
+            <path d="M4 6a4 4 0 0 1 4-4h14.5a4 4 0 0 1 3.2 1.6L28.5 7H56a4 4 0 0 1 4 4v33a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" fill="#5EA3DD"/>
+            <rect x="8" y="10" width="48" height="30" rx="2" fill="#fff"/>
+            <path class="folder__front" d="M4 16a4 4 0 0 1 4-4h48a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" fill="url(#folderFront)"/>
+          </svg>
+          <span class="folder__name">toolkit</span>
+        </button>
+        <ul class="toolkit" id="toolkit" aria-label="Tools I use"></ul>
         <div class="record" id="record">
           <div class="record__disc" aria-hidden="true"><i></i></div>
           <div class="record__actions mono">

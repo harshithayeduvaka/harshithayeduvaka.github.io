@@ -13,6 +13,12 @@ no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills s
 no "PASS" rail labels. Timeline tags: "Foundations" (education), "The Story So Far" (work).
 Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
+Desk extras: a blue "toolkit" folder (top) pops `tools` (content.js) out in a fan; tool tiles are
+64x64 SVGs in assets/tools/ (HubSpot/GA4/Notion/Asana/Canva glyphs from Simple Icons, CC0;
+Excel/Apollo.io/SQL drawn by hand). A top-down cappuccino (kit item `cup`, latte art in
+assets/objects/crema.jpg) replaced the coffee-ring stain; click = clink + steam.
+Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome
+never advances; inject `*{transition:none!important}` in test harnesses to see final states.
 
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.

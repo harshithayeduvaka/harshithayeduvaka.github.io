@@ -175,27 +175,6 @@ section { position: relative; }
   width: min(100%, calc((100svh - 110px) * 1.45)); aspect-ratio: 1.45; margin-inline: auto;
   background: var(--cream);
 }
-/* a coffee-cup ring left on the desk */
-.kit__grid::after {
-  content: ""; position: absolute; z-index: 1; pointer-events: none;
-  right: 7%; top: 55%; width: 15%; aspect-ratio: 1;
-  border-radius: 49% 51% 48% 52% / 52% 48% 51% 49%;
-  background:
-    radial-gradient(closest-side, transparent 82%, rgba(111, 66, 38, .1) 85%, rgba(111, 66, 38, .4) 88%, rgba(111, 66, 38, .14) 91%, transparent 95%);
-  transform: rotate(-12deg);
-  mix-blend-mode: multiply;
-}
-/* ...and a few drips beside it */
-.kit__grid::before {
-  content: ""; position: absolute; z-index: 1; pointer-events: none;
-  right: 4%; top: 70%; width: 8%; aspect-ratio: 1;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(111, 66, 38, .32) 0 5%, transparent 6.5%),
-    radial-gradient(circle at 60% 70%, rgba(111, 66, 38, .26) 0 8%, rgba(111, 66, 38, .1) 10%, transparent 12%),
-    radial-gradient(circle at 85% 25%, rgba(111, 66, 38, .22) 0 4%, transparent 5.5%);
-  mix-blend-mode: multiply;
-}
-
 .kit__item {
   position: absolute; display: block; padding: 10px;
   transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--r, 0deg)) scale(var(--s, 1));
@@ -214,6 +193,70 @@ section { position: relative; }
 .kit__item--print { padding: 0; } /* keeps the eject geometry exact */
 .kit__item--notebook img { filter: drop-shadow(0 22px 26px rgba(43, 29, 22, .16)) drop-shadow(0 2px 3px rgba(43, 29, 22, .12)); }
 .kit__item--camera img { filter: drop-shadow(0 12px 16px rgba(43, 29, 22, .22)) drop-shadow(0 1px 2px rgba(43, 29, 22, .2)); }
+
+/* folder at the top of the desk (macOS-style), tools fan out of it */
+.folder {
+  position: absolute; left: 41%; top: 1.5%; z-index: 20; width: 6.5%;
+  display: grid; justify-items: center; gap: 4px; padding: 6px 4px;
+  border-radius: 8px; transition: background .2s;
+}
+.folder svg { width: 100%; height: auto; filter: drop-shadow(0 6px 8px rgba(43, 29, 22, .18)); }
+.folder:hover { background: color-mix(in srgb, var(--latte) 45%, transparent); }
+.folder__name { font-size: 12px; color: var(--roast); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
+.folder[aria-expanded="true"] .folder__name { background: #3478F6; color: #fff; } /* selected, like Finder */
+.folder[aria-expanded="true"] .folder__front { transform: translateY(3px) scaleY(.92); transform-origin: 50% 100%; }
+.folder__front { transition: transform .25s var(--ease-parse); }
+
+.toolkit { position: absolute; z-index: 25; width: 0; height: 0; list-style: none; pointer-events: none; }
+.tool {
+  position: absolute; left: 0; top: 0; width: 62px; margin: -31px 0 0 -31px;
+  display: grid; justify-items: center; gap: 4px; opacity: 0;
+}
+.toolkit.is-open .tool { pointer-events: auto; }
+.tool img { width: 52px; height: 52px; filter: drop-shadow(0 8px 10px rgba(43, 29, 22, .22)); }
+.tool span { font-size: 12px; line-height: 1.2; color: var(--roast); background: color-mix(in srgb, var(--cream) 80%, transparent); padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+
+/* cappuccino from above: saucer, cup with handle, real latte art */
+.kit__item--cup { mix-blend-mode: normal; }
+.cup { position: relative; aspect-ratio: 1; }
+.cup__saucer {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 42% 38%, #fff 0 45%, #f3efe9 70%, #e7e0d6 100%);
+  box-shadow: 0 14px 24px -10px rgba(43, 29, 22, .35), inset 0 0 0 1px rgba(43, 29, 22, .06);
+}
+.cup__handle { /* points along +x; the whole object is tilted by --r */
+  position: absolute; left: 76%; top: 44%; width: 17%; height: 12%;
+  border-radius: 0 40% 40% 0 / 0 50% 50% 0;
+  background: linear-gradient(#fff, #ece6dd);
+  box-shadow: 0 3px 5px rgba(43, 29, 22, .18);
+}
+.cup__body {
+  position: absolute; inset: 15%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff 0 60%, #eee8df 100%);
+  box-shadow: 0 6px 10px -4px rgba(43, 29, 22, .35), inset 0 0 0 1px rgba(43, 29, 22, .05);
+}
+.cup__crema {
+  position: absolute; inset: 7%; border-radius: 50%; overflow: hidden;
+  box-shadow: inset 0 0 0 2px rgba(80, 45, 20, .35), inset 0 4px 10px rgba(60, 30, 10, .35);
+}
+.cup__crema img { width: 110%; max-width: none; height: 110%; margin: -5%; object-fit: cover; }
+/* steam: three soft wisps that rise and fade when the cup is clicked */
+.cup__steam { position: absolute; inset: 0; pointer-events: none; }
+.cup__steam i {
+  position: absolute; left: 44%; top: 30%; width: 12%; height: 40%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .85), transparent);
+  filter: blur(4px); opacity: 0;
+}
+.cup__steam i:nth-child(2) { left: 30%; }
+.cup__steam i:nth-child(3) { left: 58%; }
+.cup__steam.is-on i { animation: steam 2.2s ease-out forwards; }
+.cup__steam.is-on i:nth-child(2) { animation-delay: .25s; }
+.cup__steam.is-on i:nth-child(3) { animation-delay: .5s; }
+@keyframes steam {
+  0% { opacity: 0; transform: translateY(0) scale(.6); }
+  25% { opacity: .9; }
+  100% { opacity: 0; transform: translate(6%, -80%) scale(1.4, 1.8); }
+}
 
 /* name across both pages, title + tagline typed underneath
    (sizes in cqw so everything scales with the notebook, on every screen and while dragged) */
@@ -505,7 +548,6 @@ html.deck-open { overflow: hidden; }
     width: 100%; aspect-ratio: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px; padding: 4px 0 12px; align-items: center;
   }
-  .kit__grid::before, .kit__grid::after { display: none; }
   .kit__item { position: relative; left: auto !important; top: auto !important; width: auto !important;
     transform: rotate(calc(var(--r, 0deg) * .4)) scale(var(--s, 1)); cursor: pointer; touch-action: manipulation; padding: 14px 10px; }
   .kit__item.is-hidden { display: none; }
@@ -514,6 +556,12 @@ html.deck-open { overflow: hidden; }
   .kit__item--print { order: 2; padding-inline: 22%; }
   .kit__item--headphones { order: 3; }
   .kit__item--pen { order: 4; }
+  .kit__item--cup { order: 5; padding: 18px; }
+  .folder { position: relative; left: auto; top: auto; width: 84px; order: 6; justify-self: center; }
+  .toolkit { position: static; width: auto; height: auto; grid-column: 1 / -1; order: 7; display: none;
+    grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 6px; padding: 6px 0 14px; }
+  .toolkit.is-open { display: grid; }
+  .tool { position: static; width: auto; margin: 0; opacity: 1; }
   .record { position: relative; right: auto; top: auto; transform: none; grid-column: 1 / -1; order: 99; width: 100%;
     grid-template-columns: 96px 1fr; justify-items: start; text-align: left; align-items: center; }
   .record__disc { width: 96px; }
@@ -536,4 +584,5 @@ html.deck-open { overflow: hidden; }
   .kit__item:hover img, .kit__item.is-dragging img { transform: none; }
   .print::after { animation: none !important; opacity: 0 !important; } /* photo shown fully developed */
   .slide { transform: none !important; } /* deck: cross-fade only */
+  .cup__steam i { display: none; }
 }

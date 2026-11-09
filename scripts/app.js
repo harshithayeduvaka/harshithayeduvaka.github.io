@@ -2,7 +2,7 @@
 import { initGlobe } from "./webgl.js";
 import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
-  meta, kit, experience, projects, languages,
+  meta, kit, tools, experience, projects, languages,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -90,7 +90,7 @@ function passKit() {
     if (hp) hp.setAttribute("aria-pressed", String(on));
     on ? startMusic() : stopMusic();
   };
-  recBtn.addEventListener("click", () => setPlaying(!playing));
+  recBtn.addEventListener("click", (e) => { if (e.detail) recBtn.blur(); setPlaying(!playing); });
   document.addEventListener("visibilitychange", () => { if (document.hidden && playing) setPlaying(false); });
 
   // --- sound toggle --------------------------------------------------
@@ -115,6 +115,15 @@ function passKit() {
       b.setAttribute("aria-label", `Photo: ${k.alt}`);
       b.classList.add("is-hidden");
       b.innerHTML = `<span class="kit__img print"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span>`;
+    } else if (k.cup) {
+      // cappuccino from above: saucer, cup + handle, real latte art, steam (on click)
+      b.setAttribute("aria-label", `${k.alt}. Plays a sound.`);
+      b.innerHTML = `
+      <span class="kit__img cup" aria-hidden="true">
+        <span class="cup__saucer"></span><span class="cup__handle"></span>
+        <span class="cup__body"><span class="cup__crema"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" /></span></span>
+        <span class="cup__steam"><i></i><i></i><i></i></span>
+      </span>`;
     } else {
       b.innerHTML = `
       <span class="kit__img"><img src="${k.img}" alt="" width="${k.w}" height="${k.h}" loading="lazy" decoding="async" draggable="false" />${
@@ -133,13 +142,15 @@ function passKit() {
 
     // click = activate (keyboard Enter/Space also lands here)
     let dragged = false;
-    b.addEventListener("click", () => {
+    b.addEventListener("click", (e) => {
       if (dragged) { dragged = false; return; } // that was the end of a drag
+      if (e.detail) b.blur(); // mouse click: no focus box (keyboard users keep it)
       if (k.sound === "music") {
         setPlaying(!playing);
       } else {
         play(k.sound);
         if (k.sound === "shutter") ejectPrint();
+        if (k.cup) steam(b);
       }
       note.textContent = k.note || "";
       if (!reduced) {
@@ -258,6 +269,12 @@ function passKit() {
       .to(typed, { opacity: 1, y: 0, duration: 0.5, stagger: 0.25 }, "-=0.2");
   }
 
+  // --- cup click: a curl of steam rises (restarts the CSS animation) ---
+  function steam(b) {
+    const s = b.querySelector(".cup__steam");
+    s.classList.remove("is-on"); void s.offsetWidth; s.classList.add("is-on");
+  }
+
   // --- tidy: send everything back to its starting spot ---------------
   $("#deskTidy").addEventListener("click", () => {
     $$(".kit__item").forEach((b, i) => {
@@ -267,6 +284,64 @@ function passKit() {
     });
     play("page");
   });
+}
+
+// ------------------------------------------------------------------
+// Folder at the top of the desk: click it and the tool icons pop out
+// together, fanning into an arc below it. Click again (or press Esc) to
+// tuck them back in. Mobile: they open as a grid under the folder.
+// ------------------------------------------------------------------
+function passToolkit() {
+  const folder = $("#folder"), list = $("#toolkit");
+  if (!folder || !list) return;
+  list.innerHTML = tools.map((t) =>
+    `<li class="tool"><img src="${t.icon}" alt="" width="64" height="64" loading="lazy" decoding="async" /><span>${t.name}</span></li>`).join("");
+  const items = $$(".tool", list);
+  let open = false, tl = null;
+
+  // fan positions (px offsets from the folder's centre): evenly spaced left→right
+  // along a gentle smile-shaped curve that dips below the folder
+  const fan = () => {
+    const fw = folder.offsetWidth, n = items.length;
+    const step = Math.max(76, fw * 1.25), half = ((n - 1) / 2) * step;
+    return items.map((_, i) => {
+      const x = (i - (n - 1) / 2) * step, k = x / half;
+      return { x, y: fw * 0.45 + fw * 1.25 * (1 - k * k), r: k * 9 };
+    });
+  };
+
+  const set = (on) => {
+    open = on;
+    folder.setAttribute("aria-expanded", String(on));
+    list.classList.toggle("is-open", on);
+    if (tl) tl.kill();
+    if (isMobile) { // grid layout: just scale them in
+      if (!reduced && on) gsap.fromTo(items, { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2)", stagger: 0.02 });
+      return;
+    }
+    // park the list on the folder's centre, then fan the icons out from there
+    list.style.left = folder.offsetLeft + folder.offsetWidth / 2 + "px";
+    list.style.top = folder.offsetTop + folder.offsetWidth * 0.4 + "px";
+    const pos = fan();
+    if (reduced) {
+      items.forEach((it, i) => gsap.set(it, on ? { x: pos[i].x, y: pos[i].y, rotate: pos[i].r, scale: 1, opacity: 1 } : { opacity: 0 }));
+      return;
+    }
+    tl = on
+      ? gsap.timeline().fromTo(items,
+          { x: 0, y: 0, scale: 0.3, rotate: 0, opacity: 0 },
+          { x: (i) => pos[i].x, y: (i) => pos[i].y, rotate: (i) => pos[i].r, scale: 1, opacity: 1,
+            duration: 0.6, ease: "back.out(1.7)", stagger: { each: 0.015, from: "center" } })
+      : gsap.timeline().to(items, { x: 0, y: 0, scale: 0.3, rotate: 0, opacity: 0, duration: 0.35, ease: "power2.in", stagger: { each: 0.01, from: "edges" } });
+  };
+
+  folder.addEventListener("click", (e) => {
+    if (e.detail) folder.blur(); // mouse click: no focus box (keyboard users keep it)
+    play("pop");
+    if (!reduced) gsap.fromTo(folder, { scale: 1 }, { keyframes: [{ scale: 1.12, duration: 0.12 }, { scale: 1, duration: 0.4, ease: "elastic.out(1,0.4)" }] });
+    set(!open);
+  });
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && open) set(false); });
 }
 
 // ------------------------------------------------------------------
@@ -578,7 +653,7 @@ function contactForm() {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, pass03, pass04, pass05, pass07, contact, contactForm };
+  const passes = { passKit, passToolkit, pass03, pass04, pass05, pass07, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
