@@ -31,7 +31,7 @@ export const about = {
   paragraphs: [
     "I’m a marketing and business development professional based in Paris, and I do my best work when something doesn’t add up yet.",
     "It might be a campaign that should have worked and didn’t, or a market nobody has cracked. That’s where I get curious. I like taking the problem apart and asking the slightly annoying questions until it fits back together as something a team can act on. My favourite part is the moment everyone finally sees the problem clearly and knows what to do next.",
-    "Good marketing starts with listening, to the data and to the people behind it. The data shows me what’s happening, and talking to people usually explains why. I enjoy this enough that I went back to study it properly: I’m currently doing a master’s in International Marketing & Business Development.",
+    "Good marketing starts with listening, to the data and to the people behind it. The data shows me what’s happening, and talking to people usually explains why. I enjoy this enough that I went back to study it properly. I’m currently doing a master’s in International Marketing & Business Development.",
     "When I’m not working, I’m either reading about consumer psychology or losing at chess online.",
   ],
 };

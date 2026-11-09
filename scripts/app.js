@@ -524,8 +524,7 @@ function pass05() {
 function passAboutMe() {
   const body = $("#aboutBody");
   if (!body) return;
-  // first paragraph is the lead (set larger); the rest are normal body text
-  body.innerHTML = about.paragraphs.map((p, i) => `<p${i === 0 ? ' class="about-me__lead"' : ""}>${p}</p>`).join("");
+  body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
 }
 
 function revealTitles() {

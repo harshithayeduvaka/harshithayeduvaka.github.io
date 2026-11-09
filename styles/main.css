@@ -26,7 +26,7 @@
   /* spacing */
   --gutter: clamp(20px, 6vw, 88px);
   --rail-w: clamp(64px, 8vw, 132px);
-  --pass-pad: clamp(96px, 13vw, 210px);
+  --pass-pad: clamp(48px, 6.5vw, 105px); /* section spacing (halved) */
 
   --ease-parse: cubic-bezier(0.16, 0.84, 0.44, 1);
 
@@ -157,7 +157,7 @@ section { position: relative; }
 .hero.desk {
   position: relative; min-height: 100svh;
   display: grid; align-content: center;
-  padding: clamp(16px, 3vw, 40px) var(--gutter) 72px;
+  padding: clamp(16px, 3vw, 40px) var(--gutter) 36px;
 }
 .kit { position: relative; width: 100%; max-width: 1440px; margin-inline: auto; }
 .kit__tools { position: absolute; top: 0; right: 0; z-index: 30; display: flex; gap: 18px; }
@@ -441,7 +441,6 @@ section { position: relative; }
 .about-me__cmd { color: var(--caramel); font-weight: 400; font-size: .7em; vertical-align: .12em; margin-left: .1em; }
 .about-me__body { display: grid; gap: 1.1em; max-width: 62ch; }
 .about-me__body p { font-size: var(--fs-18); line-height: 1.65; color: var(--roast); }
-.about-me__body .about-me__lead { font-family: "Fraunces", serif; font-size: var(--fs-34); line-height: 1.25; color: var(--espresso); max-width: 28ch; margin-bottom: .3em; }
 
 .close { text-align: center; padding-block: var(--pass-pad); padding-inline: var(--gutter); }
 .mailto {
