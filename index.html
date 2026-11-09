@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Harshitha Yeduvaka — Marketing & Growth · Paris</title>
+<title>Harshitha Yeduvaka · Marketing & Growth · Paris</title>
 <meta name="description" content="Harshitha Yeduvaka, Marketing &amp; Growth in Paris. Helping businesses turn marketing efforts into measurable growth." />
 <link rel="canonical" href="/" />
 
@@ -33,7 +33,7 @@
        built from content.js `kit`, the record card plays the music. Desktop: drag objects
        around, click to play. Mobile: tap-to-play grid. -->
   <header class="hero desk" id="top">
-    <h1 class="visually-hidden">Harshitha Yeduvaka — Marketing &amp; Growth</h1>
+    <h1 class="visually-hidden">Harshitha Yeduvaka, Marketing &amp; Growth</h1>
     <div class="kit">
       <div class="kit__tools mono">
         <button type="button" id="deskTidy">↺ Tidy up</button>
@@ -57,7 +57,7 @@
     <h2 id="p03-h" class="visually-hidden">Experience and education</h2>
     <div class="track" id="p03Track"></div>
     <div class="p03__progress mono" id="p03Progress">
-      <span id="p03Label">PASS 01 · 1/4</span>
+      <span id="p03Label">1/4</span>
       <span class="bar"><i></i></span>
     </div>
   </section>
@@ -65,11 +65,6 @@
   <!-- PASS 04 — ohmyATS demo -->
   <section class="pass" id="p04" aria-labelledby="p04-h">
     <div class="pass__grid">
-      <div class="rail mono">
-        <span class="rail__idx">PASS 02 / 05</span>
-        <span>ohmyATS</span>
-        <span>LIVE</span>
-      </div>
       <div class="content">
         <h2 id="p04-h" class="pass__title display">The engine, in miniature.</h2>
         <div class="demo">
@@ -103,29 +98,10 @@
   <!-- PASS 05 — Projects -->
   <section class="pass" id="p05" aria-labelledby="p05-h">
     <div class="pass__grid">
-      <div class="rail mono">
-        <span class="rail__idx">PASS 03 / 05</span>
-        <span>RESULTS</span>
-      </div>
       <div class="content">
-        <h2 id="p05-h" class="pass__title display">Case studies parse on demand.</h2>
+        <h2 id="p05-h" class="pass__title display">Case studies.</h2>
+        <p class="work__hint">Open one to flip through the deck.</p>
         <div class="work" id="workList"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PASS 06 — Skills -->
-  <section class="pass" id="p06" aria-labelledby="p06-h">
-    <div class="pass__grid">
-      <div class="rail mono">
-        <span class="rail__idx">PASS 04 / 05</span>
-        <span>CLASSIFY</span>
-      </div>
-      <div class="content">
-        <h2 id="p06-h" class="pass__title display">The parser sorts the toolkit.</h2>
-        <div class="filters mono" id="skillFilters" role="group" aria-label="Filter skills"></div>
-        <div id="skills-pile" aria-hidden="true"></div>
-        <ul class="skills-fallback" id="skillsFallback"></ul>
       </div>
     </div>
   </section>
@@ -133,16 +109,12 @@
   <!-- PASS 07 — Geography + contact -->
   <section class="pass" id="p07" aria-labelledby="p07-h">
     <div class="pass__grid">
-      <div class="rail mono">
-        <span class="rail__idx">PASS 05 / 05</span>
-        <span>RESOLVE</span>
-      </div>
       <div class="content">
         <h2 id="p07-h" class="pass__title display">Hyderabad → Berlin → Paris.</h2>
         <div class="p07__wrap">
           <div id="globe" role="img" aria-label="Route from Hyderabad to Berlin to Paris"></div>
           <div>
-            <p class="body-lg">Three cities, three roles, one arc — enterprise onboarding to growth marketing to building the product itself.</p>
+            <p class="body-lg">Three cities, three roles, one arc: from enterprise onboarding to growth marketing to building the product itself.</p>
             <div class="langs" id="langs"></div>
           </div>
         </div>
@@ -188,6 +160,21 @@
     </form>
   </section>
 </main>
+
+<!-- Case-study deck viewer: filled by app.js from content.js `projects` -->
+<dialog class="deck" id="deck" aria-labelledby="deckTitle">
+  <div class="deck__bar">
+    <p class="deck__title mono" id="deckTitle"></p>
+    <p class="deck__count mono" id="deckCount" aria-live="polite"></p>
+    <button type="button" class="deck__close" id="deckClose" aria-label="Close deck">×</button>
+  </div>
+  <div class="deck__stage" id="deckStage"></div>
+  <div class="deck__nav">
+    <button type="button" class="deck__btn" id="deckPrev" aria-label="Previous slide">←</button>
+    <div class="deck__dots" id="deckDots" aria-hidden="true"></div>
+    <button type="button" class="deck__btn" id="deckNext" aria-label="Next slide">→</button>
+  </div>
+</dialog>
 
 <footer class="mono">
   <span>Designed &amp; built in Paris</span>

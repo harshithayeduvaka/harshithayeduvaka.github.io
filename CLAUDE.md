@@ -9,7 +9,10 @@ an open notebook with her name, title and tagline written on it, plus headphones
 an instax camera (click = her photo slides out as a print), a pen and a record card.
 Below it, the later sections ("passes": experience, ohmyATS demo, projects, skills,
 geography) and contact. She asked for: no CV-copy intro, no object labels/numbers,
-no Spotify, warm coffee palette.
+no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
+no "PASS" rail labels. Timeline tags: "Foundations" (education), "The Story So Far" (work).
+Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
+per project in content.js, otherwise slides are built from the project's text.
 
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.

@@ -98,7 +98,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .pass__grid {
   display: grid;
-  grid-template-columns: var(--rail-w) 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(20px, 4vw, 64px);
   max-width: 1600px;
   margin-inline: auto;
@@ -298,28 +298,21 @@ section { position: relative; }
 .track { display: flex; will-change: transform; }
 .panel {
   flex: 0 0 100vw; min-height: 100vh;
-  display: grid; grid-template-columns: var(--rail-w) 1fr;
+  display: grid; grid-template-columns: minmax(0, 1fr);
   gap: clamp(20px, 4vw, 64px);
   padding: var(--gutter);
   align-content: center;
 }
-.panel__year { font-size: var(--fs-84); color: var(--latte); font-family:"Martian Mono"; letter-spacing: 0; }
 .panel__org {
   font-size: var(--fs-52); color: var(--espresso);
   font-variation-settings: "wght" 700, "wdth" 78;
 }
 .panel__role { margin: 0.4em 0 1.4em; color: var(--roast); }
 .panel__dates { color: var(--espresso); }
-.panel > .content { grid-column: 2; } /* no small rail: the big year + city carry it */
 .panel__tag { color: var(--cream); background: var(--espresso); padding: 4px 8px; border-radius: 2px; width: max-content; margin-bottom: 1em; }
 .panel__bullets { list-style: none; max-width: 60ch; display: grid; gap: 14px; }
 .panel__bullets li { position: relative; padding-left: 22px; }
 .panel__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--caramel); }
-.panel__city {
-  position: absolute; right: var(--gutter); bottom: 8vh;
-  font-size: var(--fs-52); color: var(--latte);
-  font-family: "Fraunces"; font-weight: 800; opacity: 0.6;
-}
 .p03__progress {
   position: fixed; left: var(--gutter); right: var(--gutter); bottom: 24px; z-index: 5;
   display: none; align-items: center; gap: 12px; color: var(--espresso);
@@ -377,45 +370,19 @@ section { position: relative; }
   display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;
   padding: clamp(20px, 3vw, 34px); background: var(--cream);
   cursor: pointer; transition: background 0.3s var(--ease-parse);
-  border-bottom: 1px solid var(--latte);
+  border: 0; border-bottom: 1px solid var(--latte);
+  width: 100%; text-align: left; font: inherit; color: inherit;
 }
+.work__hint { color: var(--roast); opacity: .7; margin: -1.4em 0 1.6em; }
+.work__open { grid-column: 1 / -1; color: var(--espresso); justify-self: end; transition: transform .25s var(--ease-parse); }
+.work__row:hover .work__open { transform: translateX(4px); }
 .work__row:last-child { border-bottom: none; }
-.work__row:hover, .work__row[aria-expanded="true"] { background: var(--latte); }
+.work__row:hover { background: color-mix(in srgb, var(--latte) 55%, var(--cream)); }
 .work__idx { color: var(--espresso); }
 .work__client { font-family: "Fraunces"; font-weight: 700; font-size: var(--fs-34); }
 .work__client small { display:block; font-family:"Inter Tight"; font-weight:400; font-size: var(--fs-13); color: var(--roast); opacity: .65; text-transform:none; letter-spacing:0; }
 .work__score { font-family:"Fraunces"; font-weight:800; font-size: var(--fs-34); color: var(--caramel); text-align:right; }
 .work__score small { display:block; font-family:"Martian Mono"; font-size:.62rem; color: var(--espresso); }
-.work__detail {
-  grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 24px;
-  height: 0; overflow: hidden; opacity: 0; padding-top: 0;
-  transition: opacity 0.4s var(--ease-parse);
-}
-.work__detail dt { color: var(--espresso); margin-bottom: 6px; }
-.work__detail dd { max-width: 40ch; }
-.work__detail .proj { color: var(--caramel); }
-.work__row[aria-expanded="true"] .work__detail { height: auto; opacity: 1; padding-top: 24px; }
-
-/* ============================================================
-   PASS 06 — Skills
-   ============================================================ */
-#skills-pile { position: relative; height: 420px; border: 1px solid var(--latte); border-radius: 6px; overflow: hidden; background: var(--cream); }
-.chip {
-  position: absolute; padding: 10px 16px; border-radius: 999px;
-  background: var(--espresso); color: var(--cream);
-  font-family: "Martian Mono"; font-size: var(--fs-11); text-transform: uppercase; letter-spacing: 0.08em;
-  white-space: nowrap; user-select: none; will-change: transform;
-}
-.chip[data-cat="0"] { background: var(--espresso); }
-.chip[data-cat="1"] { background: var(--roast); }
-.chip[data-cat="2"] { background: var(--caramel); color: var(--roast); }
-.chip[data-cat="3"] { background: var(--latte); color: var(--roast); }
-.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-.filters button { border: 1px solid var(--espresso); color: var(--espresso); padding: 8px 16px; border-radius: 999px; font-family:"Martian Mono"; font-size: var(--fs-11); text-transform: uppercase; letter-spacing:.08em; min-height:40px; }
-.filters button.active { background: var(--espresso); color: var(--cream); }
-.skills-fallback { list-style: none; display: grid; gap: 22px; }
-.skills-fallback li b { color: var(--espresso); }
-[hidden] { display: none !important; }
 
 /* ============================================================
    PASS 07 — Geography + contact
@@ -461,6 +428,69 @@ footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; fle
 footer span { color: var(--roast); opacity: 0.55; }
 
 /* ============================================================
+   Case-study deck viewer (native <dialog>, opened from a case-study row)
+   ============================================================ */
+html.deck-open { overflow: hidden; }
+.deck {
+  width: min(1120px, calc(100vw - 32px)); max-height: calc(100svh - 32px);
+  margin: auto; padding: clamp(14px, 2vw, 24px);
+  border: 1px solid var(--latte); border-radius: 14px;
+  background: var(--cream); color: var(--roast);
+  box-shadow: 0 30px 80px -30px rgba(43, 29, 22, .55);
+}
+.deck::backdrop { background: rgba(43, 29, 22, .55); backdrop-filter: blur(3px); }
+.deck[open] { display: grid; grid-template-rows: auto 1fr auto; gap: 14px; animation: deck-in .35s var(--ease-parse); }
+@keyframes deck-in { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+.deck__bar { display: flex; align-items: center; gap: 16px; }
+.deck__title { color: var(--espresso); flex: 1; }
+.deck__count { color: var(--roast); opacity: .6; }
+.deck__close { font-size: 1.8rem; line-height: 1; width: 44px; height: 44px; border-radius: 50%; }
+.deck__close:hover { background: var(--latte); }
+
+/* slides sit on top of each other; the active one slides in */
+.deck__stage {
+  position: relative; aspect-ratio: 16 / 9; width: 100%; max-height: calc(100svh - 190px);
+  margin-inline: auto; overflow: hidden; border-radius: 10px;
+  background: #fffaf3; border: 1px solid var(--latte); touch-action: pan-y;
+}
+.slide {
+  position: absolute; inset: 0; display: grid; align-content: center; gap: 1.2em;
+  padding: clamp(24px, 6%, 72px); background: #fffaf3;
+  opacity: 0; transform: translateX(6%); pointer-events: none;
+  transition: opacity .45s var(--ease-parse), transform .45s var(--ease-parse);
+}
+.slide.is-before { transform: translateX(-6%); }
+.slide.is-active { opacity: 1; transform: none; pointer-events: auto; }
+.slide--img { padding: 0; place-items: center; }
+.slide--img img { width: 100%; height: 100%; object-fit: contain; }
+.slide__label { color: var(--caramel); }
+.slide__body { font-family: "Fraunces", serif; font-size: clamp(1.2rem, 1rem + 1.6vw, 2.3rem); line-height: 1.25; max-width: 30ch; color: var(--roast); }
+.slide__mine { display: block; margin-top: 1em; font-family: "Inter Tight", sans-serif; font-size: var(--fs-16); line-height: 1.5; max-width: 60ch; opacity: .85; }
+.slide__mine b { color: var(--espresso); margin-right: .6em; }
+.slide--cover { background: var(--roast); color: var(--cream); }
+.slide--cover .slide__label { color: var(--latte); }
+.slide__client { font-size: clamp(2.4rem, 1.5rem + 5vw, 5.6rem); color: var(--cream); }
+.slide__score { display: flex; align-items: baseline; gap: 14px; }
+.slide__score b { font-family: "Fraunces", serif; font-weight: 800; font-size: clamp(2rem, 1.4rem + 3vw, 3.6rem); color: var(--caramel); }
+.slide__score span { color: var(--latte); }
+.slide--impact .slide__body { color: var(--espresso); }
+
+.deck__nav { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.deck__btn {
+  width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--espresso);
+  color: var(--espresso); font-size: 1.2rem; transition: background .2s, color .2s;
+}
+.deck__btn:hover:not(:disabled) { background: var(--espresso); color: var(--cream); }
+.deck__btn:disabled { opacity: .3; cursor: default; }
+.deck__dots { display: flex; gap: 8px; }
+.deck__dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--latte); transition: background .2s, transform .2s; }
+.deck__dots i.is-active { background: var(--espresso); transform: scale(1.25); }
+@media (max-width: 860px) {
+  .deck__stage { aspect-ratio: 4 / 5; }
+  .slide__body { max-width: none; }
+}
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 860px) {
@@ -495,8 +525,6 @@ footer span { color: var(--roast); opacity: 0.55; }
   .ring-panel { order: -1; }
   .work__row { grid-template-columns: auto 1fr; }
   .work__score { grid-column: 2; text-align: left; }
-  .panel__city { position: static; opacity: 0.4; margin-top: 24px; }
-  .panel > .content { grid-column: 1; }
 }
 
 /* ============================================================
@@ -507,4 +535,5 @@ footer span { color: var(--roast); opacity: 0.55; }
   .hero__cue { display: none; }
   .kit__item:hover img, .kit__item.is-dragging img { transform: none; }
   .print::after { animation: none !important; opacity: 0 !important; } /* photo shown fully developed */
+  .slide { transform: none !important; } /* deck: cross-fade only */
 }

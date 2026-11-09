@@ -113,7 +113,7 @@ export const experience = [
     accent: "saffron",
     vocab: ["A/B", "+15% open", "+12% follows", "+17% eng", "Meta Ads", "ROI"],
     bullets: [
-      "Designed & ran A/B tests on email sequences — open rates +15%, isolating the messaging that drove replies and sign-ups.",
+      "Designed & ran A/B tests on email sequences: open rates +15%, isolating the messaging that drove replies and sign-ups.",
       "Grew follower base +12% and engagement +17% through integrated growth-marketing initiatives.",
       "Scaled paid social (Meta Ads) and analysed campaign performance for attribution and ROI.",
     ],
@@ -134,7 +134,13 @@ export const experience = [
   },
 ];
 
-// Case studies render as parser output rows that resolve into full studies.
+// Case studies. Clicking one opens its deck in a viewer on the same page.
+// To show your REAL deck instead of the auto-built one:
+//   1. Export the deck as images (Canva/PowerPoint/Keynote/Google Slides: File → Download → PNG or JPG).
+//   2. Put them in assets/decks/<id>/ (e.g. assets/decks/coop/01.jpg, 02.jpg, ...).
+//   3. Add to the project:  slides: ["assets/decks/coop/01.jpg", "assets/decks/coop/02.jpg"],
+// Without `slides`, the deck is built from context / audited / found / recommended / impact.
+// To add a new case study, copy one { ... } block and change the text.
 export const projects = [
   {
     id: "dior",
@@ -178,13 +184,6 @@ export const projects = [
     impact: "Sharpened GTM execution and market accessibility.",
   },
 ];
-
-export const skills = {
-  "CAMPAIGN & ATTRIBUTION": ["GA4", "SQL", "Meta Ads", "LinkedIn Ads", "ROI Analysis"],
-  "BRAND & STRATEGY": ["Content Drafting", "Brand-Fit", "Positioning", "SEO/SEM", "GTM"],
-  "TESTING & VERIFICATION": ["A/B Testing", "Hypothesis→Evidence", "CRM Audit", "Segmentation", "Lead Scoring"],
-  TOOLS: ["HubSpot", "Notion", "Asana", "Zapier", "Excel", "Canva", "Generative AI"],
-};
 
 export const languages = [
   { name: "English", level: "C2", pct: 100 },

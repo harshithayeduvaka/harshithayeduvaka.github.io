@@ -2,7 +2,7 @@
 import { initGlobe } from "./webgl.js";
 import { play, startMusic, stopMusic, isMuted, setMuted } from "./sound.js";
 import {
-  meta, kit, experience, projects, skills, languages,
+  meta, kit, experience, projects, languages,
 } from "./content.js";
 
 const { gsap, ScrollTrigger, Lenis } = window;
@@ -279,12 +279,10 @@ function pass03() {
     panel.className = "panel";
     panel.innerHTML = `
       <div class="content">
-        <p class="panel__tag mono">${e.type === "education" ? "Education" : "Work experience"}</p>
-        <p class="panel__year">${e.year}</p>
+        <p class="panel__tag mono">${e.type === "education" ? "Foundations" : "The Story So Far"}</p>
         <h3 class="panel__org display">${e.org}</h3>
         <p class="panel__role mono">${e.role}<span class="panel__dates"> · ${e.dates}</span></p>
         <ul class="panel__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
-        <span class="panel__city">${e.city}</span>
       </div>`;
     track.appendChild(panel);
   });
@@ -312,7 +310,7 @@ function pass03() {
       scrub: 0.5,
       onUpdate: (self) => {
         const idx = Math.min(panels.length, Math.floor(self.progress * panels.length) + 1);
-        label.textContent = `PASS 01 · ${idx}/${panels.length}`;
+        label.textContent = `${idx}/${panels.length}`;
         bar.style.width = self.progress * 100 + "%";
         prog.style.opacity = self.progress > 0.01 && self.progress < 0.99 ? 1 : 0;
       },
@@ -384,142 +382,103 @@ function pass04() {
       : `MATCH ${pct}% · FULL COVERAGE`;
   }
   form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
-  run(); // prefilled example — never an empty state
+  run(); // prefilled example: never an empty state
 }
 
 // ------------------------------------------------------------------
-// PASS 05 — Projects (parser output rows)
+// PASS 05 — Case studies. Each row opens its deck in a viewer on the same page.
+// A project with `slides` (image paths) shows those images; otherwise the deck is
+// built from the project's own text (context, audit, findings, recommendation, impact).
 // ------------------------------------------------------------------
+function deckSlides(p) {
+  if (p.slides && p.slides.length) {
+    return p.slides.map((src, i) =>
+      `<figure class="slide slide--img"><img src="${src}" alt="${p.client}, slide ${i + 1}" loading="lazy" decoding="async" /></figure>`);
+  }
+  const text = (label, body, cls = "") =>
+    `<section class="slide ${cls}"><p class="slide__label mono">${label}</p><p class="slide__body">${body}</p></section>`;
+  return [
+    `<section class="slide slide--cover">
+       <p class="slide__label mono">${p.kind} · ${p.when}</p>
+       <h3 class="slide__client display">${p.client}</h3>
+       <p class="slide__score"><b>${p.score}</b><span class="mono">${p.scoreLabel}</span></p>
+     </section>`,
+    text("Context", p.context + (p.mine ? `<span class="slide__mine"><b class="mono">My part</b> ${p.mine}</span>` : "")),
+    text("What we audited", p.audited),
+    text("What we found", p.found),
+    text("What we recommended", p.recommended),
+    text("Impact", p.impact, "slide--impact"),
+  ];
+}
+
 function pass05() {
   const list = $("#workList");
-  projects.forEach((p, i) => {
-    const row = document.createElement("div");
-    row.className = "work__row";
-    row.setAttribute("role", "button");
-    row.setAttribute("tabindex", "0");
-    row.setAttribute("aria-expanded", "false");
-    row.innerHTML = `
-      <span class="work__idx mono">R0${i + 1}</span>
-      <span class="work__client">${p.client}<small>${p.kind} · ${p.when}</small></span>
-      <span class="work__score">${p.score}<small>${p.scoreLabel}</small></span>
-      <dl class="work__detail">
-        <div><dt class="mono">CONTEXT</dt><dd>${p.context}</dd></div>
-        ${p.mine ? `<div><dt class="mono">MY PART</dt><dd>${p.mine}</dd></div>` : ""}
-        <div><dt class="mono">AUDITED</dt><dd>${p.audited}</dd></div>
-        <div><dt class="mono">FOUND</dt><dd>${p.found}</dd></div>
-        <div><dt class="mono">RECOMMENDED</dt><dd>${p.recommended}</dd></div>
-        <div><dt class="mono">PROJECTED IMPACT</dt><dd class="proj">${p.impact}</dd></div>
-        ${p.link ? `<div><dt class="mono">LINK</dt><dd><a class="work__link" href="${p.link}" target="_blank" rel="noopener">${p.linkLabel || "Open"} ↗</a></dd></div>` : ""}
-      </dl>`;
-    const toggle = () => {
-      const open = row.getAttribute("aria-expanded") === "true";
-      $$(".work__row").forEach((r) => r.setAttribute("aria-expanded", "false"));
-      row.setAttribute("aria-expanded", String(!open));
-      ScrollTrigger.refresh();
-    };
-    row.addEventListener("click", (e) => { if (!e.target.closest("a")) toggle(); });
-    row.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+  const dlg = $("#deck"), stage = $("#deckStage"), dots = $("#deckDots");
+  const count = $("#deckCount"), title = $("#deckTitle");
+  let slides = [], at = 0, opener = null;
+
+  const go = (i) => {
+    at = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => {
+      s.classList.toggle("is-active", k === at);
+      s.classList.toggle("is-before", k < at);
+      s.setAttribute("aria-hidden", String(k !== at));
     });
-    list.appendChild(row);
-  });
-}
-
-// ------------------------------------------------------------------
-// PASS 06 — Skills (lightweight physics pile + fallback + filters)
-// ------------------------------------------------------------------
-function pass06() {
-  const cats = Object.keys(skills);
-  const fallback = $("#skillsFallback");
-  const filters = $("#skillFilters");
-  const pile = $("#skills-pile");
-
-  // fallback list (also the reduced-motion / a11y version)
-  cats.forEach((c) => {
-    const li = document.createElement("li");
-    li.innerHTML = `<b class="mono">${c}</b><br>${skills[c].join(" · ")}`;
-    fallback.appendChild(li);
-  });
-
-  // filter buttons
-  ["ALL", ...cats].forEach((c, i) => {
-    const b = document.createElement("button");
-    b.textContent = c;
-    if (i === 0) b.classList.add("active");
-    b.addEventListener("click", () => { setFilter(i - 1, b); });
-    filters.appendChild(b);
-  });
-
-  if (reduced || isMobile) { pile.hidden = true; fallback.hidden = false; filters.hidden = reduced; return; }
-  fallback.hidden = true;
-
-  // Build chips
-  const chips = [];
-  cats.forEach((c, ci) => {
-    skills[c].forEach((s) => {
-      const el = document.createElement("div");
-      el.className = "chip";
-      el.dataset.cat = ci;
-      el.textContent = s;
-      pile.appendChild(el);
-      chips.push({ el, ci, x: 0, y: 0, vy: 0, vx: 0, w: 0, h: 0, home: 0 });
-    });
-  });
-
-  const settle = () => {
-    const W = pile.clientWidth, PH = pile.clientHeight;
-    let x = 20, y = PH - 60, rowH = 46;
-    chips.forEach((c) => {
-      if (c.el.hidden) return;
-      c.w = c.el.offsetWidth; c.h = c.el.offsetHeight;
-      if (x + c.w > W - 20) { x = 20; y -= rowH; }
-      c.tx = x; c.ty = y; x += c.w + 12;
-    });
+    $$("i", dots).forEach((d, k) => d.classList.toggle("is-active", k === at));
+    count.textContent = `${at + 1} / ${slides.length}`;
+    $("#deckPrev").disabled = at === 0;
+    $("#deckNext").disabled = at === slides.length - 1;
   };
 
-  // physics state (verlet-lite drop + repel)
-  const W = () => pile.clientWidth;
-  chips.forEach((c) => { c.w = c.el.offsetWidth; c.h = c.el.offsetHeight; c.x = Math.random() * (W() - 120); c.y = -60 - Math.random() * 200; });
-  settle();
-
-  let mouse = { x: -999, y: -999 };
-  pile.addEventListener("pointermove", (e) => {
-    const r = pile.getBoundingClientRect();
-    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  const open = (p, btn) => {
+    opener = btn;
+    title.textContent = p.client;
+    stage.innerHTML = deckSlides(p).join("");
+    slides = $$(".slide", stage);
+    dots.innerHTML = slides.map(() => "<i></i>").join("");
+    go(0);
+    if (lenis) lenis.stop();
+    document.documentElement.classList.add("deck-open");
+    dlg.showModal();
+    play("page");
+  };
+  const close = () => dlg.close();
+  dlg.addEventListener("close", () => {
+    if (lenis) lenis.start();
+    document.documentElement.classList.remove("deck-open");
+    if (opener) opener.focus();
   });
-  pile.addEventListener("pointerleave", () => (mouse = { x: -999, y: -999 }));
 
-  let running = false;
-  function physics() {
-    if (!running) return;
-    chips.forEach((c) => {
-      if (c.el.hidden) return;
-      // spring to settle target
-      c.vx += (c.tx - c.x) * 0.02;
-      c.vy += (c.ty - c.y) * 0.02;
-      // mouse repel
-      const dx = c.x + c.w / 2 - mouse.x, dy = c.y + c.h / 2 - mouse.y;
-      const d2 = dx * dx + dy * dy;
-      if (d2 < 9000) { const f = (9000 - d2) / 9000; c.vx += (dx / Math.sqrt(d2 + 1)) * f * 4; c.vy += (dy / Math.sqrt(d2 + 1)) * f * 4; }
-      c.vx *= 0.86; c.vy *= 0.86;
-      c.x += c.vx; c.y += c.vy;
-      c.el.style.transform = `translate(${c.x}px, ${c.y}px)`;
-    });
-    requestAnimationFrame(physics);
-  }
-
-  ScrollTrigger.create({
-    trigger: "#p06", start: "top 70%",
-    onEnter: () => { if (!running) { running = true; physics(); } },
+  $("#deckClose").addEventListener("click", close);
+  $("#deckPrev").addEventListener("click", () => { go(at - 1); play("page"); });
+  $("#deckNext").addEventListener("click", () => { go(at + 1); play("page"); });
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) close(); }); // click outside the deck
+  dlg.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); go(at + 1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(at - 1); }
   });
-  window.addEventListener("resize", () => { chips.forEach((c) => { c.w = c.el.offsetWidth; c.h = c.el.offsetHeight; }); settle(); });
+  // swipe on touch screens
+  let sx = null;
+  stage.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+  stage.addEventListener("pointerup", (e) => {
+    if (sx === null) return;
+    const dx = e.clientX - sx; sx = null;
+    if (Math.abs(dx) > 50) go(at + (dx < 0 ? 1 : -1));
+  });
 
-  function setFilter(catIdx, btn) {
-    $$("#skillFilters button").forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    chips.forEach((c) => { c.el.hidden = catIdx >= 0 && c.ci !== catIdx; });
-    settle();
-  }
+  projects.forEach((p, i) => {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "work__row";
+    row.setAttribute("aria-haspopup", "dialog");
+    row.innerHTML = `
+      <span class="work__idx mono">0${i + 1}</span>
+      <span class="work__client">${p.client}<small>${p.kind} · ${p.when}</small></span>
+      <span class="work__score">${p.score}<small>${p.scoreLabel}</small></span>
+      <span class="work__open mono">Open deck →</span>`;
+    row.addEventListener("click", () => open(p, row));
+    list.appendChild(row);
+  });
 }
 
 // ------------------------------------------------------------------
@@ -619,7 +578,7 @@ function contactForm() {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, pass03, pass04, pass05, pass06, pass07, contact, contactForm };
+  const passes = { passKit, pass03, pass04, pass05, pass07, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
