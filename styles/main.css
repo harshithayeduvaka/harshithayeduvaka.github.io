@@ -289,7 +289,7 @@ section { position: relative; }
   pointer-events: none;
 }
 .kit__sign {
-  display: block; width: 84cqw; padding: 1cqw 0; /* her handwritten name (assets/signature.png) */
+  display: block; width: 84cqw; padding: 1cqw 0 0; /* her handwritten name (assets/signature.png) */
   line-height: 0;
   transform: rotate(.45deg); /* cancels the handwriting's own slight upward slope: baseline parallel to the lines below */
 }
@@ -297,7 +297,7 @@ section { position: relative; }
   font-family: "Martian Mono", monospace; font-size: 2.15cqw; letter-spacing: .02em;
   color: #4a3528; line-height: 1.5;
 }
-.kit__sign + .kit__type { margin-top: 4.5cqw; font-size: 3.4cqw; letter-spacing: .06em; color: var(--roast); }
+.kit__sign + .kit__type { margin-top: 3.1cqw; /* name → title: a little more than title → tagline */ font-size: 3.4cqw; letter-spacing: .06em; color: var(--roast); }
 .kit__type + .kit__type { margin-top: 1.4cqw; max-width: 88%; }
 
 /* instax mini print: warm white frame, 3:4 photo window, deeper bottom margin */
