@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 .vscode/
+# Vercel CLI link folder (local only)
+.vercel

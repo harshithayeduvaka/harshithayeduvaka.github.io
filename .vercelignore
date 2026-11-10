@@ -1,0 +1,4 @@
+# not part of the website: keep out of Vercel uploads
+CLAUDE.md
+serve.py
+.gitignore
