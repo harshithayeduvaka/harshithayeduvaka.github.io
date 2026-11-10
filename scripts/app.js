@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110n";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110o";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110n";
+} from "./content.js?v=20261110o";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -12,7 +12,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110n";
+const ASSET_V = "20261110o";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -134,7 +134,7 @@ function passKit() {
     } else {
       b.innerHTML = `
       <span class="kit__img"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="eager" decoding="async"${k.ink ? ' fetchpriority="high"' : ""} draggable="false" />${
-        k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="983" height="131" draggable="false" /></span>${
+        k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="959" height="131" draggable="false" /></span>${
           k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
       }</span>`;
     }
@@ -331,7 +331,7 @@ function passKit() {
   if (chaosInk) {
     const [title, tagline] = kit.find((k) => k.ink).ink.lines;
     chaosInk.innerHTML = `
-      <span class="chaos-ink__name"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="983" height="131" draggable="false" /></span>
+      <span class="chaos-ink__name"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="959" height="131" draggable="false" /></span>
       <span class="chaos-ink__title">${title}</span>
       <span class="chaos-ink__tag">${tagline}</span>`;
   }
