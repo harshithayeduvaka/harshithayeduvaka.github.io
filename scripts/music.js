@@ -208,13 +208,24 @@ export function initMusic({ playlist, gsap, reduced, isMobile, grid }) {
 
   // ---------- open / close the card (pops out of the headphones) ---------------
   let open = false;
+  // The card opens on the LEFT of the headphones (towards the page edge), never over the
+  // notebook. Its width shrinks to fit the space there (240px max, 170px min); only when
+  // the window is too narrow for that does it fall back to the right of the headphones.
   function placeCard(hp) {
     if (isMobile) return;
     const g = grid.getBoundingClientRect(), h = hp.getBoundingClientRect();
-    const cw = card.offsetWidth, ch = card.offsetHeight;
-    let left = h.right - g.left + 14, top = h.top - g.top - 10;
-    if (left + cw > g.width - 8) left = h.left - g.left - cw - 14;     // no room on the right: open to the left
-    left = Math.max(8, Math.min(left, g.width - cw - 8));
+    const roomLeft = h.left - 12 - 12; // between the window edge and the headphones
+    let left;
+    if (roomLeft >= 170) {
+      card.style.width = Math.min(240, roomLeft) + "px";
+      left = h.left - g.left - 12 - card.offsetWidth;
+    } else {
+      card.style.width = "";
+      left = h.right - g.left + 14;
+      left = Math.max(8, Math.min(left, g.width - card.offsetWidth - 8));
+    }
+    const ch = card.offsetHeight;
+    let top = h.top - g.top - 10;
     top = Math.max(8, Math.min(top, g.height - ch - 8));
     card.style.left = left + "px"; card.style.top = top + "px";
     // grow from the headphones' centre
@@ -247,6 +258,11 @@ export function initMusic({ playlist, gsap, reduced, isMobile, grid }) {
     if (open && !card.contains(e.target) && !e.target.closest(".kit__item--headphones") && !mini.contains(e.target)) closeCard();
   });
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeCard(); });
+  // keep the card beside the headphones when the window (and so the desk) changes size
+  addEventListener("resize", () => {
+    const hp = document.querySelector(".kit__item--headphones");
+    if (open && hp) placeCard(hp);
+  });
 
   // ---------- mini player: fixed on the right; draggable only when dragged ------
   mini.querySelectorAll("button").forEach((b) => b.addEventListener("click", (e) => {

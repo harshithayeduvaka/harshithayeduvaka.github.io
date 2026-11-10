@@ -358,8 +358,8 @@ section { position: relative; }
 /* ---- Playlist: "now playing" card that pops out of the headphones (music.js) ----
    Styled like a phone's now-playing card: warm dark glass, big cover, light text. */
 .np {
-  position: absolute; z-index: 58; width: clamp(240px, 21%, 300px); padding: 14px 14px 12px;
-  border-radius: 22px; color: #F6EFE6;
+  position: absolute; z-index: 58; width: 240px; padding: 12px 12px 10px;
+  border-radius: 20px; color: #F6EFE6;
   background: linear-gradient(160deg, rgba(74, 56, 44, .96), rgba(36, 27, 22, .97));
   box-shadow: 0 30px 60px -20px rgba(20, 12, 8, .6), inset 0 0 0 1px rgba(255, 255, 255, .06);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
@@ -383,13 +383,13 @@ section { position: relative; }
 .np__dots i { width: 5px; height: 5px; border-radius: 50%; background: rgba(246, 239, 230, .3); transition: background .2s, transform .2s; }
 .np__dots i.is-on { background: #F6EFE6; transform: scale(1.3); }
 .np__src { font: 500 11px/1.4 "Inter Tight", sans-serif; color: rgba(246, 239, 230, .55); margin-top: 2px; }
-.np__title { font: 600 18px/1.25 "Inter Tight", sans-serif; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.np__artist { font: 400 15px/1.3 "Inter Tight", sans-serif; color: rgba(246, 239, 230, .7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.np__title { font: 600 16px/1.25 "Inter Tight", sans-serif; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.np__artist { font: 400 13.5px/1.3 "Inter Tight", sans-serif; color: rgba(246, 239, 230, .7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .np__bar { position: relative; height: 4px; margin: 14px 0 6px; border-radius: 4px; background: rgba(246, 239, 230, .25); cursor: pointer; }
 .np__bar::before { content: ""; position: absolute; inset: -8px 0; } /* bigger click target */
 .np__bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: #F6EFE6; }
 .np__times { display: flex; justify-content: space-between; font: 500 11px/1 "Inter Tight", sans-serif; color: rgba(246, 239, 230, .55); }
-.np__ctrls { display: flex; justify-content: center; align-items: center; gap: 26px; margin: 10px 0 12px; }
+.np__ctrls { display: flex; justify-content: center; align-items: center; gap: 18px; margin: 6px 0 8px; }
 .np__ctrls button, .mini button { display: grid; place-items: center; color: inherit; border-radius: 50%; transition: transform .15s, background .2s; }
 .np__ctrls button { width: 40px; height: 40px; }
 .np__ctrls button svg { width: 26px; height: 26px; fill: currentColor; }
