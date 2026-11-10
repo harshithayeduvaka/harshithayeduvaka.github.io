@@ -502,8 +502,6 @@ section { position: relative; }
 
 footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; flex-wrap: wrap; gap: 12px 40px; }
 footer span { color: var(--roast); opacity: 0.7; }
-.footer__hi { color: var(--espresso); border-bottom: 1px solid var(--latte); transition: border-color .2s; }
-.footer__hi:hover { border-color: var(--espresso); }
 
 /* ============================================================
    Case-study deck viewer (native <dialog>, opened from a case-study row)
