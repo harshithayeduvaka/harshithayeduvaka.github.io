@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261111n";
-import { initMusic } from "./music.js?v=20261111n";
+import { play, playFile } from "./sound.js?v=20261111q";
+import { initMusic } from "./music.js?v=20261111q";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111n";
+} from "./content.js?v=20261111q";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111n";
+const ASSET_V = "20261111q";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -110,7 +110,7 @@ function passKit() {
 
   // her handwriting (content.js kit.ink.hand): one <img> per written line
   const handImgs = (lines) => (lines || []).map((h) =>
-    `<img class="hand" src="${h.src}?v=${ASSET_V}" alt="" width="${h.w}" height="${h.h}" draggable="false" />`).join("");
+    `<img class="hand" src="${h.src}?v=${ASSET_V}" alt="" width="${h.w}" height="${h.h}" style="rotate:${h.tilt || 0}deg" draggable="false" />`).join("");
 
   // --- objects -------------------------------------------------------
   kit.forEach((k, i) => {
