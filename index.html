@@ -11,11 +11,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261111i" />
+<link rel="stylesheet" href="styles/main.css?v=20261111j" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261111i" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261111i" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261111j" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261111j" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -114,9 +114,15 @@
   <!-- Close -->
   <section class="close" id="close" aria-labelledby="closeH">
     <h2 id="closeH" class="visually-hidden">Contact</h2>
-    <a class="mailto" id="mailto" href="mailto:yeduvakaharshitha@gmail.com">yeduvakaharshitha@gmail.com</a>
     <div class="contact-actions mono">
-      <button type="button" id="copyEmail">Copy email</button>
+      <!-- the email: click = a small menu with Copy email / Send an email -->
+      <span class="email-menu">
+        <button type="button" id="mailto" class="email-menu__btn" aria-haspopup="menu" aria-expanded="false" aria-controls="emailPop">yeduvakaharshitha@gmail.com</button>
+        <span class="email-menu__pop" id="emailPop" role="menu" hidden>
+          <button type="button" id="copyEmail" role="menuitem">Copy email</button>
+          <a id="mailtoLink" role="menuitem" href="mailto:yeduvakaharshitha@gmail.com">Send an email ↗</a>
+        </span>
+      </span>
       <a id="linkedin" href="https://www.linkedin.com/in/harshithayeduvaka/" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a id="resume" href="resume.pdf" target="_blank" rel="noopener">CV ↗</a>
     </div>
@@ -174,6 +180,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261111i"></script>
+<script type="module" src="scripts/app.js?v=20261111j"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111i";
-import { initMusic } from "./music.js?v=20261111i";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111j";
+import { initMusic } from "./music.js?v=20261111j";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111i";
+} from "./content.js?v=20261111j";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111i";
+const ASSET_V = "20261111j";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -522,7 +522,7 @@ function pass03() {
       <li class="tl__item">
         <p class="tl__when mono">${e.dates}</p>
         <div class="tl__body">
-          <h4 class="tl__org display">${e.link ? `<a href="${e.link}" target="_blank" rel="noopener">${e.org}<span class="tl__ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>` : e.org}</h4>
+          <h4 class="tl__org display">${e.link ? `<a href="${e.link}" target="_blank" rel="noopener">${e.org}<svg class="tl__ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg><span class="visually-hidden"> (opens in a new tab)</span></a>` : e.org}</h4>
           <p class="tl__role mono">${e.role}</p>
           ${e.bullets.length ? `<ul class="tl__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
         </div>
@@ -727,27 +727,34 @@ function revealTitles() {
 // Contact + chrome
 // ------------------------------------------------------------------
 function contact() {
-  $("#mailto").href = `mailto:${meta.email}`;
-  $("#mailto").textContent = meta.email;
+  const btn = $("#mailto"), pop = $("#emailPop"), send = $("#mailtoLink");
+  btn.textContent = meta.email;
+  send.href = `mailto:${meta.email}`;
   $("#resume").href = meta.resume;
   $("#linkedin").href = meta.linkedin;
+
+  // email menu: Copy email / Send an email. Closes on outside click, Esc, or after a choice.
+  const setOpen = (on, kb = false) => {
+    pop.hidden = !on;
+    btn.setAttribute("aria-expanded", String(on));
+    if (on && kb) pop.querySelector("[role=menuitem]").focus(); // keyboard: move focus into the menu
+  };
+  btn.addEventListener("click", (e) => setOpen(pop.hidden, e.detail === 0));
+  document.addEventListener("pointerdown", (e) => { if (!pop.hidden && !e.target.closest(".email-menu")) setOpen(false); });
+  pop.addEventListener("keydown", (e) => {
+    const items = $$("[role=menuitem]", pop), i = items.indexOf(document.activeElement);
+    if (e.key === "Escape") { setOpen(false); btn.focus(); }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); items[(i + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length].focus(); }
+  });
+  send.addEventListener("click", () => setOpen(false));
 
   const toast = $("#toast");
   $("#copyEmail").addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(meta.email); } catch {}
+    setOpen(false); btn.focus();
     toast.classList.add("show");
     setTimeout(() => toast.classList.remove("show"), 1600);
   });
-
-  // magnetic mailto
-  if (!reduced && matchMedia("(hover: hover)").matches) {
-    const mail = $("#mailto");
-    mail.addEventListener("pointermove", (e) => {
-      const r = mail.getBoundingClientRect();
-      gsap.to(mail, { x: (e.clientX - r.left - r.width / 2) * 0.15, y: (e.clientY - r.top - r.height / 2) * 0.2, duration: 0.4 });
-    });
-    mail.addEventListener("pointerleave", () => gsap.to(mail, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1,0.4)" }));
-  }
 }
 
 // Contact form: POST to FormSubmit via fetch, report status inline.
