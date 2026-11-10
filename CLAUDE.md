@@ -15,7 +15,7 @@ no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills s
 no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots | entry); the group headings
 "Foundations" (education) and "The Story So Far" (work) appear once each. Layout: line on the
 left edge (aligned with section headings), dates above each organisation, on every screen size.
-Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
+Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones get a swipe row of cards. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
 tagline move from the notebook pages to #chaosInk on the desk). Desktop only.

@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111g";
-import { initMusic } from "./music.js?v=20261111g";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111h";
+import { initMusic } from "./music.js?v=20261111h";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111g";
+} from "./content.js?v=20261111h";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111g";
+const ASSET_V = "20261111h";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -622,19 +622,54 @@ function pass05() {
     if (Math.abs(dx) > 50) go(at + (dx < 0 ? 1 : -1));
   });
 
-  projects.forEach((p, i) => {
+  // Split view: names on the left, one preview panel on the right (desktop). Hovering
+  // or focusing a name swaps the panel to that project's deck cover (slide one), metric
+  // and "Open deck"; clicking opens the deck. On phones the panel is hidden and each row
+  // becomes a swipeable card with its own cover (CSS, same markup).
+  const cover = (p, cls) => p.slides && p.slides.length
+    ? `<img class="${cls}" src="${p.slides[0]}" alt="" width="1600" height="900" loading="lazy" decoding="async" draggable="false" />`
+    : `<span class="${cls} work__cover--text" aria-hidden="true">${p.client}</span>`;
+  const sub = (p) => [p.kind, p.when].filter(Boolean).join(" · ");
+
+  const ul = document.createElement("div"); ul.className = "work__list";
+  const panel = document.createElement("div"); panel.className = "work__panel"; panel.setAttribute("aria-hidden", "true");
+  panel.innerHTML = `
+    <button type="button" class="work__stage" tabindex="-1">${projects.map((p, i) => cover(p, `work__shot${i ? "" : " is-on"}`)).join("")}</button>
+    <div class="work__meta">
+      <span class="work__score"><b></b><small></small></span>
+      <button type="button" class="work__open mono" tabindex="-1">Open deck →</button>
+    </div>`;
+  const shots = $$(".work__shot", panel), scoreB = $(".work__score b", panel), scoreS = $(".work__score small", panel);
+  let sel = 0;
+  const rows = projects.map((p, i) => {
     const row = document.createElement("button");
     row.type = "button";
-    row.className = "work__row";
+    row.className = "work__row" + (i ? "" : " is-on");
     row.setAttribute("aria-haspopup", "dialog");
+    row.setAttribute("aria-label", `${p.client}, ${sub(p)}. ${p.score} ${p.scoreLabel.toLowerCase()}. Open deck`);
     row.innerHTML = `
-      <span class="work__idx mono">0${i + 1}</span>
-      <span class="work__client">${p.client}<small>${[p.kind, p.when].filter(Boolean).join(" · ")}</small></span>
-      <span class="work__score">${p.score}<small>${p.scoreLabel}</small></span>
-      <span class="work__open mono">Open deck →</span>`;
+      ${cover(p, "work__cover")}
+      <span class="work__idx mono">${String(i + 1).padStart(2, "0")}</span>
+      <span class="work__client">${p.client}<small>${sub(p)}</small></span>
+      <span class="work__score work__score--card">${p.score}<small>${p.scoreLabel}</small></span>
+      <span class="work__go mono">Open deck →</span>`;
     row.addEventListener("click", () => open(p, row));
-    list.appendChild(row);
+    row.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") pick(i); });
+    row.addEventListener("focus", () => pick(i));
+    ul.appendChild(row);
+    return row;
   });
+  const pick = (i) => {
+    sel = i;
+    rows.forEach((r, k) => r.classList.toggle("is-on", k === i));
+    shots.forEach((s, k) => s.classList.toggle("is-on", k === i));
+    scoreB.textContent = projects[i].score; scoreS.textContent = projects[i].scoreLabel;
+  };
+  pick(0);
+  const openSel = () => open(projects[sel], rows[sel]);
+  $(".work__stage", panel).addEventListener("click", openSel);
+  $(".work__open", panel).addEventListener("click", openSel);
+  list.append(ul, panel);
 }
 
 // ------------------------------------------------------------------

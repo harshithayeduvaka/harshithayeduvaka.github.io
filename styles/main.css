@@ -495,24 +495,59 @@ section { position: relative; }
 /* ============================================================
    PASS 05 — Projects (parser output rows)
    ============================================================ */
-.work { display: grid; gap: 2px; border: 1px solid var(--latte); border-radius: 6px; overflow: hidden; }
+/* Featured Work: split view. Left = list of names; right = one preview panel (deck cover,
+   metric, Open deck) that swaps on hover/focus. Fixed height whatever the number of projects. */
+.work { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(20px, 3vw, 48px); align-items: start; }
+.work__list { display: grid; border-top: 1px solid var(--latte); }
 .work__row {
-  display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;
-  padding: clamp(20px, 3vw, 34px); background: var(--cream);
-  cursor: pointer; transition: background 0.3s var(--ease-parse);
-  border: 0; border-bottom: 1px solid var(--latte);
-  width: 100%; text-align: left; font: inherit; color: inherit;
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; text-align: left;
+  padding: 16px 14px 16px 16px; border-bottom: 1px solid var(--latte); position: relative;
+  transition: background .25s, padding-left .25s var(--ease-parse);
 }
-.work__hint { color: var(--roast); opacity: .7; margin: -1.4em 0 1.6em; }
-.work__open { grid-column: 1 / -1; color: var(--espresso); justify-self: end; transition: transform .25s var(--ease-parse); }
-.work__row:hover .work__open { transform: translateX(4px); }
-.work__row:last-child { border-bottom: none; }
-.work__row:hover { background: color-mix(in srgb, var(--latte) 55%, var(--cream)); }
-.work__idx { color: var(--espresso); }
-.work__client { font-family: "Fraunces"; font-weight: 700; font-size: var(--fs-34); }
-.work__client small { display:block; font-family:"Inter Tight"; font-weight:400; font-size: var(--fs-13); color: var(--roast); opacity: .65; text-transform:none; letter-spacing:0; }
-.work__score { font-family:"Fraunces"; font-weight:800; font-size: var(--fs-34); color: var(--caramel); text-align:right; }
-.work__score small { display:block; font-family:"Martian Mono"; font-size:.62rem; color: var(--espresso); }
+.work__row::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 2px; background: var(--caramel); transform: scaleY(0); transition: transform .3s var(--ease-parse); }
+.work__row.is-on { background: color-mix(in srgb, var(--latte) 40%, var(--cream)); padding-left: 24px; }
+.work__row.is-on::before { transform: scaleY(1); }
+.work__idx { color: var(--espresso); font-size: var(--fs-13); }
+.work__client { font-family: "Fraunces"; font-weight: 700; font-size: clamp(1.25rem, 1.9vw, 1.75rem); line-height: 1.15; color: var(--roast); }
+.work__client small { display: block; margin-top: 4px; font-family: "Inter Tight"; font-weight: 400; font-size: var(--fs-13); color: var(--roast); opacity: .65; }
+.work__cover, .work__score--card, .work__go { display: none; } /* phone-card parts */
+.work__panel { position: sticky; top: 24px; display: grid; gap: 18px; }
+.work__stage {
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 10px;
+  background: var(--latte); box-shadow: 0 24px 50px -28px rgba(43, 29, 22, .55), 0 0 0 1px rgba(43, 29, 22, .06); cursor: pointer;
+}
+.work__shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.03); transition: opacity .45s ease, transform .6s var(--ease-parse); }
+.work__shot.is-on { opacity: 1; transform: none; }
+.work__cover--text { display: grid; place-items: center; font-family: "Fraunces"; font-weight: 800; font-size: var(--fs-34); color: var(--espresso); background: color-mix(in srgb, var(--latte) 60%, var(--cream)); }
+.work__meta { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+.work__score { font-family: "Fraunces"; font-weight: 800; font-size: var(--fs-34); line-height: 1; color: var(--caramel); }
+.work__score b { font-weight: inherit; }
+.work__score small { display: block; margin-top: 8px; font-family: "Martian Mono"; font-size: .62rem; letter-spacing: .08em; color: var(--espresso); }
+.work__open { color: var(--espresso); transition: transform .25s var(--ease-parse); }
+.work__open:hover, .work__stage:hover ~ .work__meta .work__open { transform: translateX(4px); }
+@media (max-width: 860px) {
+  /* phones: the panel can't sit beside the list, so each row becomes a swipeable card */
+  .work { display: block; }
+  .work__panel { display: none; }
+  .work__list {
+    display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; border-top: 0;
+    margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 14px; scroll-padding-inline: var(--gutter);
+    scrollbar-width: none; overscroll-behavior-x: contain;
+  }
+  .work__list::-webkit-scrollbar { display: none; }
+  .work__row, .work__row.is-on {
+    flex: 0 0 82%; scroll-snap-align: start; padding: 0 0 16px; border: 1px solid var(--latte); border-radius: 12px;
+    background: color-mix(in srgb, var(--latte) 25%, var(--cream)); overflow: hidden; grid-template-columns: auto 1fr; align-content: start;
+  }
+  .work__row::before { display: none; }
+  .work__cover { display: block; grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; margin-bottom: 10px; }
+  .work__cover.work__cover--text { display: grid; }
+  .work__idx { padding-left: 14px; }
+  .work__client { padding-right: 14px; font-size: 1.35rem; }
+  .work__score--card { display: block; grid-column: 1 / -1; padding: 10px 14px 0; font-size: 1.6rem; }
+  .work__go { display: block; grid-column: 1 / -1; padding: 10px 14px 0; color: var(--espresso); }
+}
+@media (prefers-reduced-motion: reduce) { .work__shot, .work__row, .work__row::before, .work__open { transition: none; } .work__shot { transform: none; } }
 
 /* ============================================================
    PASS 07 — Geography + contact
