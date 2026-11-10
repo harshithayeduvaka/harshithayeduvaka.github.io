@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110v";
-import { initMusic } from "./music.js?v=20261110v";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110w";
+import { initMusic } from "./music.js?v=20261110w";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261110v";
+} from "./content.js?v=20261110w";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110v";
+const ASSET_V = "20261110w";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -157,7 +157,11 @@ function passKit() {
         if (k.cup) steam(b);
       }
       note.textContent = k.note || "";
-      if (!reduced && !k.cup) { // the cup only steams; everything else does a little hop
+      if (!reduced && k.id === "alarm") { // the alarm clock rattles while it rings
+        gsap.fromTo(b.querySelector("img"), { rotate: 0, x: 0 },
+          { keyframes: [...Array(8)].map((_, i) => ({ rotate: i % 2 ? -5 : 5, x: i % 2 ? -1.5 : 1.5, duration: 0.055 }))
+              .concat({ rotate: 0, x: 0, duration: 0.25, ease: "elastic.out(1,0.5)" }) });
+      } else if (!reduced && !k.cup) { // the cup only steams; everything else does a little hop
         // (the polaroid hops as one piece: frame and photo together)
         gsap.fromTo(b.querySelector(k.print ? ".print" : "img"), { y: 0, rotate: 0 },
           { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });

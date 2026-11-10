@@ -76,6 +76,20 @@ export const kit = [
     desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
     chaos: { x: 63, y: 6, w: 2.2, r: 52 },
     note: "" },
+  // A little twin-bell alarm clock where the vinyl card used to sit. Click: a short ring + a shake.
+  { id: "alarm", label: "ALARM", name: "Alarm clock", sound: "ring",
+    img: "assets/objects/alarm.avif", w: 306, h: 420, // transparent cut-out
+    alt: "Black twin-bell alarm clock",
+    desk: { x: 82, y: 6, w: 10, r: 8 },
+    chaos: { x: 86, y: 5, w: 9, r: 0 },
+    note: "" },
+  // A binder clip, smaller than the alarm. Click: a metal snap.
+  { id: "clip", label: "CLIP", name: "Binder clip", sound: "snap",
+    img: "assets/objects/clip.avif", w: 153, h: 192, // cut out of a white background
+    alt: "Silver binder clip",
+    desk: { x: 81, y: 33, w: 5.2, r: -14 },
+    chaos: { x: 50, y: 84, w: 4, r: 35 },
+    note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.avif, cup drawn in CSS).
   // Click: a 2s slurp (assets/sounds/slurp.mp3 if present) + steam wisps. r = handle direction.
   { id: "cup", label: "CAPPUCCINO", name: "Cappuccino", sound: "slurp",

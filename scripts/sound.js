@@ -164,6 +164,27 @@ const SOUNDS = {
     n2.connect(lp).connect(g2).connect(master);
     n2.start(t, Math.random()); n2.stop(t + dur);
   },
+  // alarm clock: a short, gentle bell ring (hammer hits alternating between two bells)
+  ring(t) {
+    for (let i = 0; i < 9; i++) {
+      const at = t + i * 0.055, f = i % 2 ? 2350 : 2620;
+      [1, 2.76].forEach((m, j) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = "sine"; o.frequency.value = f * m;
+        g.gain.setValueAtTime(0.0001, at);
+        g.gain.exponentialRampToValueAtTime((j ? 0.025 : 0.09) * (1 - i / 12), at + 0.004);
+        g.gain.exponentialRampToValueAtTime(0.0001, at + (i === 8 ? 0.6 : 0.2));
+        o.connect(g).connect(master); o.start(at); o.stop(at + 0.65);
+      });
+      tick(at, 900, 0.01, 0.05);
+    }
+  },
+  // binder clip: the metal jaws snapping shut
+  snap(t) {
+    burst(t, { freq: 5200, q: 4, dur: 0.02, gain: 0.6 });
+    tick(t, 2900, 0.025, 0.2);
+    burst(t + 0.012, { freq: 7800, q: 6, dur: 0.05, gain: 0.12 });
+  },
   // needle drop before the music starts
   needle(t) {
     tick(t, 90, 0.08, 0.4);
