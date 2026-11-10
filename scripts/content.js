@@ -284,3 +284,23 @@ export const projects = [
 ];
 
 
+
+// "On My Shelf" (scripts/bookshelf.js), between About and Contact.
+// shelf: "read" | "tbr". Order here = order on the shelf (left to right).
+// spineColor / textColor: the spine. height: 0.85–1 of the shelf height. thickness: spine width (px on desktop).
+// cover: assets/covers/<slug>.jpg (add/replace the file to change it). If a file is missing, the site tries
+// Open Library (by `isbn` if you add one, e.g. isbn: "9781234567890", else by title + author), then
+// shows a plain typographic cover in the spine colour.
+export const books = [
+  { slug: "verity", title: "Verity", author: "Colleen Hoover", shelf: "read", spineColor: "#1E3A35", textColor: "#E8D88A", height: 0.95, thickness: 44 },
+  { slug: "the-housemaid", title: "The Housemaid", author: "Freida McFadden", shelf: "read", spineColor: "#1F4DB0", textColor: "#F6E04B", height: 0.97, thickness: 46 },
+  { slug: "a-good-girls-guide-to-murder", title: "A Good Girl’s Guide to Murder", author: "Holly Jackson", shelf: "read", spineColor: "#F2EFE8", textColor: "#1D1B1A", height: 0.92, thickness: 52 },
+  { slug: "the-fault-in-our-stars", title: "The Fault in Our Stars", author: "John Green", shelf: "read", spineColor: "#59ABE3", textColor: "#141414", height: 0.88, thickness: 42 },
+  { slug: "it-ends-with-us", title: "It Ends with Us", author: "Colleen Hoover", shelf: "read", spineColor: "#EBD8C3", textColor: "#A1236E", height: 1, thickness: 48 },
+  { slug: "one-indian-girl", title: "One Indian Girl", author: "Chetan Bhagat", shelf: "read", spineColor: "#C9301F", textColor: "#FFF1D2", height: 0.9, thickness: 44 },
+  { slug: "life-is-what-you-make-it", title: "Life Is What You Make It", author: "Preeti Shenoy", shelf: "read", spineColor: "#E38B1F", textColor: "#3A1C08", height: 0.86, thickness: 40 },
+  { slug: "how-brands-grow", title: "How Brands Grow", author: "Byron Sharp", shelf: "tbr", spineColor: "#A1122A", textColor: "#FFFFFF", height: 1, thickness: 52 },
+  { slug: "thats-not-my-name", title: "That’s Not My Name", author: "Megan Lally", shelf: "tbr", spineColor: "#1C2A25", textColor: "#FF6B3D", height: 0.93, thickness: 44 },
+  { slug: "good-girl-bad-blood", title: "Good Girl, Bad Blood", author: "Holly Jackson", shelf: "tbr", spineColor: "#B3222D", textColor: "#FFFFFF", height: 0.96, thickness: 48 },
+  { slug: "as-good-as-dead", title: "As Good as Dead", author: "Holly Jackson", shelf: "tbr", spineColor: "#1C1D21", textColor: "#8FD1E8", height: 0.97, thickness: 50 },
+].map((b) => ({ cover: `assets/covers/${b.slug}.jpg`, ...b }));

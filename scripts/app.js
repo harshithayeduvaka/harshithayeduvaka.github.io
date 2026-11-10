@@ -1,9 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261111y";
-import { initMusic } from "./music.js?v=20261111y";
+import { play, playFile } from "./sound.js?v=20261112b";
+import { initMusic } from "./music.js?v=20261112b";
+import { initBookshelf } from "./bookshelf.js?v=20261112b";
 import {
-  meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111y";
+  meta, about, kit, tools, experience, projects, playlist, books,
+} from "./content.js?v=20261112b";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111y";
+const ASSET_V = "20261112b";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -680,6 +681,12 @@ function passAboutMe() {
   // static text (the pool-water ripple was removed at her request)
 }
 
+// On My Shelf: two wooden shelves of books (scripts/bookshelf.js)
+function passBookshelf() {
+  const root = $("#shelves");
+  if (root) initBookshelf({ root, books, gsap, reduced, getLenis: () => lenis });
+}
+
 function revealTitles() {
   $$(".pass__title").forEach((t) => {
     if (t.id === "about-h") return; // About heading: no animation
@@ -792,7 +799,7 @@ function contactForm() {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, passToolkit, pass03, pass05, passAboutMe, revealTitles, contact, contactForm };
+  const passes = { passKit, passToolkit, pass03, pass05, passAboutMe, passBookshelf, revealTitles, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
