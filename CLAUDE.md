@@ -14,7 +14,7 @@ no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots 
 "Foundations" (education) and "The Story So Far" (work) appear once each.
 Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
-Desk modes: notebook (default) vs chaos (icons under the desk; kit[].chaos positions; name/title/
+Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
 tagline move from the notebook pages to #chaosInk on the desk). Desktop only.
 Desk extras: a blue "stack" folder (below the notebook) pops `tools` (content.js) out sideways, 4 each side; tool logos are
 PNGs she supplied in assets/tools/ (tile: "full" for square app icons, else a light tile).
