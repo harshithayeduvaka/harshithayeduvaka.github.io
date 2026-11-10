@@ -306,6 +306,16 @@ section { position: relative; }
 }
 .kit__sign + .kit__type { margin-top: 2.6cqw; /* name → title: a little more than title → tagline */ font-size: 3.6cqw; font-style: normal; font-weight: 600; letter-spacing: .01em; color: var(--roast); }
 .kit__type + .kit__type { margin-top: 1.4cqw; max-width: 50cqw; text-wrap: balance; }
+/* her handwriting (images): sizes in notebook-widths so it scales with the desk */
+.kit__type:has(.hand), .chaos-ink__title:has(.hand), .chaos-ink__tag:has(.hand) { display: grid; justify-items: center; line-height: 0; max-width: none; }
+.hand { height: auto; display: block; }
+.kit__type .hand[src*="hand-title"] { width: 44cqw; }
+.kit__type .hand[src*="hand-tagline-1"] { width: 62cqw; }
+.kit__type .hand[src*="hand-tagline-2"] { width: 37cqw; margin-top: -.4cqw; }
+.kit__sign + .kit__type:has(.hand) { margin-top: 2.2cqw; }
+.chaos-ink__title .hand { width: 23cqw; }
+.chaos-ink__tag .hand[src*="hand-tagline-1"] { width: 32.5cqw; }
+.chaos-ink__tag .hand[src*="hand-tagline-2"] { width: 19.4cqw; margin-top: -.2cqw; }
 
 /* instax mini print: warm white frame, 3:4 photo window, deeper bottom margin */
 .print {
