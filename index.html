@@ -11,15 +11,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261110r" />
+<link rel="stylesheet" href="styles/main.css?v=20261110s" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110r" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261110r" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110s" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261110s" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"Harshitha Yeduvaka","jobTitle":"B2B Implementation & Marketing Professional","email":"mailto:yeduvakaharshitha@gmail.com","telephone":"+33745577349","address":{"@type":"PostalAddress","addressLocality":"Paris","addressCountry":"France"},"alumniOf":"SKEMA Business School","knowsLanguage":["English","French","Hindi","Telugu"]}
+{"@context":"https://schema.org","@type":"Person","name":"Harshitha Yeduvaka","jobTitle":"B2B Implementation & Marketing Professional","email":"mailto:yeduvakaharshitha@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Paris","addressCountry":"France"},"alumniOf":"SKEMA Business School","knowsLanguage":["English","French","Hindi","Telugu"]}
 </script>
 </head>
 <body>
@@ -129,15 +129,14 @@
     <h2 id="closeH" class="visually-hidden">Contact</h2>
     <a class="mailto" id="mailto" href="mailto:yeduvakaharshitha@gmail.com">yeduvakaharshitha@gmail.com</a>
     <div class="contact-actions mono">
-      <button id="copyEmail">Copy email</button>
+      <button type="button" id="copyEmail">Copy email</button>
       <a id="linkedin" href="https://www.linkedin.com/in/harshithayeduvaka/" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a id="resume" href="resume.pdf" target="_blank" rel="noopener">CV ↗</a>
-      <a href="tel:+33745577349">+33 745577349</a>
     </div>
 
     <!-- Contact form. Without JS it posts straight to FormSubmit; with JS app.js sends it via fetch. -->
     <form class="contact-form" id="contactForm" action="https://formsubmit.co/yeduvakaharshitha@gmail.com" method="POST">
-      <p class="mono contact-form__head">OR LEAVE A MESSAGE</p>
+      <p class="contact-form__head">Got something that doesn’t add up yet? I’d love to hear it.</p>
       <div class="contact-form__row">
         <div class="demo__field">
           <label class="mono" for="cfName">Name</label>
@@ -150,13 +149,13 @@
       </div>
       <div class="demo__field">
         <label class="mono" for="cfMsg">Message</label>
-        <textarea id="cfMsg" name="message" required maxlength="4000"></textarea>
+        <textarea id="cfMsg" name="message" required maxlength="4000" placeholder="The role, the problem, or just hello."></textarea>
       </div>
       <!-- spam trap: hidden from people, bots fill it in -->
       <input type="text" name="_honey" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
       <input type="hidden" name="_subject" value="New message from your portfolio" />
       <input type="hidden" name="_captcha" value="false" />
-      <button class="btn" type="submit">▸ Send</button>
+      <button class="btn" type="submit">▸ Send it my way</button>
       <p class="contact-form__status mono" id="cfStatus" role="status" aria-live="polite"></p>
     </form>
   </section>
@@ -178,9 +177,7 @@
 </dialog>
 
 <footer class="mono">
-  <span>Designed &amp; built in Paris</span>
-  <span id="buildStamp"></span>
-  <span>Made with Three.js · GSAP · Lenis · zero frameworks</span>
+  <span>Designed &amp; built by Harshitha in Paris. <a href="#contactForm" class="footer__hi">Say hi →</a></span>
 </footer>
 
 <div id="toast" class="mono" role="status" aria-live="polite">Copied</div>
@@ -190,6 +187,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261110r"></script>
+<script type="module" src="scripts/app.js?v=20261110s"></script>
 </body>
 </html>

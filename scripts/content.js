@@ -9,7 +9,6 @@ export const meta = {
   location: "Paris, France",
   coords: "48.8566° N · 2.3522° E",
   email: "yeduvakaharshitha@gmail.com",
-  phone: "+33 745577349",
   linkedin: "https://www.linkedin.com/in/harshithayeduvaka/",
   portfolio: "#", // TODO: real portfolio/repo URL
   resume: "resume.pdf",

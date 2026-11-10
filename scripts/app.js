@@ -1,8 +1,8 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110r";
+import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110s";
 import {
   meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110r";
+} from "./content.js?v=20261110s";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -12,7 +12,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110r";
+const ASSET_V = "20261110s";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -734,7 +734,6 @@ function contact() {
   $("#mailto").textContent = meta.email;
   $("#resume").href = meta.resume;
   $("#linkedin").href = meta.linkedin;
-  $("#buildStamp").textContent = "BUILD " + new Date().toISOString().slice(0, 16).replace("T", " ");
 
   const toast = $("#toast");
   $("#copyEmail").addEventListener("click", async () => {

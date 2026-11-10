@@ -477,11 +477,15 @@ section { position: relative; }
 }
 .mailto:hover { color: var(--espresso); }
 .contact-actions { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 2em; }
-.contact-actions a { border-bottom: 2px solid var(--latte); padding-bottom: 4px; transition: border-color .3s; }
-.contact-actions a:hover { border-color: var(--espresso); }
+.contact-actions a, .contact-actions button {
+  border-bottom: 2px solid var(--latte); padding-bottom: 4px; transition: border-color .3s;
+  font: inherit; text-transform: uppercase; letter-spacing: inherit; color: inherit;
+}
+.contact-actions a:hover, .contact-actions button:hover { border-color: var(--espresso); }
 
 .contact-form { max-width: 720px; margin: clamp(56px, 8vw, 96px) auto 0; text-align: left; }
-.contact-form__head { color: var(--espresso); text-align: center; margin-bottom: 1.6em; }
+.contact-form__head { font-family: "Fraunces", serif; font-size: var(--fs-24); line-height: 1.3; color: var(--espresso); text-align: center; margin-bottom: 1.4em; }
+.contact-form textarea::placeholder { color: var(--roast); opacity: .45; }
 .contact-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 .contact-form .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
 .contact-form__status { margin-top: 14px; min-height: 1.5em; color: var(--roast); }
@@ -497,7 +501,9 @@ section { position: relative; }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; flex-wrap: wrap; gap: 12px 40px; }
-footer span { color: var(--roast); opacity: 0.55; }
+footer span { color: var(--roast); opacity: 0.7; }
+.footer__hi { color: var(--espresso); border-bottom: 1px solid var(--latte); transition: border-color .2s; }
+.footer__hi:hover { border-color: var(--espresso); }
 
 /* ============================================================
    Case-study deck viewer (native <dialog>, opened from a case-study row)
