@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261111r";
-import { initMusic } from "./music.js?v=20261111r";
+import { play, playFile } from "./sound.js?v=20261111s";
+import { initMusic } from "./music.js?v=20261111s";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111r";
+} from "./content.js?v=20261111s";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111r";
+const ASSET_V = "20261111s";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -163,8 +163,8 @@ function passKit() {
       if (k.sound === "music") {
         music.toggleCard(b);
       } else {
-        // cup: her Pixabay slurp if saved as assets/sounds/slurp.mp3, else the synth; always 2s
-        if (k.cup) playFile("assets/sounds/slurp.mp3", "slurp", 2);
+        // cup: a short sip (assets/sounds/sip.mp3 if she adds one, else the synth; capped 1.5s)
+        if (k.cup) playFile("assets/sounds/sip.mp3", "sip", 1.5);
         // alarm / clip: a recorded effect if saved as assets/sounds/<ring|snap>.mp3, else the 2s synth
         else if (k.sound === "ring" || k.sound === "snap") playFile(`assets/sounds/${k.sound}.mp3`, k.sound, 2);
         else if (k.sound === "lamp") { playFile("assets/sounds/lamp.mp3", "lamp", 1); lightLamp(b); }
@@ -595,7 +595,6 @@ function pass05() {
     if (lenis) lenis.stop();
     document.documentElement.classList.add("deck-open");
     dlg.showModal();
-    play("page");
   };
   const close = () => dlg.close();
   dlg.addEventListener("close", () => {
@@ -605,8 +604,8 @@ function pass05() {
   });
 
   $("#deckClose").addEventListener("click", close);
-  $("#deckPrev").addEventListener("click", () => { go(at - 1); play("page"); });
-  $("#deckNext").addEventListener("click", () => { go(at + 1); play("page"); });
+  $("#deckPrev").addEventListener("click", () => go(at - 1));
+  $("#deckNext").addEventListener("click", () => go(at + 1));
   dlg.addEventListener("click", (e) => { if (e.target === dlg) close(); }); // click outside the deck
   dlg.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") { e.preventDefault(); go(at + 1); }

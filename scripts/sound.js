@@ -228,6 +228,30 @@ const SOUNDS = {
       o.connect(g).connect(master); o.start(t + 0.04); o.stop(t + 1.02);
     });
   },
+  // coffee: one quiet sip. A soft intake of air through the lips (filtered noise whose
+  // pitch rises as the lips close), a tiny lip "tk", then a small gulp.
+  sip(t) {
+    const n = noise(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+    bp.type = "bandpass"; bp.Q.value = 2.2;
+    bp.frequency.setValueAtTime(900, t);
+    bp.frequency.exponentialRampToValueAtTime(2600, t + 0.32);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.2, t + 0.06);
+    g.gain.setValueAtTime(0.2, t + 0.22);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.36);
+    n.connect(bp).connect(g).connect(master);
+    n.start(t, Math.random()); n.stop(t + 0.4);
+    burst(t + 0.37, { freq: 1500, q: 2, dur: 0.012, gain: 0.25 }); // lips part
+    // gulp: a short low "glk" with a quick downward pitch
+    const o = ctx.createOscillator(), og = ctx.createGain(), at = t + 0.55;
+    o.type = "sine";
+    o.frequency.setValueAtTime(320, at);
+    o.frequency.exponentialRampToValueAtTime(140, at + 0.09);
+    og.gain.setValueAtTime(0.0001, at);
+    og.gain.exponentialRampToValueAtTime(0.22, at + 0.015);
+    og.gain.exponentialRampToValueAtTime(0.0001, at + 0.12);
+    o.connect(og).connect(master); o.start(at); o.stop(at + 0.14);
+  },
   // needle drop before the music starts
   needle(t) {
     tick(t, 90, 0.08, 0.4);
