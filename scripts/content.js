@@ -172,15 +172,15 @@ export const experience = [
 // Case studies. Clicking one opens its deck in a viewer on the same page.
 // To show your REAL deck instead of the auto-built one:
 //   1. Export the deck as images (Canva/PowerPoint/Keynote/Google Slides: File → Download → PNG or JPG).
-//   2. Put them in assets/decks/<id>/ (e.g. assets/decks/coop/01.jpg, 02.jpg, ...).
-//   3. Add to the project:  slides: ["assets/decks/coop/01.jpg", "assets/decks/coop/02.jpg"],
+//   2. Put them in assets/decks/<id>/ (e.g. assets/decks/coop/01.webp, 02.webp, ...).
+//   3. Add to the project:  slides: ["assets/decks/coop/01.webp", "assets/decks/coop/02.webp"],
 // Without `slides`, the deck is built from context / audited / found / recommended / impact.
 // To add a new case study, copy one { ... } block and change the text.
 export const projects = [
   {
     id: "comintelli",
-    // the real deck (PDF exported to images, assets/decks/comintelli/01..24.jpg)
-    slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.jpg`),
+    // the real deck (PDF exported to images, assets/decks/comintelli/01..24.webp)
+    slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.webp`),
     client: "Comintelli",
     kind: "International Business Development Strategy",
     when: "", // no date shown
@@ -194,8 +194,8 @@ export const projects = [
   },
   {
     id: "dior",
-    // the real deck (PDF exported to images, assets/decks/dior/01..16.jpg)
-    slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
+    // the real deck (PDF exported to images, assets/decks/dior/01..16.webp)
+    slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.webp`),
     client: "Dior",
     kind: "Omnichannel Analysis",
     when: "", // no date shown
@@ -220,13 +220,13 @@ export const projects = [
     found: "A real but narrow advantage: the cooperative model and local, ethical sourcing are rare and hard to copy, but only for a niche segment. ROA sat at 0% in 2023 and revenue stalled around €1.04B.",
     recommended: "Refocus on related diversification: an organic/local private label, click-and-collect and e-commerce, niche formats (zero-waste stores, a discount banner), and an SEO/SEM keyword strategy.",
     impact: "Improved cross-functional decision-making efficiency 10%.",
-    // the real deck (PDF exported to images, assets/decks/coop/01..19.jpg)
-    slides: Array.from({ length: 19 }, (_, i) => `assets/decks/coop/${String(i + 1).padStart(2, "0")}.jpg`),
+    // the real deck (PDF exported to images, assets/decks/coop/01..19.webp)
+    slides: Array.from({ length: 19 }, (_, i) => `assets/decks/coop/${String(i + 1).padStart(2, "0")}.webp`),
   },
   {
     id: "maya",
-    // the real deck (PDF exported to images, assets/decks/maya/01..10.jpg)
-    slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.jpg`),
+    // the real deck (PDF exported to images, assets/decks/maya/01..10.webp)
+    slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.webp`),
     client: "Eco-Packaging",
     kind: "Strategic Branding",
     when: "", // no date shown

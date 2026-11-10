@@ -10,12 +10,17 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261110n" />
-<link rel="icon" type="image/png" href="assets/logo-hy.png" />
+<!-- loaded without blocking first paint (display=swap shows fallback text until ready) -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" /></noscript>
+<link rel="stylesheet" href="styles/main.css?v=20261110o" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="modulepreload" href="scripts/content.js?v=20261110o" />
+<link rel="modulepreload" href="scripts/sound.js?v=20261110o" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110n" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261110n" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110o" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.webp?v=20261110o" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -186,10 +191,10 @@
 <div id="toast" class="mono" role="status" aria-live="polite">Copied</div>
 
 <!-- GSAP + Lenis (self-hosted, no CDN) -->
-<script src="vendor/gsap.min.js"></script>
-<script src="vendor/ScrollTrigger.min.js"></script>
-<script src="vendor/lenis.min.js"></script>
+<script defer src="vendor/gsap.min.js"></script>
+<script defer src="vendor/ScrollTrigger.min.js"></script>
+<script defer src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261110n"></script>
+<script type="module" src="scripts/app.js?v=20261110o"></script>
 </body>
 </html>
