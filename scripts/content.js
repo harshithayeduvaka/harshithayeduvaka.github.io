@@ -133,10 +133,7 @@ export const experience = [
     accent: "signal-red",
     vocab: ["ATS", "scoring", "EN·FR·DE", "100+ profiles", "frontend"],
     bullets: [
-      "Building a solo full-stack tool that helps graduates optimise CVs to pass ATS screening and reach interviews.",
-      "Trained the scoring engine on 100+ real profiles (strong and weak) to improve match accuracy.",
-      "Supports 3 languages (EN·FR·DE); expanding to Dutch, Spanish, Italian.",
-      "Built the frontend UI, ship bug fixes, and iterate on result quality continuously.",
+      "Built a CV-screening tool from scratch, solo. It scores graduate CVs against ATS filters in English, French and German, tuned on 100+ real profiles.",
     ],
   },
   {
@@ -149,9 +146,7 @@ export const experience = [
     accent: "saffron",
     vocab: ["A/B", "+15% open", "+12% follows", "+17% eng", "Meta Ads", "ROI"],
     bullets: [
-      "Designed & ran A/B tests on email sequences: open rates +15%, isolating the messaging that drove replies and sign-ups.",
-      "Grew follower base +12% and engagement +17% through integrated growth-marketing initiatives.",
-      "Scaled paid social (Meta Ads) and analysed campaign performance for attribution and ROI.",
+      "Lifted email open rates 15% by testing. A/B tested sequences to find the message that drove sign-ups. Grew followers 12% and engagement 17%, and ran Meta Ads.",
     ],
   },
   {
@@ -164,8 +159,7 @@ export const experience = [
     accent: "ultramarine",
     vocab: ["65+ accounts", "Zivame", "Future Group", "churn −15%", "CLV", "lead scoring"],
     bullets: [
-      "Ran end-to-end B2B onboarding for 65+ enterprise accounts (incl. Zivame, Future Group), training clients to self-configure their workflows.",
-      "Cut client churn 15% in one quarter across 25+ SME accounts via pipeline management, lead-scoring refinement, and CLV optimisation.",
+      "Cut client churn 15% in one quarter. That was across 25+ SME accounts. Also onboarded 65+ enterprise clients, including Zivame and Future Group, and trained them to run the platform themselves.",
     ],
   },
 ];
