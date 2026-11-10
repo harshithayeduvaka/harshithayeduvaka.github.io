@@ -209,20 +209,25 @@ export function initMusic({ playlist, gsap, reduced, isMobile, grid }) {
   // ---------- open / close the card (pops out of the headphones) ---------------
   let open = false;
   // The card opens on the LEFT of the headphones (towards the page edge), never over the
-  // notebook. Its width shrinks to fit the space there (240px max, 170px min); only when
-  // the window is too narrow for that does it fall back to the right of the headphones.
+  // notebook. Width: 240px max, shrinking to fit (170px min). If the gap left of the
+  // headphones is too small, the card covers the headphones instead and stops just before
+  // the notebook. Only when even that fails does it open to the right of the headphones.
   function placeCard(hp) {
     if (isMobile) return;
-    const g = grid.getBoundingClientRect(), h = hp.getBoundingClientRect();
-    const roomLeft = h.left - 12 - 12; // between the window edge and the headphones
+    const g = grid.getBoundingClientRect();
+    const h = (hp.querySelector("img") || hp).getBoundingClientRect();
+    const nbEl = document.querySelector(".kit__item--notebook img");
+    const nb = nbEl ? nbEl.getBoundingClientRect() : null;
+    const edges = [h.left - 12];                        // just left of the headphones
+    if (nb && nb.left > h.left) edges.push(nb.left - 14); // or just left of the notebook
+    const right = edges.find((e) => e - 12 >= 170);    // first spot with enough room
     let left;
-    if (roomLeft >= 170) {
-      card.style.width = Math.min(240, roomLeft) + "px";
-      left = h.left - g.left - 12 - card.offsetWidth;
+    if (right !== undefined) {
+      card.style.width = Math.min(240, right - 12) + "px";
+      left = right - g.left - card.offsetWidth;
     } else {
       card.style.width = "";
-      left = h.right - g.left + 14;
-      left = Math.max(8, Math.min(left, g.width - card.offsetWidth - 8));
+      left = Math.max(8, Math.min(h.right - g.left + 14, g.width - card.offsetWidth - 8));
     }
     const ch = card.offsetHeight;
     let top = h.top - g.top - 10;
