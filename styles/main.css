@@ -335,7 +335,7 @@ section { position: relative; }
 /* chaos mode: the writing spilled onto the desk (sizes in cqw = % of the desk width) */
 .kit__grid { container-type: inline-size; }
 .chaos-ink {
-  position: absolute; z-index: 15; left: 22%; top: 33%; width: 44%; pointer-events: none;
+  position: absolute; z-index: 15; left: 28%; top: 33%; width: 44%; /* centred on the desk */ pointer-events: none;
   display: grid; justify-items: center; text-align: center; gap: 1.2cqw;
 }
 .chaos-ink > span { opacity: 0; display: block; }
