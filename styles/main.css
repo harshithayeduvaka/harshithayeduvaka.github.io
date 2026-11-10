@@ -377,7 +377,7 @@ section { position: relative; }
    line on the left edge (aligned with the section headings), a dot per entry;
    each entry: dates, then organisation, role, description
    ============================================================ */
-.timeline { --draw: 1; --indent: clamp(30px, 3vw, 44px); list-style: none; position: relative; max-width: 1100px; }
+.timeline { --draw: 1; --indent: clamp(30px, 3vw, 44px); list-style: none; position: relative; max-width: none; } /* same full content width as Featured Work + About */
 /* the line: a faint track, plus a caramel line that draws down on scroll */
 .timeline::before, .timeline::after {
   content: ""; position: absolute; top: 8px; bottom: 0; left: 6px; width: 2px; border-radius: 2px;
@@ -407,7 +407,7 @@ section { position: relative; }
 .tl__org a:hover, .tl__org a:focus-visible { background-size: 100% 3px; color: var(--caramel); }
 .tl__ext { font-size: .45em; vertical-align: super; margin-left: .15em; color: var(--caramel); }
 .tl__role { margin: .5em 0 1.1em; color: var(--roast); }
-.tl__bullets { list-style: none; max-width: 64ch; display: grid; gap: 12px; }
+.tl__bullets { list-style: none; max-width: none; display: grid; gap: 12px; }
 .tl__bullets li { position: relative; padding-left: 22px; }
 .tl__bullets li::before { content: "▸"; position: absolute; left: 0; color: var(--caramel); }
 
