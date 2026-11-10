@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111h";
-import { initMusic } from "./music.js?v=20261111h";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111i";
+import { initMusic } from "./music.js?v=20261111i";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111h";
+} from "./content.js?v=20261111i";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111h";
+const ASSET_V = "20261111i";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -150,7 +150,7 @@ function passKit() {
       b.style.left = k.desk.x + "%";
       b.style.top = k.desk.y + "%";
       b.style.width = k.desk.w + "%";
-      b.style.zIndex = i + 1;
+      b.style.zIndex = k.id === "pen" ? 55 : i + 1; // the pen always lies on top of everything
     }
 
     // click = activate (keyboard Enter/Space also lands here)
@@ -213,7 +213,7 @@ function passKit() {
       b.addEventListener("pointerdown", (e) => {
         if (e.button !== 0) return;
         try { b.setPointerCapture(e.pointerId); } catch {} // keeps the drag even if the cursor outruns the object
-        b.style.zIndex = Math.min(++top, 55); // above every section, below the logo
+        b.style.zIndex = k.id === "pen" ? 55 : Math.min(++top, 54); // above every section, below the logo; the pen stays on top
         sx = px = e.clientX; sy = py = e.clientY; sScroll = scrollY();
         ox = parseFloat(b.style.getPropertyValue("--dx")) || 0;
         oy = parseFloat(b.style.getPropertyValue("--dy")) || 0;
@@ -285,7 +285,7 @@ function passKit() {
     });
     const out = (f) => slot - hS / 2 + f * hS; // print centre when fraction f is outside
 
-    camBtn.style.zIndex = ++top;
+    camBtn.style.zIndex = top = Math.min(top + 1, 54);
     printBtn.style.zIndex = top - 1; // tucked behind the camera while it ejects
     ejectTl = gsap.timeline()
       // photo top points out of the slot: rotate a quarter-turn from the camera's tilt
@@ -294,7 +294,7 @@ function passKit() {
       .to(printBtn, { ...at(out(0.8)), clipPath: "inset(0% 0% 20% 0%)", duration: 1.3, ease: "power1.inOut" })
       // a beat, then it is pulled free...
       .to(printBtn, { ...at(out(1.15)), clipPath: "inset(0% 0% 0% 0%)", duration: 0.25, ease: "power1.in" }, "+=0.35")
-      .call(() => { printBtn.style.zIndex = ++top; })
+      .call(() => { printBtn.style.zIndex = top = Math.min(top + 1, 54); })
       // ...and dropped beside the camera
       .to(printBtn, {
         "--dx": camDx + "px", "--dy": camDy + "px", "--s": 1, "--r": `${place(printSpec).r}deg`,
