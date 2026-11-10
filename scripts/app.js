@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261111l";
-import { initMusic } from "./music.js?v=20261111l";
+import { play, playFile } from "./sound.js?v=20261111m";
+import { initMusic } from "./music.js?v=20261111m";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111l";
+} from "./content.js?v=20261111m";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111l";
+const ASSET_V = "20261111m";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -108,6 +108,10 @@ function passKit() {
     lampTimer = setTimeout(() => { b.classList.remove("is-lit"); glow.classList.remove("is-on"); }, 1000);
   };
 
+  // her handwriting (content.js kit.ink.hand): one <img> per written line
+  const handImgs = (lines) => (lines || []).map((h) =>
+    `<img class="hand" src="${h.src}?v=${ASSET_V}" alt="" width="${h.w}" height="${h.h}" draggable="false" />`).join("");
+
   // --- objects -------------------------------------------------------
   kit.forEach((k, i) => {
     const b = document.createElement("button");
@@ -134,7 +138,7 @@ function passKit() {
       b.innerHTML = `
       <span class="kit__img"><img src="${k.img}?v=${ASSET_V}" alt="" width="${k.w}" height="${k.h}" loading="eager" decoding="async"${k.ink ? ' fetchpriority="high"' : ""} draggable="false" />${
         k.ink ? `<span class="kit__ink" aria-hidden="true"><span class="kit__sign"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="959" height="131" draggable="false" /></span>${
-          k.ink.lines.map((l) => `<span class="kit__type">${l}</span>`).join("")}</span>` : ""
+          k.ink.lines.map((l, j) => `<span class="kit__type">${handImgs(k.ink.hand?.[j]) || l}</span>`).join("")}</span>` : ""
       }</span>`;
     }
     if (k.id === "camera") b.setAttribute("aria-label", "Camera: take a photo");
@@ -334,7 +338,8 @@ function passKit() {
   const chaosInk = $("#chaosInk");
   const nbInk = $(".kit__ink");
   if (chaosInk) {
-    const [title, tagline] = kit.find((k) => k.ink).ink.lines;
+    const inkData = kit.find((k) => k.ink).ink;
+    const [title, tagline] = inkData.lines.map((l, j) => handImgs(inkData.hand?.[j]) || l);
     chaosInk.innerHTML = `
       <span class="chaos-ink__name"><img src="assets/signature.png?v=${ASSET_V}" alt="" width="959" height="131" draggable="false" /></span>
       <span class="chaos-ink__title">${title}</span>

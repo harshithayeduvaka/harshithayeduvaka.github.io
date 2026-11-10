@@ -54,7 +54,13 @@ export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
     img: "assets/objects/notebook.avif", w: 960, h: 694, // transparent cut-out (ruled MUJI notebook)
     alt: "Open cream notebook with a red ribbon bookmark",
-    ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // written on the pages
+    ink: { name: meta.name, lines: [meta.title, meta.tagline], // written on the pages
+      // her own handwriting for the title and tagline (transparent PNGs, ink #3A2618).
+      // Each entry = the lines of one block; the text above stays for screen readers / search.
+      hand: [
+        [{ src: "assets/hand-title.png", w: 1310, h: 291 }],
+        [{ src: "assets/hand-tagline-1.png", w: 1579, h: 206 }, { src: "assets/hand-tagline-2.png", w: 895, h: 147 }],
+      ] },
     desk: { x: 19, y: 12, w: 58, r: -10 },
     chaos: { x: 3, y: 53, w: 38, r: 0 },   // chaos mode: pushed to the bottom-left corner
     note: "" },
@@ -82,7 +88,7 @@ export const kit = [
     img: "assets/objects/pen.avif", w: 46, h: 373, // transparent cut-out (clear plastic)
     alt: "Clear retractable gel pen with black ink",
     desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
-    chaos: { x: 42.5, y: 57, w: 2.2, r: 0 },
+    chaos: { x: 42.5, y: 61, w: 2.2, r: 0 },
     note: "" },
   // A little twin-bell alarm clock where the vinyl card used to sit. Click: a short ring + a shake.
   { id: "alarm", label: "ALARM", name: "Alarm clock", sound: "ring",
@@ -96,7 +102,7 @@ export const kit = [
     img: "assets/objects/clip.avif", w: 153, h: 192, // cut out of a white background
     alt: "Silver binder clip",
     desk: { x: 84, y: 36, w: 5.2, r: -14 },
-    chaos: { x: 46.5, y: 58, w: 4, r: -12 },
+    chaos: { x: 46.5, y: 63, w: 4, r: -12 },
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.avif, cup drawn in CSS).
   // Click: a 2s slurp (assets/sounds/slurp.mp3 if present) + steam wisps. r = handle direction.
