@@ -5,8 +5,10 @@ Development, SKEMA Paris). Goal: land a **marketing internship in Paris, 2026**.
 Audience: marketing hiring managers and recruiters (FR/EU), plus startup founders.
 
 Concept: **a coffee-coded desk**. The first screen is a desk (ref: jackiehu.design):
-an open notebook with her name, title and tagline written on it, plus headphones (music),
-an instax camera (click = her photo slides out as a print), a pen and a record card.
+an open notebook with her name, title and tagline written on it, plus headphones (her Spotify playlist pops out of them, scripts/music.js),
+an instax camera (click = her photo slides out as a print), a pen and a cappuccino. A small player (⏮ ▶ ⏭) is fixed on the right edge;
+it only moves when dragged. Playlist data lives in content.js `playlist`; audio via Spotify's official
+iFrame embed (loaded on first play; 30s previews unless logged in). Vinyl record card removed.
 Below it: experience timeline, case studies, About ⌘, contact. (ohmyATS demo removed: the
 timeline links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
@@ -48,7 +50,8 @@ index.html          markup skeleton for every pass (sections are filled by JS)
 styles/main.css     all styles; design tokens live in :root at the top
 scripts/content.js  ALL editable content (desk objects, jobs, projects, skills, links)
 scripts/app.js      animation orchestration + section rendering + ohmyATS demo
-scripts/sound.js    Web Audio synth: desk click sounds + original lo-fi loop (no audio files)
+scripts/sound.js    Web Audio synth: desk click sounds (lo-fi loop no longer used)
+scripts/music.js    playlist: pop-out now-playing card, swipeable covers, fixed mini player, Spotify embed
 assets/             images are AVIF (small, transparent): her photo (instax print) + desk objects (assets/objects/; notebook
                     and camera are transparent PNG cut-outs)
 vendor/             third-party libs, never edit

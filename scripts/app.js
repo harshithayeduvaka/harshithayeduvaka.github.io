@@ -1,8 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, startMusic, stopMusic, isMuted, setMuted } from "./sound.js?v=20261110u";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110v";
+import { initMusic } from "./music.js?v=20261110v";
 import {
-  meta, about, kit, tools, experience, projects,
-} from "./content.js?v=20261110u";
+  meta, about, kit, tools, experience, projects, playlist,
+} from "./content.js?v=20261110v";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -12,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110u";
+const ASSET_V = "20261110v";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -74,7 +75,7 @@ function hero() {
 
 // ------------------------------------------------------------------
 // The desk. Desktop: objects laid out around the notebook, draggable; a click
-// (without dragging) plays the object's sound. Headphones toggle the music.
+// (without dragging) plays the object's sound. Headphones pop out her playlist (music.js).
 // Clicking the camera ejects her photo as an instax print. Mobile: tap grid.
 // ------------------------------------------------------------------
 function passKit() {
@@ -82,23 +83,12 @@ function passKit() {
   const note = $("#kitNote");
   const desk = !isMobile; // free-placement layout only on desktop
   let top = 10;           // z-index counter: last touched object comes to the front
-  let playing = false;
   let mode = "notebook";                        // "notebook" | "chaos"
   const place = (k) => (mode === "chaos" && k.chaos) || k.desk; // where an object sits in this mode
 
-  // --- record card: plays the original loop from sound.js ------------
-  const rec = $("#record"), recBtn = $("#recordPlay");
-  const setPlaying = (on) => {
-    playing = on;
-    rec.classList.toggle("is-playing", on);
-    recBtn.setAttribute("aria-pressed", String(on));
-    recBtn.textContent = on ? "❚❚ Pause" : "▶ Play";
-    const hp = $(".kit__item--headphones");
-    if (hp) hp.setAttribute("aria-pressed", String(on));
-    on ? startMusic() : stopMusic();
-  };
-  recBtn.addEventListener("click", (e) => { if (e.detail) recBtn.blur(); setPlaying(!playing); });
-  document.addEventListener("visibilitychange", () => { if (document.hidden && playing) setPlaying(false); });
+  // --- music: her Spotify playlist (pop-out card + fixed mini player) -------
+  let music = { toggleCard() {}, closeCard() {} };
+  try { music = initMusic({ playlist, gsap, reduced, isMobile, grid }); } catch (e) { console.error("[music]", e); }
 
   // --- sound toggle --------------------------------------------------
   const mute = $("#deskMute");
@@ -139,6 +129,7 @@ function passKit() {
       }</span>`;
     }
     if (k.id === "camera") b.setAttribute("aria-label", "Camera: take a photo");
+    if (k.sound === "music") { b.setAttribute("aria-label", "Headphones: open my playlist"); b.setAttribute("aria-expanded", "false"); }
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
       b.style.left = k.desk.x + "%";
@@ -157,7 +148,7 @@ function passKit() {
         return;
       }
       if (k.sound === "music") {
-        setPlaying(!playing);
+        music.toggleCard(b);
       } else {
         // cup: her Pixabay slurp if saved as assets/sounds/slurp.mp3, else the synth; always 2s
         if (k.cup) playFile("assets/sounds/slurp.mp3", "slurp", 2);
@@ -215,7 +206,7 @@ function passKit() {
         if (!moving) return;
         px = e.clientX; py = e.clientY;
         if (!dragged && Math.hypot(px - sx, py - sy) < 5) return; // tiny jitter still counts as a click
-        if (!dragged) { dragged = true; raf = requestAnimationFrame(edgeScroll); }
+        if (!dragged) { dragged = true; raf = requestAnimationFrame(edgeScroll); if (k.sound === "music") music.closeCard(); }
         b.classList.add("is-dragging");
         place();
       });
@@ -307,12 +298,10 @@ function passKit() {
   const settle = $$(".kit__item:not(.kit__item--print)");
   if (!reduced) {
     gsap.set(settle, { opacity: 0, "--s": 1.12 });
-    gsap.set(rec, { opacity: 0 });
     if (sign) gsap.set(sign, { clipPath: "inset(-30% 100% -30% -5%)" });
     gsap.set(typed, { opacity: 0, y: 6 });
     deskIntro = gsap.timeline({ paused: true })
       .to(settle, { opacity: 1, "--s": 1, duration: 0.7, stagger: 0.09, ease: "power2.out" })
-      .to(rec, { opacity: 1, duration: 0.6 }, "-=0.4")
       .to(sign, { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.6, ease: "power1.inOut" }, "-=0.2")
       .to(typed, { opacity: 1, y: 0, duration: 0.5, stagger: 0.25 }, "-=0.2");
   }
@@ -348,9 +337,7 @@ function passKit() {
       gsap.to(b, { left: p.x + "%", top: p.y + "%", width: p.w + "%", "--r": `${p.r}deg`,
         "--dx": "0px", "--dy": "0px", duration: t, ease: "power3.inOut", delay: reduced ? 0 : i * 0.04 });
     });
-    gsap.to(rec, mode === "chaos"
-      ? { rotation: 0, xPercent: 6, yPercent: 10, x: 0, y: 0, duration: t, ease: "power3.inOut" }
-      : { rotation: 8, xPercent: 0, yPercent: 0, x: 0, y: 0, duration: t, ease: "power3.inOut" });
+    music.closeCard();
     // the writing: off the notebook pages and onto the desk (or back)
     gsap.to(nbInk, { opacity: mode === "chaos" ? 0 : 1, duration: t * 0.5 });
     if (mode === "chaos") {
@@ -363,33 +350,6 @@ function passKit() {
   }
   modeBtns.forEach((b) => b.addEventListener("click", (e) => { if (e.detail) b.blur(); setMode(b.dataset.mode); }));
 
-  // --- the vinyl card is draggable too (desktop). It moves with GSAP x/y so its tilt
-  //     and chaos-mode offset stay intact; a press on Play that doesn't move still plays.
-  if (desk) {
-    let sx, sy, ox, oy, moving = false, moved = false;
-    rec.style.cursor = "grab";
-    rec.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0) return;
-      try { rec.setPointerCapture(e.pointerId); } catch {}
-      rec.style.zIndex = Math.min(++top, 55);
-      sx = e.clientX; sy = e.clientY;
-      ox = gsap.getProperty(rec, "x"); oy = gsap.getProperty(rec, "y");
-      moving = true; moved = false;
-    });
-    rec.addEventListener("pointermove", (e) => {
-      if (!moving) return;
-      const dx = e.clientX - sx, dy = e.clientY - sy;
-      if (!moved && Math.hypot(dx, dy) < 5) return;
-      moved = true; rec.style.cursor = "grabbing";
-      gsap.set(rec, { x: ox + dx, y: oy + dy });
-    });
-    // the click that ends a drag fires right after pointerup; clear the flag just after it
-    const end = () => { moving = false; rec.style.cursor = "grab"; setTimeout(() => { moved = false; }, 0); };
-    rec.addEventListener("pointerup", end);
-    rec.addEventListener("pointercancel", end);
-    // a drag that ends over Play must not also press it
-    recBtn.addEventListener("click", (e) => { if (moved) { e.stopImmediatePropagation(); moved = false; } }, true);
-  }
 }
 
 // ------------------------------------------------------------------

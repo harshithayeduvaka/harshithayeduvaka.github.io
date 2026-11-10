@@ -103,9 +103,30 @@ export const tools = [
   { name: "Brandwatch", icon: "assets/tools/brandwatch.avif" },
 ];
 
-// Clicking the headphones (or Play on the record card) plays an original lo-fi loop
-// generated in scripts/sound.js. No Spotify / third-party player.
-// The song she loves, kept for reference: "Coffee & Chill" by Cloudchord.
+// Her Spotify playlist. Clicking the headphones pops it out as a "now playing" card
+// (swipe the covers to change song); a small player stays fixed on the right of the page.
+// Audio plays through Spotify's official embed (scripts/music.js): visitors logged in to
+// Spotify hear full songs, others hear Spotify's 30-second previews.
+// To change songs: edit the playlist on Spotify, then update this list (title, artist,
+// track uri from Share > Copy Song Link, length in ms, cover from the song's page).
+export const playlist = {
+  name: "tracks i dont skip",
+  url: "https://open.spotify.com/playlist/4aRTrJLBB0yLSa9K1L9DTw",
+  tracks: [
+    { title: "Écoute Chérie", artist: "Vendredi sur Mer", uri: "spotify:track:0qPRYrfn8GqotCTTd5YnhB", ms: 226373,
+      cover: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02520ad86f1b1aee23e3597a83" },
+    { title: "Kho Gaye Hum Kahan", artist: "Jasleen Royal, Prateek Kuhad", uri: "spotify:track:7nPCAO0Q9AHbM7PWyj9O98", ms: 213055,
+      cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02563e078ad6506c79c9f3292a" },
+    { title: "Les Champs-Elysées", artist: "Joe Dassin", uri: "spotify:track:4VWbPQUPvLes814r6T11Jz", ms: 157626,
+      cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02159a5ce13b0c1657c87b96bc" },
+    { title: "Inthandham", artist: "Vishal Chandrashekhar, S.P. Charan, Krishna Kanth", uri: "spotify:track:0gE8ZP2cTXpRDz53bTkpu6", ms: 218808,
+      cover: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02c718a804cc2f93fd94f03788" },
+    { title: "Apocalypse", artist: "Cigarettes After Sex", uri: "spotify:track:1oAwsWBovWRIp7qLMGPIet", ms: 290146,
+      cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02dfed999f959177dfc4f33cdc" },
+    { title: "Ditto", artist: "NewJeans", uri: "spotify:track:3r8RuvgbX9s7ammBn07D3W", ms: 185506,
+      cover: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02edf5b257be1d6593e81bb45f" },
+  ],
+};
 
 // Order shown on the site: education first, then work experience (newest first).
 // type: "work" | "education" (education panels get their own label).

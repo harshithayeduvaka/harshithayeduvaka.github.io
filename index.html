@@ -11,11 +11,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261110u" />
+<link rel="stylesheet" href="styles/main.css?v=20261110v" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110u" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261110u" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110v" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261110v" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -34,7 +34,7 @@
 
 <main id="main">
   <!-- Hero — the desk. The notebook carries her name, title and tagline; objects are
-       built from content.js `kit`, the record card plays the music. Desktop: drag objects
+       built from content.js `kit`; the headphones open her playlist (scripts/music.js). Desktop: drag objects
        around, click to play. Mobile: tap-to-play grid. -->
   <!-- Personal brand mark, top right (transparent PNG); links back to the top -->
   <a class="brand" href="#top" aria-label="Harshitha Yeduvaka, back to top">
@@ -65,12 +65,6 @@
         <ul class="toolkit" id="toolkit" aria-label="Tools I use"></ul>
         <!-- Chaos mode: name, title and tagline leave the notebook and land on the desk, a bit askew -->
         <div class="chaos-ink" id="chaosInk" aria-hidden="true"></div>
-        <div class="record" id="record">
-          <div class="record__disc" aria-hidden="true"><i></i></div>
-          <div class="record__actions mono">
-            <button type="button" id="recordPlay" aria-pressed="false">▶ Play</button>
-          </div>
-        </div>
       </div>
       <!-- Desk modes: tidy notebook vs. a little chaos -->
       <div class="modes" role="group" aria-label="Desk style">
@@ -187,6 +181,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261110u"></script>
+<script type="module" src="scripts/app.js?v=20261110v"></script>
 </body>
 </html>
