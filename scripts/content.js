@@ -58,8 +58,8 @@ export const kit = [
       // her own handwriting for the title and tagline (transparent PNGs, ink #3A2618).
       // Each entry = the lines of one block; the text above stays for screen readers / search.
       hand: [
-        [{ src: "assets/hand-title.png", w: 1400, h: 287, tilt: 1.7 }],
-        [{ src: "assets/hand-tagline-1.png", w: 1392, h: 165, tilt: 1.2 }, { src: "assets/hand-tagline-2.png", w: 843, h: 133, tilt: 1.2 }],
+        [{ src: "assets/hand-title.png", w: 1199, h: 222, tilt: -1 }],
+        [{ src: "assets/hand-tagline-1.png", w: 1400, h: 145, tilt: 0.7 }, { src: "assets/hand-tagline-2.png", w: 845, h: 120, tilt: 0.7 }],
       ] },
     desk: { x: 19, y: 12, w: 58, r: -10 },
     chaos: { x: 3, y: 53, w: 38, r: 0 },   // chaos mode: pushed to the bottom-left corner
