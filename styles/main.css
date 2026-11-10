@@ -309,13 +309,13 @@ section { position: relative; }
 /* her handwriting (images): sizes in notebook-widths so it scales with the desk */
 .kit__type:has(.hand), .chaos-ink__title:has(.hand), .chaos-ink__tag:has(.hand) { display: grid; justify-items: center; line-height: 0; max-width: none; }
 .hand { height: auto; display: block; }
-.kit__type .hand[src*="hand-title"] { width: 40cqw; }
-.kit__type .hand[src*="hand-tagline-1"] { width: 58cqw; }
-.kit__type .hand[src*="hand-tagline-2"] { width: 35cqw; margin-top: -.6cqw; }
+.kit__type .hand[src*="hand-title"] { width: 44cqw; }
+.kit__type .hand[src*="hand-tagline-1"] { width: 62cqw; }
+.kit__type .hand[src*="hand-tagline-2"] { width: 37.4cqw; margin-top: -.6cqw; }
 .kit__sign + .kit__type:has(.hand) { margin-top: 2.2cqw; }
-.chaos-ink__title .hand { width: 21cqw; }
-.chaos-ink__tag .hand[src*="hand-tagline-1"] { width: 30.4cqw; }
-.chaos-ink__tag .hand[src*="hand-tagline-2"] { width: 18.4cqw; margin-top: -.3cqw; }
+.chaos-ink__title .hand { width: 23cqw; }
+.chaos-ink__tag .hand[src*="hand-tagline-1"] { width: 32.5cqw; }
+.chaos-ink__tag .hand[src*="hand-tagline-2"] { width: 19.6cqw; margin-top: -.3cqw; }
 
 /* instax mini print: warm white frame, 3:4 photo window, deeper bottom margin */
 .print {
