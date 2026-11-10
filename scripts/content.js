@@ -82,7 +82,7 @@ export const kit = [
     img: "assets/objects/pen.avif", w: 46, h: 373, // transparent cut-out (clear plastic)
     alt: "Clear retractable gel pen with black ink",
     desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
-    chaos: { x: 42.5, y: 57, w: 2.2, r: 6 },
+    chaos: { x: 42.5, y: 57, w: 2.2, r: 0 },
     note: "" },
   // A little twin-bell alarm clock where the vinyl card used to sit. Click: a short ring + a shake.
   { id: "alarm", label: "ALARM", name: "Alarm clock", sound: "ring",
