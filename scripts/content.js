@@ -96,7 +96,7 @@ export const kit = [
     img: "assets/objects/clip.avif", w: 153, h: 192, // cut out of a white background
     alt: "Silver binder clip",
     desk: { x: 84, y: 36, w: 5.2, r: -14 },
-    chaos: { x: 50, y: 84, w: 4, r: 35 },
+    chaos: { x: 62, y: 80, w: 4, r: 24 },
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.avif, cup drawn in CSS).
   // Click: a 2s slurp (assets/sounds/slurp.mp3 if present) + steam wisps. r = handle direction.
