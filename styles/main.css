@@ -522,8 +522,6 @@ section { position: relative; }
 .about-me__cmd { color: var(--caramel); font-weight: 400; font-size: .7em; vertical-align: .12em; margin-left: .1em; }
 .about-me__body { display: grid; gap: 1.1em; max-width: none; } /* text spans the full content width */
 .about-me__body p { font-size: var(--fs-18); line-height: 1.65; color: var(--roast); }
-/* About text: gentle pool-water ripple (SVG filter #pool, animated in app.js) */
-.about-me__body.is-pool { filter: url(#pool); }
 
 .close { text-align: center; padding-block: var(--pass-pad); padding-inline: var(--gutter); }
 .mailto {

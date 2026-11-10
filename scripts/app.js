@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110z";
-import { initMusic } from "./music.js?v=20261110z";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111a";
+import { initMusic } from "./music.js?v=20261111a";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261110z";
+} from "./content.js?v=20261111a";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110z";
+const ASSET_V = "20261111a";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -644,27 +644,7 @@ function passAboutMe() {
   const body = $("#aboutBody");
   if (!body) return;
   body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
-  // "pool water": the text ripples gently, like letters seen through moving water.
-  // An SVG turbulence filter displaces the text; its noise drifts slowly over time.
-  // Runs only while the text is on screen (and the tab is visible); off for reduced motion.
-  if (reduced) return;
-  const turb = $("#poolTurb");
-  if (!turb) return;
-  body.classList.add("is-pool");
-  let raf = 0, visible = false;
-  const t0 = performance.now();
-  const frame = (now) => {
-    const t = (now - t0) / 1000;
-    // two slow, out-of-step waves: gentle swell, never choppy
-    const fx = 0.004 + 0.0015 * Math.sin(t * 0.55);
-    const fy = 0.016 + 0.005 * Math.sin(t * 0.83 + 1.3);
-    turb.setAttribute("baseFrequency", `${fx.toFixed(5)} ${fy.toFixed(5)}`);
-    raf = requestAnimationFrame(frame);
-  };
-  const run = (on) => { cancelAnimationFrame(raf); if (on && !document.hidden) raf = requestAnimationFrame(frame); };
-  ScrollTrigger.create({ trigger: body, start: "top bottom", end: "bottom top",
-    onToggle: (self) => { visible = self.isActive; run(visible); } });
-  document.addEventListener("visibilitychange", () => run(visible));
+  // static text (the pool-water ripple was removed at her request)
 }
 
 function revealTitles() {

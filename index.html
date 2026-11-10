@@ -11,11 +11,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50&family=Inter+Tight:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261110z" />
+<link rel="stylesheet" href="styles/main.css?v=20261111a" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261110z" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261110z" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261111a" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261111a" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -103,13 +103,6 @@
 
   <!-- About ⌘ — text from content.js `about` -->
   <section class="pass about-me" id="about" aria-labelledby="about-h">
-    <!-- "pool water" ripple for the About text (animated by app.js) -->
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-      <filter id="pool" x="-2%" y="-10%" width="104%" height="120%">
-        <feTurbulence id="poolTurb" type="fractalNoise" baseFrequency="0.004 0.016" numOctaves="1" seed="7" result="n"/>
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/>
-      </filter>
-    </svg>
     <div class="pass__grid">
       <div class="content">
         <h2 id="about-h" class="pass__title display">What makes me, me? <span class="about-me__cmd" aria-hidden="true">☺︎</span></h2>
@@ -181,6 +174,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261110z"></script>
+<script type="module" src="scripts/app.js?v=20261111a"></script>
 </body>
 </html>
