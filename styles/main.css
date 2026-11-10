@@ -161,7 +161,6 @@ section { position: relative; }
   padding: clamp(16px, 3vw, 40px) var(--gutter) 36px;
 }
 .kit { position: relative; width: 100%; max-width: 1440px; margin-inline: auto; }
-.kit__tools { position: absolute; top: 0; right: 0; z-index: 30; display: flex; gap: 18px; }
 /* HY brand mark, top left of the page (not fixed: it scrolls away with the content) */
 .brand {
   position: absolute; top: clamp(10px, 1.6vw, 22px); left: var(--gutter); z-index: 60; /* scrolls away with the page */
@@ -170,12 +169,6 @@ section { position: relative; }
 }
 .brand img { width: 100%; height: auto; }
 .brand:hover { transform: rotate(-4deg) scale(1.05); }
-.kit__tools button {
-  border-bottom: 2px solid var(--latte); padding: 6px 0 4px; min-height: 32px;
-  transition: border-color .2s, color .2s;
-}
-.kit__tools button:hover { border-color: var(--espresso); color: var(--espresso); }
-.kit__tools button[aria-pressed="true"] { opacity: .6; }
 
 /* the desk itself: as large as fits the screen, same proportions everywhere */
 .kit__grid {
@@ -418,9 +411,14 @@ section { position: relative; }
 .mini button { width: 38px; height: 38px; }
 .mini button svg { width: 18px; height: 18px; fill: currentColor; pointer-events: none; }
 .mini .mini__play svg { width: 22px; height: 22px; }
+.mini__sep { width: 22px; height: 1px; background: rgba(246, 239, 230, .2); }
+.mini .mini__sound svg { width: 19px; height: 19px; }
+.mini__sound .w { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.mini.is-muted .mini__sound { opacity: .6; }
 @media (max-width: 860px) {
   .mini { right: 10px; top: auto; bottom: 16px; transform: none; flex-direction: row; padding: 6px 10px 6px 6px; }
   .mini__art { width: 34px; height: 34px; }
+  .mini__sep { width: 1px; height: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .np.is-playing .np__cover img, .mini.is-playing .mini__art { animation: none; }
@@ -678,7 +676,6 @@ html.deck-open { overflow: hidden; }
   .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   /* desk -> tap grid; no dragging (it would fight scrolling) */
   .hero.desk { min-height: auto; padding-top: 16px; padding-bottom: 56px; }
-  .kit__tools { position: static; justify-content: flex-end; margin-bottom: 8px; padding-left: 80px; }
   .kit__grid {
     width: 100%; aspect-ratio: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px; padding: 4px 0 12px; align-items: center;

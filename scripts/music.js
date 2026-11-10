@@ -7,11 +7,15 @@
 //    press of play, so nothing from Spotify loads until a visitor asks for music.
 //    Logged-in Spotify users hear full songs; everyone else hears 30-second previews.
 
+import { isMuted, setMuted } from "./sound.js?v=20261111l";
+
 const ICON = {
   prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6.5v11L2.5 12zM21.5 6.5v11L13 12z"/></svg>',
   next: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 6.5v11l8.5-5.5zM2.5 6.5v11L11 12z"/></svg>',
   play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>',
   pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/></svg>',
+  soundOn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5h4l5-4.5v14l-5-4.5H3z"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  soundOff: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5h4l5-4.5v14l-5-4.5H3z"/><path class="w" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
 };
 const fmt = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
 
@@ -64,7 +68,9 @@ export function initMusic({ playlist, gsap, reduced, isMobile, grid }) {
     <img class="mini__art" src="${tracks[0].cover}" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" />
     <button type="button" data-act="prev" aria-label="Previous song">${ICON.prev}</button>
     <button type="button" data-act="play" class="mini__play" aria-label="Play">${ICON.play}</button>
-    <button type="button" data-act="next" aria-label="Next song">${ICON.next}</button>`;
+    <button type="button" data-act="next" aria-label="Next song">${ICON.next}</button>
+    <i class="mini__sep" aria-hidden="true"></i>
+    <button type="button" data-act="sound" class="mini__sound" aria-pressed="false" aria-label="Sound off">${ICON.soundOn}</button>`;
   document.body.appendChild(mini);
   const miniArt = mini.querySelector(".mini__art");
 
@@ -150,7 +156,25 @@ export function initMusic({ playlist, gsap, reduced, isMobile, grid }) {
     }
     ctrl.togglePlay();
   }
-  const act = (a) => (a === "play" ? toggle() : go(idx + (a === "next" ? 1 : -1), playing || wantPlay));
+  // sound on/off for the whole site (desk sounds). Turning it off also pauses the music.
+  const soundBtn = mini.querySelector(".mini__sound");
+  const paintSound = () => {
+    const off = isMuted();
+    soundBtn.innerHTML = off ? ICON.soundOff : ICON.soundOn;
+    soundBtn.setAttribute("aria-pressed", String(off));
+    soundBtn.setAttribute("aria-label", off ? "Sound on" : "Sound off");
+    soundBtn.title = off ? "Sound off" : "Sound on";
+    mini.classList.toggle("is-muted", off);
+  };
+  paintSound();
+  const act = (a) => {
+    if (a === "sound") {
+      setMuted(!isMuted()); paintSound();
+      if (isMuted() && (playing || wantPlay)) toggle();
+      return;
+    }
+    return a === "play" ? toggle() : go(idx + (a === "next" ? 1 : -1), playing || wantPlay);
+  };
 
   // ---------- swipeable covers --------------------------------------------------
   let programmatic = false, scrollT = 0;

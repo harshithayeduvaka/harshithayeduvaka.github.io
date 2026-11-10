@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261111k";
-import { initMusic } from "./music.js?v=20261111k";
+import { play, playFile } from "./sound.js?v=20261111l";
+import { initMusic } from "./music.js?v=20261111l";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261111k";
+} from "./content.js?v=20261111l";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261111k";
+const ASSET_V = "20261111l";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -91,13 +91,7 @@ function passKit() {
   try { music = initMusic({ playlist, gsap, reduced, isMobile, grid }); } catch (e) { console.error("[music]", e); }
 
   // --- sound toggle --------------------------------------------------
-  const mute = $("#deskMute");
-  const paintMute = () => {
-    mute.setAttribute("aria-pressed", String(isMuted()));
-    mute.textContent = isMuted() ? "♪ Sound off" : "♪ Sound on";
-  };
-  mute.addEventListener("click", () => { setMuted(!isMuted()); paintMute(); });
-  paintMute();
+  // (sound on/off now lives in the fixed mini player, scripts/music.js)
 
   // Lamp: lights up for 1 second. The shade glows, and a warm pool of light (.lamp-light)
   // spreads over the desk around it, above the other objects (blend mode, no clicks blocked).
