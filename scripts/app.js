@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110x";
-import { initMusic } from "./music.js?v=20261110x";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110y";
+import { initMusic } from "./music.js?v=20261110y";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261110x";
+} from "./content.js?v=20261110y";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110x";
+const ASSET_V = "20261110y";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -99,6 +99,21 @@ function passKit() {
   mute.addEventListener("click", () => { setMuted(!isMuted()); paintMute(); });
   paintMute();
 
+  // Lamp: lights up for 1 second. The shade glows, and a warm pool of light (.lamp-light)
+  // spreads over the desk around it, above the other objects (blend mode, no clicks blocked).
+  let lampTimer;
+  const lightLamp = (b) => {
+    let glow = grid.querySelector(".lamp-light");
+    if (!glow) { glow = document.createElement("div"); glow.className = "lamp-light"; glow.setAttribute("aria-hidden", "true"); grid.appendChild(glow); }
+    const g = grid.getBoundingClientRect(), r = b.getBoundingClientRect();
+    glow.style.left = r.left - g.left + r.width / 2 + "px";
+    glow.style.top = r.top - g.top + r.height * 0.36 + "px";
+    glow.style.setProperty("--size", r.width * 3.2 + "px");
+    b.classList.add("is-lit"); glow.classList.add("is-on");
+    clearTimeout(lampTimer);
+    lampTimer = setTimeout(() => { b.classList.remove("is-lit"); glow.classList.remove("is-on"); }, 1000);
+  };
+
   // --- objects -------------------------------------------------------
   kit.forEach((k, i) => {
     const b = document.createElement("button");
@@ -154,6 +169,7 @@ function passKit() {
         if (k.cup) playFile("assets/sounds/slurp.mp3", "slurp", 2);
         // alarm / clip: a recorded effect if saved as assets/sounds/<ring|snap>.mp3, else the 2s synth
         else if (k.sound === "ring" || k.sound === "snap") playFile(`assets/sounds/${k.sound}.mp3`, k.sound, 2);
+        else if (k.sound === "lamp") { playFile("assets/sounds/lamp.mp3", "lamp", 1); lightLamp(b); }
         else play(k.sound);
         if (k.sound === "shutter") ejectPrint();
         if (k.cup) steam(b);
@@ -163,7 +179,7 @@ function passKit() {
         gsap.fromTo(b.querySelector("img"), { rotate: 0, x: 0 },
           { keyframes: [...Array(32)].map((_, i) => ({ rotate: i % 2 ? -5 : 5, x: i % 2 ? -1.5 : 1.5, duration: 0.056 }))
               .concat({ rotate: 0, x: 0, duration: 0.25, ease: "elastic.out(1,0.5)" }) });
-      } else if (!reduced && !k.cup) { // the cup only steams; everything else does a little hop
+      } else if (!reduced && !k.cup && k.sound !== "lamp") { // the cup only steams; everything else does a little hop
         // (the polaroid hops as one piece: frame and photo together)
         gsap.fromTo(b.querySelector(k.print ? ".print" : "img"), { y: 0, rotate: 0 },
           { keyframes: [{ y: -14, rotate: -4, duration: 0.18 }, { y: 0, rotate: 0, duration: 0.5, ease: "elastic.out(1,0.45)" }] });

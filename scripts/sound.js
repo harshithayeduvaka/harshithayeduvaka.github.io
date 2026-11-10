@@ -213,6 +213,21 @@ const SOUNDS = {
     creak(t + 1.3, 0.3);       // squeeze again
     metal(t + 1.65, 0.6);      // final snap shut (rings out to ~2s)
   },
+  // lamp: the switch clicks on, then the bulb hums softly for about a second
+  lamp(t) {
+    burst(t, { freq: 3600, q: 2.5, dur: 0.02, gain: 0.75 });
+    tick(t, 1700, 0.03, 0.3);
+    burst(t + 0.03, { freq: 1200, q: 1.5, dur: 0.03, gain: 0.25 });
+    [100, 200, 300].forEach((f, j) => { // mains hum of the bulb warming up
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t + 0.04);
+      g.gain.exponentialRampToValueAtTime([0.035, 0.018, 0.008][j], t + 0.2);
+      g.gain.setValueAtTime([0.035, 0.018, 0.008][j], t + 0.75);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1);
+      o.connect(g).connect(master); o.start(t + 0.04); o.stop(t + 1.02);
+    });
+  },
   // needle drop before the music starts
   needle(t) {
     tick(t, 90, 0.08, 0.4);

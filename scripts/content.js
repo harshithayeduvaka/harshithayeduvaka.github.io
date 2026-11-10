@@ -43,6 +43,14 @@ export const about = {
 // sound: shutter | click | page | music.
 // note: optional line in your words, shown under the desk on click. Leave "" to show nothing.
 export const kit = [
+  // A stained-glass table lamp, a little behind the notebook (listed first so it sits under it).
+  // Click: it lights up for 1 second with a switch click (assets/sounds/lamp.mp3 if present).
+  { id: "lamp", label: "LAMP", name: "Table lamp", sound: "lamp",
+    img: "assets/objects/lamp.avif", w: 418, h: 640, // cut out of her photo
+    alt: "Stained-glass table lamp with blue and yellow flowers",
+    desk: { x: 67, y: -2, w: 16, r: 0 },
+    chaos: { x: 72, y: 2, w: 11, r: 0 },
+    note: "" },
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
     img: "assets/objects/notebook.avif", w: 960, h: 694, // transparent cut-out (ruled MUJI notebook)
     alt: "Open cream notebook with a red ribbon bookmark",
@@ -80,14 +88,14 @@ export const kit = [
   { id: "alarm", label: "ALARM", name: "Alarm clock", sound: "ring",
     img: "assets/objects/alarm.avif", w: 306, h: 420, // transparent cut-out
     alt: "Black twin-bell alarm clock",
-    desk: { x: 82, y: 6, w: 10, r: 8 },
-    chaos: { x: 86, y: 5, w: 9, r: 0 },
+    desk: { x: 84, y: 9, w: 10, r: 8 },
+    chaos: { x: 86, y: 30, w: 9, r: 0 },
     note: "" },
   // A binder clip, smaller than the alarm. Click: a metal snap.
   { id: "clip", label: "CLIP", name: "Binder clip", sound: "snap",
     img: "assets/objects/clip.avif", w: 153, h: 192, // cut out of a white background
     alt: "Silver binder clip",
-    desk: { x: 81, y: 33, w: 5.2, r: -14 },
+    desk: { x: 84, y: 36, w: 5.2, r: -14 },
     chaos: { x: 50, y: 84, w: 4, r: 35 },
     note: "" },
   // A cappuccino seen from above (latte art from assets/objects/crema.avif, cup drawn in CSS).

@@ -205,7 +205,20 @@ section { position: relative; }
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
 .kit__item--pen { padding: 2px; } /* thin object: barely any padding */
 .kit__item--headphones img, .kit__item--pen img { filter: drop-shadow(0 10px 12px rgba(43, 29, 22, .2)) drop-shadow(0 1px 2px rgba(43, 29, 22, .18)); }
-.kit__item--print { padding: 0; } /* keeps the eject geometry exact */
+.kit__item--print { padding: 0; }
+/* lamp: lights up for 1s on click (app.js lightLamp). Shade brightens + glows; a warm pool
+   of light spreads over the desk around it. Reduced motion: it switches on/off without fading. */
+.kit__item--lamp img { filter: drop-shadow(0 12px 14px rgba(43, 29, 22, .22)); transition: transform .35s var(--ease-parse), filter .18s ease-out; }
+.kit__item--lamp.is-lit img { filter: brightness(1.15) saturate(1.4) drop-shadow(0 0 18px rgba(255, 196, 110, .85)) drop-shadow(0 0 46px rgba(255, 176, 80, .5)); }
+.lamp-light {
+  position: absolute; z-index: 60; width: var(--size, 300px); aspect-ratio: 1; translate: -50% -50%;
+  border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle, rgba(255, 205, 130, .3) 0%, rgba(255, 190, 105, .17) 32%, rgba(255, 185, 95, .07) 52%, rgba(255, 180, 90, 0) 70%);
+  transition: opacity .2s ease-out;
+}
+.lamp-light.is-on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .lamp-light, .kit__item--lamp img { transition: none; } }
+ /* keeps the eject geometry exact */
 .kit__item--notebook img { filter: drop-shadow(0 22px 26px rgba(43, 29, 22, .16)) drop-shadow(0 2px 3px rgba(43, 29, 22, .12)); }
 .kit__item--camera img { filter: drop-shadow(0 12px 16px rgba(43, 29, 22, .22)) drop-shadow(0 1px 2px rgba(43, 29, 22, .2)); }
 

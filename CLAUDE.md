@@ -6,7 +6,7 @@ Audience: marketing hiring managers and recruiters (FR/EU), plus startup founder
 
 Concept: **a coffee-coded desk**. The first screen is a desk (ref: jackiehu.design):
 an open notebook with her name, title and tagline written on it, plus headphones (her Spotify playlist pops out of them, scripts/music.js),
-an instax camera (click = her photo slides out as a print), a pen, a cappuccino, an alarm clock (click = short ring + shake) and a binder clip (click = snap), both where the vinyl card used to be. A small player (⏮ ▶ ⏭) is fixed on the right edge;
+an instax camera (click = her photo slides out as a print), a pen, a cappuccino, an alarm clock (click = short ring + shake) and a binder clip (click = snap), both where the vinyl card used to be, and a stained-glass lamp partly behind the notebook (click = lights up 1s + switch click; kit item listed first so it sits under the notebook). A small player (⏮ ▶ ⏭) is fixed on the right edge;
 it only moves when dragged. Playlist data lives in content.js `playlist`; audio via Spotify's official
 iFrame embed (loaded on first play; 30s previews unless logged in). Vinyl record card removed.
 Below it: experience timeline, case studies, About ⌘, contact. (ohmyATS demo removed: the
