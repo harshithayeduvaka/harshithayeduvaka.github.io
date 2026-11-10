@@ -94,6 +94,7 @@ export const kit = [
 export const tools = [
   { name: "HubSpot", icon: "assets/tools/hubspot.avif", tile: "full" },
   { name: "GA4", icon: "assets/tools/ga4.avif" },
+  { name: "Power BI", icon: "assets/tools/powerbi.avif" },
   { name: "SQL", icon: "assets/tools/sql.avif" },
   { name: "Excel", icon: "assets/tools/excel.avif" },
   { name: "Apollo.io", icon: "assets/tools/apollo.avif", tile: "full" },
