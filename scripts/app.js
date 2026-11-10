@@ -1,9 +1,9 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110w";
-import { initMusic } from "./music.js?v=20261110w";
+import { play, playFile, isMuted, setMuted } from "./sound.js?v=20261110x";
+import { initMusic } from "./music.js?v=20261110x";
 import {
   meta, about, kit, tools, experience, projects, playlist,
-} from "./content.js?v=20261110w";
+} from "./content.js?v=20261110x";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +13,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261110w";
+const ASSET_V = "20261110x";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -152,6 +152,8 @@ function passKit() {
       } else {
         // cup: her Pixabay slurp if saved as assets/sounds/slurp.mp3, else the synth; always 2s
         if (k.cup) playFile("assets/sounds/slurp.mp3", "slurp", 2);
+        // alarm / clip: a recorded effect if saved as assets/sounds/<ring|snap>.mp3, else the 2s synth
+        else if (k.sound === "ring" || k.sound === "snap") playFile(`assets/sounds/${k.sound}.mp3`, k.sound, 2);
         else play(k.sound);
         if (k.sound === "shutter") ejectPrint();
         if (k.cup) steam(b);
@@ -159,7 +161,7 @@ function passKit() {
       note.textContent = k.note || "";
       if (!reduced && k.id === "alarm") { // the alarm clock rattles while it rings
         gsap.fromTo(b.querySelector("img"), { rotate: 0, x: 0 },
-          { keyframes: [...Array(8)].map((_, i) => ({ rotate: i % 2 ? -5 : 5, x: i % 2 ? -1.5 : 1.5, duration: 0.055 }))
+          { keyframes: [...Array(32)].map((_, i) => ({ rotate: i % 2 ? -5 : 5, x: i % 2 ? -1.5 : 1.5, duration: 0.056 }))
               .concat({ rotate: 0, x: 0, duration: 0.25, ease: "elastic.out(1,0.5)" }) });
       } else if (!reduced && !k.cup) { // the cup only steams; everything else does a little hop
         // (the polaroid hops as one piece: frame and photo together)

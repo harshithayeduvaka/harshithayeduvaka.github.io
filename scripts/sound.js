@@ -164,26 +164,54 @@ const SOUNDS = {
     n2.connect(lp).connect(g2).connect(master);
     n2.start(t, Math.random()); n2.stop(t + dur);
   },
-  // alarm clock: a short, gentle bell ring (hammer hits alternating between two bells)
+  // alarm clock: a classic twin-bell ring, 2 seconds. The hammer rattles between the two
+  // bells ~18 times a second; the ring swells in, holds, and fades as it winds down.
   ring(t) {
-    for (let i = 0; i < 9; i++) {
-      const at = t + i * 0.055, f = i % 2 ? 2350 : 2620;
-      [1, 2.76].forEach((m, j) => {
+    const dur = 2, rate = 18, n = Math.floor(dur * rate);
+    for (let i = 0; i < n; i++) {
+      const at = t + i / rate, f = i % 2 ? 2350 : 2620;
+      const env = Math.min(1, i / 3) * (i > n - 8 ? (n - i) / 8 : 1); // fade in / wind down
+      [1, 2.76, 5.4].forEach((m, j) => {
         const o = ctx.createOscillator(), g = ctx.createGain();
         o.type = "sine"; o.frequency.value = f * m;
         g.gain.setValueAtTime(0.0001, at);
-        g.gain.exponentialRampToValueAtTime((j ? 0.025 : 0.09) * (1 - i / 12), at + 0.004);
-        g.gain.exponentialRampToValueAtTime(0.0001, at + (i === 8 ? 0.6 : 0.2));
-        o.connect(g).connect(master); o.start(at); o.stop(at + 0.65);
+        g.gain.exponentialRampToValueAtTime(Math.max(0.0002, [0.07, 0.022, 0.008][j] * env), at + 0.003);
+        g.gain.exponentialRampToValueAtTime(0.0001, at + (i === n - 1 ? 0.5 : 0.16));
+        o.connect(g).connect(master); o.start(at); o.stop(at + 0.55);
       });
-      tick(at, 900, 0.01, 0.05);
+      burst(at, { freq: 6000, q: 3, dur: 0.008, gain: 0.08 * env }); // hammer strike
     }
   },
-  // binder clip: the metal jaws snapping shut
+  // binder clip, 2 seconds: squeeze the arms (creak), let go (snap), flip a wire arm
+  // over (two light clicks), then a final snap shut with a little metal ring.
   snap(t) {
-    burst(t, { freq: 5200, q: 4, dur: 0.02, gain: 0.6 });
-    tick(t, 2900, 0.025, 0.2);
-    burst(t + 0.012, { freq: 7800, q: 6, dur: 0.05, gain: 0.12 });
+    const metal = (at, gain) => {
+      burst(at, { freq: 5200, q: 4, dur: 0.02, gain });
+      tick(at, 2900, 0.025, gain * 0.35);
+      [3100, 4700].forEach((f) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, at);
+        g.gain.exponentialRampToValueAtTime(gain * 0.05, at + 0.002);
+        g.gain.exponentialRampToValueAtTime(0.0001, at + 0.25);
+        o.connect(g).connect(master); o.start(at); o.stop(at + 0.3);
+      });
+    };
+    const creak = (at, len) => {
+      const n = noise(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      f.type = "bandpass"; f.Q.value = 6;
+      f.frequency.setValueAtTime(1800, at); f.frequency.linearRampToValueAtTime(2600, at + len);
+      g.gain.setValueAtTime(0.0001, at);
+      g.gain.exponentialRampToValueAtTime(0.06, at + len * 0.6);
+      g.gain.exponentialRampToValueAtTime(0.0001, at + len);
+      n.connect(f).connect(g).connect(master); n.start(at, Math.random()); n.stop(at + len + 0.02);
+    };
+    creak(t, 0.35);            // squeeze open
+    metal(t + 0.38, 0.55);     // let go: snap
+    metal(t + 0.85, 0.2);      // wire arm flips over
+    metal(t + 1.05, 0.16);
+    creak(t + 1.3, 0.3);       // squeeze again
+    metal(t + 1.65, 0.6);      // final snap shut (rings out to ~2s)
   },
   // needle drop before the music starts
   needle(t) {
