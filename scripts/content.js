@@ -252,7 +252,7 @@ export const projects = [
   },
   {
     id: "coop",
-    client: "COOP ATLANTIQUE",
+    client: "Coop Atlantique",
     kind: "Business Simulation",
     when: "", // no date shown
     score: "10%",
