@@ -301,21 +301,11 @@ section { position: relative; }
   /* both words are level in the image itself, so no extra rotation: parallel to the lines below */
 }
 .kit__type {
-  font-family: "Fraunces", serif; font-size: 2.15cqw; letter-spacing: .02em;
-  color: #4a3528; line-height: 1.5;
+  font-family: "Fraunces", serif; font-style: italic; font-size: 2.3cqw; letter-spacing: 0;
+  color: #4a3528; line-height: 1.45;
 }
-.kit__sign + .kit__type { margin-top: 3.1cqw; /* name → title: a little more than title → tagline */ font-size: 3.4cqw; letter-spacing: .06em; color: var(--roast); }
-.kit__type + .kit__type { margin-top: 1.4cqw; max-width: 88%; }
-/* her handwriting (images): sizes in notebook-widths so it scales with the desk */
-.kit__type:has(.hand), .chaos-ink__title:has(.hand), .chaos-ink__tag:has(.hand) { display: grid; justify-items: center; line-height: 0; max-width: none; }
-.hand { height: auto; display: block; }
-.kit__type .hand[src*="hand-title"] { width: 44cqw; }
-.kit__type .hand[src*="hand-tagline-1"] { width: 62cqw; }
-.kit__type .hand[src*="hand-tagline-2"] { width: 37.4cqw; margin-top: -.6cqw; }
-.kit__sign + .kit__type:has(.hand) { margin-top: 2.2cqw; }
-.chaos-ink__title .hand { width: 23cqw; }
-.chaos-ink__tag .hand[src*="hand-tagline-1"] { width: 32.5cqw; }
-.chaos-ink__tag .hand[src*="hand-tagline-2"] { width: 19.6cqw; margin-top: -.3cqw; }
+.kit__sign + .kit__type { margin-top: 2.6cqw; /* name → title: a little more than title → tagline */ font-size: 3.6cqw; font-style: normal; font-weight: 600; letter-spacing: .01em; color: var(--roast); }
+.kit__type + .kit__type { margin-top: 1.4cqw; max-width: 50cqw; text-wrap: balance; }
 
 /* instax mini print: warm white frame, 3:4 photo window, deeper bottom margin */
 .print {
@@ -344,8 +334,8 @@ section { position: relative; }
 .chaos-ink > span { opacity: 0; display: block; }
 .chaos-ink__name { width: 44cqw; line-height: 0; } /* her handwritten name */
 .chaos-ink__name img, .kit__sign img { width: 100%; height: auto; display: block; }
-.chaos-ink__title { font-family: "Fraunces", serif; font-size: 1.7cqw; letter-spacing: .08em; color: var(--roast); }
-.chaos-ink__tag { font-family: "Fraunces", serif; font-size: 1.15cqw; color: #4a3528; max-width: 34cqw; line-height: 1.5; }
+.chaos-ink__title { font-family: "Fraunces", serif; font-weight: 600; font-size: 1.9cqw; letter-spacing: .01em; color: var(--roast); }
+.chaos-ink__tag { font-family: "Fraunces", serif; font-style: italic; font-size: 1.25cqw; color: #4a3528; max-width: 30cqw; line-height: 1.45; text-wrap: balance; }
 
 /* mode switch under the desk */
 .modes { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }

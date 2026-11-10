@@ -54,13 +54,7 @@ export const kit = [
   { id: "notebook", label: "NOTEBOOK", name: "Plain notebook", sound: "page",
     img: "assets/objects/notebook.avif", w: 960, h: 694, // transparent cut-out (ruled MUJI notebook)
     alt: "Open cream notebook with a red ribbon bookmark",
-    ink: { name: meta.name, lines: [meta.title, meta.tagline], // written on the pages
-      // her own handwriting for the title and tagline (transparent PNGs, ink #3A2618).
-      // Each entry = the lines of one block; the text above stays for screen readers / search.
-      hand: [
-        [{ src: "assets/hand-title.png", w: 1203, h: 226, tilt: -1 }],
-        [{ src: "assets/hand-tagline-1.png", w: 1400, h: 147, tilt: 0.7 }, { src: "assets/hand-tagline-2.png", w: 845, h: 123, tilt: 0.7 }],
-      ] },
+    ink: { name: meta.name, lines: [meta.title, meta.tagline] }, // name = her handwriting; title + tagline typed in Fraunces
     desk: { x: 19, y: 12, w: 58, r: -10 },
     chaos: { x: 3, y: 53, w: 38, r: 0 },   // chaos mode: pushed to the bottom-left corner
     note: "" },
