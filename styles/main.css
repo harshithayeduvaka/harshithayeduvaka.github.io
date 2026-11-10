@@ -31,6 +31,8 @@
   --ease-parse: cubic-bezier(0.16, 0.84, 0.44, 1);
 
   --measure: 68ch;
+  /* page content width = the desk's width (set by the screen height), so sections line up with it */
+  --content-w: min(1600px, calc((100svh - 110px) * 1.45));
 }
 
 /* ---- Reset ------------------------------------------------- */
@@ -99,7 +101,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: clamp(20px, 4vw, 64px);
-  max-width: 1600px;
+  max-width: var(--content-w);
   margin-inline: auto;
 }
 .rail {
@@ -178,7 +180,7 @@ section { position: relative; }
 /* the desk itself: as large as fits the screen, same proportions everywhere */
 .kit__grid {
   position: relative; /* no overflow clipping: objects can be dragged off the desk, anywhere on the page */
-  width: min(100%, calc((100svh - 110px) * 1.45)); aspect-ratio: 1.45; margin-inline: auto;
+  width: min(100%, var(--content-w)); aspect-ratio: 1.45; margin-inline: auto;
   background: var(--cream);
 }
 .kit__item {
@@ -500,7 +502,8 @@ section { position: relative; }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; flex-wrap: wrap; gap: 12px 40px; }
+footer { padding: 48px var(--gutter); color: var(--espresso); display: flex; flex-wrap: wrap; gap: 12px 40px;
+  max-width: calc(var(--content-w) + 2 * var(--gutter)); margin-inline: auto; }
 footer span { color: var(--roast); opacity: 0.7; }
 
 /* ============================================================
@@ -570,6 +573,7 @@ html.deck-open { overflow: hidden; }
    Responsive
    ============================================================ */
 @media (max-width: 860px) {
+  :root { --content-w: 100%; } /* phones: sections use the full screen width */
   /* minmax(0,1fr): stop wide children (photo, long words) from stretching the column past the screen */
   .hero, .pass__grid { grid-template-columns: minmax(0, 1fr); }
   /* timeline: line on the left, dates above each entry */
