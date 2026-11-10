@@ -374,33 +374,34 @@ section { position: relative; }
 
 /* ============================================================
    Experience — one vertical timeline
-   [dates + city] | line with a dot per entry | [organisation, role, bullets]
+   line on the left edge (aligned with the section headings), a dot per entry;
+   each entry: dates, then organisation, role, description
    ============================================================ */
-.timeline { --draw: 1; --col: clamp(150px, 16vw, 230px); list-style: none; position: relative; max-width: 1100px; }
+.timeline { --draw: 1; --indent: clamp(30px, 3vw, 44px); list-style: none; position: relative; max-width: 1100px; }
 /* the line: a faint track, plus a caramel line that draws down on scroll */
 .timeline::before, .timeline::after {
-  content: ""; position: absolute; top: 8px; bottom: 0; left: calc(var(--col) + 28px); width: 2px; border-radius: 2px;
+  content: ""; position: absolute; top: 8px; bottom: 0; left: 6px; width: 2px; border-radius: 2px;
 }
 .timeline::before { background: var(--latte); }
 .timeline::after { background: var(--caramel); transform-origin: top; transform: scaleY(var(--draw)); }
 
-.tl__group { padding: 0 0 22px calc(var(--col) + 56px); }
+.tl__group { padding: 0 0 22px var(--indent); }
 .tl__group:not(:first-child) { padding-top: 34px; }
 .tl__heading {
   color: var(--cream); background: var(--espresso); padding: 5px 10px; border-radius: 2px;
   width: max-content; font-weight: 500;
 }
 .tl__item {
-  position: relative; display: grid; grid-template-columns: var(--col) minmax(0, 1fr);
-  column-gap: 56px; padding-bottom: clamp(40px, 5vw, 64px);
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr);
+  padding: 0 0 clamp(40px, 5vw, 64px) var(--indent);
 }
 /* the dot on the line */
 .tl__item::before {
-  content: ""; position: absolute; z-index: 1; left: calc(var(--col) + 22px); top: .55em;
+  content: ""; position: absolute; z-index: 1; left: 0; top: .25em;
   width: 14px; height: 14px; border-radius: 50%;
   background: var(--cream); border: 3px solid var(--caramel);
 }
-.tl__when { text-align: right; color: var(--espresso); padding-top: .55em; line-height: 1.6; }
+.tl__when { color: var(--espresso); line-height: 1.6; margin-bottom: .35em; }
 .tl__org { font-size: var(--fs-52); color: var(--espresso); }
 .tl__org a { background: linear-gradient(var(--caramel), var(--caramel)) 0 100% / 0 3px no-repeat; transition: background-size .35s var(--ease-parse), color .2s; }
 .tl__org a:hover, .tl__org a:focus-visible { background-size: 100% 3px; color: var(--caramel); }
@@ -568,12 +569,6 @@ html.deck-open { overflow: hidden; }
   /* minmax(0,1fr): stop wide children (photo, long words) from stretching the column past the screen */
   .hero, .pass__grid { grid-template-columns: minmax(0, 1fr); }
   /* timeline: line on the left, dates above each entry */
-  .timeline { --col: 0px; }
-  .timeline::before, .timeline::after { left: 6px; }
-  .tl__group { padding-left: 34px; }
-  .tl__item { grid-template-columns: minmax(0, 1fr); column-gap: 0; padding-left: 34px; }
-  .tl__item::before { left: 0; top: .2em; }
-  .tl__when { text-align: left; padding-top: 0; margin-bottom: .4em; }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
   .contact-form__row { grid-template-columns: minmax(0, 1fr); }
   /* desk -> tap grid; no dragging (it would fight scrolling) */
