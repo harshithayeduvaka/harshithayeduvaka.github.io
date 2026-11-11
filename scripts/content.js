@@ -287,7 +287,7 @@ export const projects = [
 
 // "On My Shelf" (scripts/bookshelf.js), between About and Contact.
 // shelf: "read" | "tbr". Order here = order on the shelf (left to right).
-// spineColor / textColor: the spine. height: 0.85–1 of the shelf height. thickness: spine width (px on desktop).
+// spineColor / textColor: the spine. spineAuthor (optional): shorter author line for the spine. height: 0.85–1 of the shelf height. thickness: spine width (px on desktop).
 // cover: assets/covers/<slug>.jpg (add/replace the file to change it). If a file is missing, the site tries
 // Open Library (by `isbn` if you add one, e.g. isbn: "9781234567890", else by title + author), then
 // shows a plain typographic cover in the spine colour.
@@ -304,4 +304,6 @@ export const books = [
   { slug: "good-girl-bad-blood", title: "Good Girl, Bad Blood", author: "Holly Jackson", shelf: "tbr", spineColor: "#B3222D", textColor: "#FFFFFF", height: 0.96, thickness: 48 },
   { slug: "as-good-as-dead", title: "As Good as Dead", author: "Holly Jackson", shelf: "tbr", spineColor: "#1C1D21", textColor: "#8FD1E8", height: 0.97, thickness: 50 },
   { slug: "the-da-vinci-code", title: "The Da Vinci Code", author: "Dan Brown", shelf: "tbr", spineColor: "#D99A4E", textColor: "#2A1A10", height: 0.9, thickness: 46 },
+  { slug: "the-courage-to-be-disliked", title: "The Courage to Be Disliked", author: "Ichiro Kishimi & Fumitake Koga", spineAuthor: "Kishimi & Koga", shelf: "tbr", spineColor: "#F4F1EC", textColor: "#B3161B", height: 0.94, thickness: 56, isbn: "1760630721" },
+  { slug: "the-mountain-is-you", title: "The Mountain Is You", author: "Brianna Wiest", shelf: "tbr", spineColor: "#141414", textColor: "#E9E4DA", height: 0.88, thickness: 38, isbn: "9355434146" },
 ].map((b) => ({ cover: `assets/covers/${b.slug}.jpg`, ...b }));

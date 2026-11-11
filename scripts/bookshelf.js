@@ -24,7 +24,7 @@ export function initBookshelf({ root, books, gsap, reduced, getLenis = () => nul
   const byId = new Map(books.map((b) => [b.slug, b]));
 
   // ---------- shelves ----------
-  const spineHTML = (b) => `<span class="spine__title">${esc(b.title)}</span><span class="spine__author">${esc(b.author)}</span>`;
+  const spineHTML = (b) => `<span class="spine__title">${esc(b.title)}</span><span class="spine__author">${esc(b.spineAuthor || b.author)}</span>`;
   root.innerHTML = SHELVES.map((s) => {
     const list = books.filter((b) => b.shelf === s.id);
     if (!list.length) return "";
