@@ -65,6 +65,21 @@ export function initBookshelf({ root, books, gsap, reduced, getLenis = () => nul
     </div>
     <button type="button" class="bookview__close" aria-label="Close">×</button>`;
   document.body.appendChild(dlg);
+
+  // keep every book on its shelf: if a row holds more than fits, all books shrink a little
+  // (same factor on both shelves). Phones scroll sideways instead.
+  const fit = () => {
+    if (matchMedia("(max-width: 860px)").matches) { root.style.setProperty("--fit", 1); return; }
+    let k = 1;
+    root.querySelectorAll(".shelf__row").forEach((row) => {
+      const slots = [...row.children];
+      const need = slots.reduce((a, el) => a + parseFloat(el.style.getPropertyValue("--w")), 0) + 2 * (slots.length - 1) + 40;
+      k = Math.min(k, row.parentElement.clientWidth / need);
+    });
+    root.style.setProperty("--fit", Math.max(0.6, k).toFixed(3));
+  };
+  fit();
+  new ResizeObserver(fit).observe(root);
   const $ = (s) => dlg.querySelector(s);
   const dim = $(".bookview__dim"), fly = $(".bookview__fly"), box = $(".bookview__box");
   const vSpine = $(".bookview__spine"), cover = $(".bookview__cover"), img = $(".bookview__cover img");
