@@ -7,7 +7,7 @@
 //    press of play, so nothing from Spotify loads until a visitor asks for music.
 //    Logged-in Spotify users hear full songs; everyone else hears 30-second previews.
 
-import { isMuted, setMuted } from "./sound.js?v=20261112c";
+import { isMuted, setMuted } from "./sound.js?v=20261112d";
 
 const ICON = {
   prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6.5v11L2.5 12zM21.5 6.5v11L13 12z"/></svg>',
