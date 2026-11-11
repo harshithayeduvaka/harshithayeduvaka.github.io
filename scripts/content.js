@@ -299,6 +299,8 @@ export const books = [
   { slug: "it-ends-with-us", title: "It Ends with Us", author: "Colleen Hoover", shelf: "read", spineColor: "#EBD8C3", textColor: "#A1236E", height: 1, thickness: 48 },
   { slug: "one-indian-girl", title: "One Indian Girl", author: "Chetan Bhagat", shelf: "read", spineColor: "#C9301F", textColor: "#FFF1D2", height: 0.9, thickness: 44 },
   { slug: "life-is-what-you-make-it", title: "Life Is What You Make It", author: "Preeti Shenoy", shelf: "read", spineColor: "#E38B1F", textColor: "#3A1C08", height: 0.86, thickness: 40 },
+  { slug: "the-housemaids-secret", title: "The Housemaid’s Secret", author: "Freida McFadden", shelf: "read", spineColor: "#C0281C", textColor: "#F7D94A", height: 0.96, thickness: 46 },
+  { slug: "never-lie", title: "Never Lie", author: "Freida McFadden", shelf: "read", spineColor: "#ECEAE5", textColor: "#B3141A", height: 0.95, thickness: 44 },
   { slug: "how-brands-grow", title: "How Brands Grow", author: "Byron Sharp", shelf: "tbr", spineColor: "#A1122A", textColor: "#FFFFFF", height: 1, thickness: 52 },
   { slug: "thats-not-my-name", title: "That’s Not My Name", author: "Megan Lally", shelf: "tbr", spineColor: "#1C2A25", textColor: "#FF6B3D", height: 0.93, thickness: 44 },
   { slug: "good-girl-bad-blood", title: "Good Girl, Bad Blood", author: "Holly Jackson", shelf: "tbr", spineColor: "#B3222D", textColor: "#FFFFFF", height: 0.96, thickness: 48 },
@@ -306,4 +308,6 @@ export const books = [
   { slug: "the-da-vinci-code", title: "The Da Vinci Code", author: "Dan Brown", shelf: "tbr", spineColor: "#D99A4E", textColor: "#2A1A10", height: 0.9, thickness: 46 },
   { slug: "the-courage-to-be-disliked", title: "The Courage to Be Disliked", author: "Ichiro Kishimi & Fumitake Koga", spineAuthor: "Kishimi & Koga", shelf: "tbr", spineColor: "#F4F1EC", textColor: "#B3161B", height: 0.94, thickness: 56, isbn: "1760630721" },
   { slug: "the-mountain-is-you", title: "The Mountain Is You", author: "Brianna Wiest", shelf: "tbr", spineColor: "#141414", textColor: "#E9E4DA", height: 0.88, thickness: 38, isbn: "9355434146" },
+  { slug: "the-art-of-enduring", title: "The Art of Enduring", author: "Saurabh Mukherjea & Salil Desai", spineAuthor: "Mukherjea & Desai", shelf: "tbr", spineColor: "#FFFFFF", textColor: "#06A350", height: 0.9, thickness: 50, isbn: "9377300703" },
+  { slug: "marketing-management", title: "Marketing Management", author: "Philip Kotler, Kevin Lane Keller & Alexander Chernev", spineAuthor: "Kotler · Keller · Chernev", shelf: "tbr", spineColor: "#14263F", textColor: "#B8DC6A", height: 1, thickness: 62 },
 ].map((b) => ({ cover: `assets/covers/${b.slug}.jpg`, ...b }));
