@@ -18,7 +18,7 @@ const EASE_SETTLE = "back.out(3)";       // neighbours settle with a small overs
 const CLOSE_SPEED = 1.15;      // closing plays the same timeline backwards, a little faster
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const SHELVES = [{ id: "read", label: "Read", aria: "read" }, { id: "tbr", label: "TBR", aria: "to be read" }];
+const SHELVES = [{ id: "read", label: "Dog-Eared", aria: "read" }, { id: "tbr", label: "TBR", aria: "to be read" }];
 
 export function initBookshelf({ root, books, gsap, reduced, getLenis = () => null }) {
   const byId = new Map(books.map((b) => [b.slug, b]));
@@ -124,7 +124,7 @@ export function initBookshelf({ root, books, gsap, reduced, getLenis = () => nul
     dlg.style.setProperty("--spine", b.spineColor);
     dlg.style.setProperty("--ink", b.textColor);
     vSpine.innerHTML = spineHTML(b);
-    $(".bookview__shelf").textContent = b.shelf === "read" ? "Read" : "On my TBR";
+    $(".bookview__shelf").textContent = b.shelf === "read" ? "Dog-Eared" : "On my TBR";
     $(".bookview__title").textContent = b.title;
     $(".bookview__author").textContent = b.author;
     loadCover(b);

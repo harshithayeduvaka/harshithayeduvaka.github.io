@@ -580,10 +580,9 @@ section { position: relative; }
 }
 .shelf__row {
   display: flex; align-items: flex-end; gap: 2px; padding: 0 20px 6px; min-height: var(--shelf-h);
-  perspective: 1100px; perspective-origin: 50% -25%;
   background: linear-gradient(0deg, #b48252 0, #8d5c35 7px, transparent 7px); /* the shelf's top surface */
 }
-.book-slot { flex: none; transform-style: preserve-3d; }
+.book-slot { flex: none; transform-style: preserve-3d; perspective: 700px; perspective-origin: 50% -30%; } /* own viewpoint: page tops go straight back, never over a neighbour */
 .book {
   position: relative; display: block; padding: 0; transform-style: preserve-3d;
   width: calc(var(--w) * var(--u)); height: calc(var(--shelf-h) * var(--h)); border-radius: 2px;
@@ -615,6 +614,9 @@ section { position: relative; }
     linear-gradient(180deg, #a87447 0%, #8c5a33 45%, #6f4424 100%);
   box-shadow: 0 16px 20px -14px rgba(43, 29, 22, .55), inset 0 1px 0 rgba(255, 255, 255, .18);
 }
+
+.shelf-sec { padding-bottom: 0; }
+.shelf-sec + .close { padding-top: clamp(72px, 10vw, 124px); } /* a bit more than the links → form gap (.contact-form margin) */
 
 /* the pulled-out book */
 .bookview {

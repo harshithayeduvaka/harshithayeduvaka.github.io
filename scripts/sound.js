@@ -228,29 +228,48 @@ const SOUNDS = {
       o.connect(g).connect(master); o.start(t + 0.04); o.stop(t + 1.02);
     });
   },
-  // coffee: one quiet sip. A soft intake of air through the lips (filtered noise whose
-  // pitch rises as the lips close), a tiny lip "tk", then a small gulp.
+  // coffee: a sip. Lips on the cup draw in air + coffee: a soft, wet "sss" whose
+  // loudness bubbles irregularly (liquid), rising slightly as the mouth fills; a tiny
+  // lip release; then a soft, low swallow.
   sip(t) {
-    const n = noise(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
-    bp.type = "bandpass"; bp.Q.value = 2.2;
-    bp.frequency.setValueAtTime(900, t);
-    bp.frequency.exponentialRampToValueAtTime(2600, t + 0.32);
+    const dur = 0.5;
+    const n = noise(), hp = ctx.createBiquadFilter(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+    hp.type = "highpass"; hp.frequency.value = 500;
+    bp.type = "bandpass"; bp.Q.value = 1.1;
+    bp.frequency.setValueAtTime(1300, t);
+    bp.frequency.linearRampToValueAtTime(2100, t + dur);
+    // irregular bubbling: many tiny random gain wobbles
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.2, t + 0.06);
-    g.gain.setValueAtTime(0.2, t + 0.22);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.36);
-    n.connect(bp).connect(g).connect(master);
-    n.start(t, Math.random()); n.stop(t + 0.4);
-    burst(t + 0.37, { freq: 1500, q: 2, dur: 0.012, gain: 0.25 }); // lips part
-    // gulp: a short low "glk" with a quick downward pitch
-    const o = ctx.createOscillator(), og = ctx.createGain(), at = t + 0.55;
-    o.type = "sine";
-    o.frequency.setValueAtTime(320, at);
-    o.frequency.exponentialRampToValueAtTime(140, at + 0.09);
+    g.gain.exponentialRampToValueAtTime(0.12, t + 0.05);
+    for (let k = 0.06; k < dur - 0.06; k += 0.018 + Math.random() * 0.02) {
+      g.gain.linearRampToValueAtTime(0.05 + Math.random() * 0.16, t + k);
+    }
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    n.connect(hp).connect(bp).connect(g).connect(master);
+    n.start(t, Math.random()); n.stop(t + dur + 0.05);
+    // little liquid "plips" inside the slurp
+    for (let k = 0; k < 5; k++) {
+      const at = t + 0.08 + Math.random() * (dur - 0.15);
+      const o = ctx.createOscillator(), og = ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(900 + Math.random() * 700, at);
+      o.frequency.exponentialRampToValueAtTime(1800 + Math.random() * 900, at + 0.025);
+      og.gain.setValueAtTime(0.0001, at);
+      og.gain.exponentialRampToValueAtTime(0.05, at + 0.004);
+      og.gain.exponentialRampToValueAtTime(0.0001, at + 0.03);
+      o.connect(og).connect(master); o.start(at); o.stop(at + 0.04);
+    }
+    burst(t + dur + 0.01, { freq: 1700, q: 2.5, dur: 0.01, gain: 0.12 }); // lips leave the cup
+    // swallow: soft low "glk" through a lowpass
+    const at = t + dur + 0.22;
+    const o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), og = ctx.createGain();
+    o.type = "triangle"; lp.type = "lowpass"; lp.frequency.value = 600;
+    o.frequency.setValueAtTime(240, at);
+    o.frequency.exponentialRampToValueAtTime(110, at + 0.1);
     og.gain.setValueAtTime(0.0001, at);
-    og.gain.exponentialRampToValueAtTime(0.22, at + 0.015);
-    og.gain.exponentialRampToValueAtTime(0.0001, at + 0.12);
-    o.connect(og).connect(master); o.start(at); o.stop(at + 0.14);
+    og.gain.exponentialRampToValueAtTime(0.18, at + 0.02);
+    og.gain.exponentialRampToValueAtTime(0.0001, at + 0.14);
+    o.connect(lp).connect(og).connect(master); o.start(at); o.stop(at + 0.16);
   },
   // needle drop before the music starts
   needle(t) {
