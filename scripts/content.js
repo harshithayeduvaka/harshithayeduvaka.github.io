@@ -303,4 +303,5 @@ export const books = [
   { slug: "thats-not-my-name", title: "That’s Not My Name", author: "Megan Lally", shelf: "tbr", spineColor: "#1C2A25", textColor: "#FF6B3D", height: 0.93, thickness: 44 },
   { slug: "good-girl-bad-blood", title: "Good Girl, Bad Blood", author: "Holly Jackson", shelf: "tbr", spineColor: "#B3222D", textColor: "#FFFFFF", height: 0.96, thickness: 48 },
   { slug: "as-good-as-dead", title: "As Good as Dead", author: "Holly Jackson", shelf: "tbr", spineColor: "#1C1D21", textColor: "#8FD1E8", height: 0.97, thickness: 50 },
+  { slug: "the-da-vinci-code", title: "The Da Vinci Code", author: "Dan Brown", shelf: "tbr", spineColor: "#D99A4E", textColor: "#2A1A10", height: 0.9, thickness: 46 },
 ].map((b) => ({ cover: `assets/covers/${b.slug}.jpg`, ...b }));
