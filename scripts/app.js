@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115b";
-import { initMusic } from "./music.js?v=20261115b";
-import { initBookshelf } from "./bookshelf.js?v=20261115b";
+import { play, playFile } from "./sound.js?v=20261115c";
+import { initMusic } from "./music.js?v=20261115c";
+import { initBookshelf } from "./bookshelf.js?v=20261115c";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115b";
+} from "./content.js?v=20261115c";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115b";
+const ASSET_V = "20261115c";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -744,6 +744,19 @@ function passAboutMe() {
   if (!body) return;
   body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
   // static text (the pool-water ripple was removed at her request)
+
+  // in-page links in the text (e.g. "reading fiction" -> On My Shelf): glide there with
+  // the site's smooth scroll, then move keyboard focus to that section's heading
+  $$('a[href^="#"]', body).forEach((a) => a.addEventListener("click", (e) => {
+    const target = $(a.getAttribute("href"));
+    if (!target) return;
+    e.preventDefault();
+    const heading = $(".pass__title", target) || target;
+    const land = () => { heading.setAttribute("tabindex", "-1"); heading.focus({ preventScroll: true }); };
+    history.replaceState(null, "", a.getAttribute("href"));
+    if (lenis) lenis.scrollTo(target, { offset: -24, duration: 1.4, onComplete: land });
+    else { target.scrollIntoView({ block: "start" }); land(); }
+  }));
 }
 
 // On My Shelf: two wooden shelves of books (scripts/bookshelf.js)
