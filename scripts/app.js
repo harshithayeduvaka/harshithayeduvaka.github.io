@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115i";
-import { initMusic } from "./music.js?v=20261115i";
-import { initBookshelf } from "./bookshelf.js?v=20261115i";
+import { play, playFile } from "./sound.js?v=20261115j";
+import { initMusic } from "./music.js?v=20261115j";
+import { initBookshelf } from "./bookshelf.js?v=20261115j";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115i";
+} from "./content.js?v=20261115j";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115i";
+const ASSET_V = "20261115j";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -520,9 +520,9 @@ function pass03() {
   list.innerHTML = experience.map((e, i) => {
     const student = e.type === "education";
     const front = student
-      ? `<p class="badge__band mono"><span>Student card</span>${logo(e)}</p>
+      ? `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
          <div class="badge__main">
-           <h3 class="badge__org">${e.org}</h3>
+           <h3 class="badge__org mono">Student card</h3>
            <img class="badge__photo" src="${about.idPhoto.src}?v=${ASSET_V}" alt="" width="${about.idPhoto.w}" height="${about.idPhoto.h}" loading="lazy" decoding="async" />
            <p class="badge__name">${meta.name}</p>
            <p class="badge__role mono">${e.role}</p>

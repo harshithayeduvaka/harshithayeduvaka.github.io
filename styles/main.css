@@ -579,13 +579,13 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .badge__flip:hover { background: var(--latte); }
 
 /* student card (SKEMA): photo, name, programme, validity */
-.badge--student .badge__band { justify-content: space-between; letter-spacing: .14em; }
+/* student card: logo on the left, school name beside it (like the work badges) */
 .badge--student .badge__band .badge__logo { width: 12cqi; height: 12cqi; }
 .badge--student .badge__main {
   display: grid; grid-template-columns: 36cqi minmax(0, 1fr); grid-template-areas: "org org" "photo name" "role role";
   align-content: center; gap: 4cqi; position: relative;
 }
-.badge__org { grid-area: org; font-weight: 700; font-size: 7.5cqi; line-height: 1.08; color: var(--espresso); }
+.badge__org { grid-area: org; font-size: 4.6cqi; letter-spacing: .14em; text-transform: uppercase; color: var(--espresso); } /* "Student card" label */
 .badge__photo { grid-area: photo; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2cqi; box-shadow: 0 0 0 1px rgba(43, 29, 22, .12); }
 .badge--student .badge__name { grid-area: name; align-self: end; font-size: 8.5cqi; }
 .badge--student .badge__role { grid-area: role; line-height: 1.35; color: var(--roast); }
