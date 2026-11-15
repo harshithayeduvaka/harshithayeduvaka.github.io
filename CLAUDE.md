@@ -26,6 +26,7 @@ tagline move from the notebook pages to #chaosInk on the desk). Desktop only.
 Desk extras: a blue "stack" folder (below the notebook) pops `tools` (content.js) out sideways, 4 each side; tool logos are
 PNGs she supplied in assets/tools/ (tile: "full" for square app icons, else a light tile).
 Folder click = assets/sounds/click.mp3 if present (her Pixabay click), else a synthesized click.
+Coffee cup = assets/sounds/sip.mp3 (Pixabay "slurp" by freesound_community, Pixabay licence): plays the first sip only (offset 0.09s, 0.75s long, set in app.js).
 Brand mark: assets/logo-hy.png (her HY monogram, transparent, brown #522606), top left of the page, scrolls with content (not fixed)
 + favicon; sound on/off is the last button of the fixed mini player (music.js; off also pauses the music). No Tidy button. A top-down cappuccino (kit item `cup`, latte art in
 assets/objects/crema.avif) replaced the coffee-ring stain; click = a short sip (sip.mp3 if present, capped 1.5s; else synth `sip`) + steam wisps only (the cup

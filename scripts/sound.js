@@ -287,7 +287,7 @@ export function play(key) {
 // Play a recorded sound file (e.g. assets/sounds/click.mp3). If the file is missing
 // or can't be decoded, play the synthesized `fallback` sound instead.
 const fileCache = {};
-export function playFile(url, fallback, maxDur = 0) {
+export function playFile(url, fallback, maxDur = 0, offset = 0) {
   ac();
   if (!(url in fileCache)) {
     fileCache[url] = fetch(url)
@@ -300,7 +300,7 @@ export function playFile(url, fallback, maxDur = 0) {
     const s = ctx.createBufferSource(), g = ctx.createGain(), t = ctx.currentTime;
     s.buffer = buf;
     s.connect(g).connect(master);
-    s.start(t);
+    s.start(t, offset); // offset: skip silence at the start of the file
     if (maxDur) { // cut to maxDur seconds with a short fade, so it never clicks off
       g.gain.setValueAtTime(1, t + maxDur - 0.15);
       g.gain.linearRampToValueAtTime(0, t + maxDur);

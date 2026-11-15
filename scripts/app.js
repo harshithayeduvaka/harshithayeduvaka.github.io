@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115m";
-import { initMusic } from "./music.js?v=20261115m";
-import { initBookshelf } from "./bookshelf.js?v=20261115m";
+import { play, playFile } from "./sound.js?v=20261115n";
+import { initMusic } from "./music.js?v=20261115n";
+import { initBookshelf } from "./bookshelf.js?v=20261115n";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115m";
+} from "./content.js?v=20261115n";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115m";
+const ASSET_V = "20261115n";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -165,8 +165,9 @@ function passKit() {
       if (k.sound === "music") {
         music.toggleCard(b);
       } else {
-        // cup: a short sip (assets/sounds/sip.mp3 if she adds one, else the synth; capped 1.5s)
-        if (k.cup) playFile("assets/sounds/sip.mp3", "sip", 1.5);
+        // cup: one sip of coffee (assets/sounds/sip.mp3, Pixabay "slurp" by freesound_community):
+        // skip its 0.09s of silence, play the first sip only (0.75s, the second slurp is cut). Synth if missing.
+        if (k.cup) playFile("assets/sounds/sip.mp3", "sip", 0.75, 0.09);
         // alarm / clip: a recorded effect if saved as assets/sounds/<ring|snap>.mp3, else the 2s synth
         else if (k.sound === "ring" || k.sound === "snap") playFile(`assets/sounds/${k.sound}.mp3`, k.sound, 2);
         else if (k.sound === "lamp") { playFile("assets/sounds/lamp.mp3", "lamp", 1); lightLamp(b); }
