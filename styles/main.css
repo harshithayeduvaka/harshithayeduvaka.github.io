@@ -718,20 +718,21 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .about-me__cmd { color: var(--caramel); font-weight: 400; font-size: .7em; vertical-align: .12em; margin-left: .1em; }
 /* ---- The letter: About text on a sheet of ruled notebook paper lying on the desk ----
    --lh = one text line = one ruled line, so the text sits on the rules (paragraph gaps are one
-   empty line). Paper + rule colours are sampled from the hero notebook photo. */
+   empty line). Recycled paper: warm oatmeal with fine grain and darker fibre flecks (SVG noise). */
 .letter-wrap { position: relative; max-width: fit-content; margin-left: clamp(0px, 2vw, 32px); padding-bottom: 28px; }
 .letter {
   --lh: calc(var(--fs-18) * 1.65);
   --pad-l: clamp(40px, 6vw, 84px); --pad-r: clamp(28px, 4vw, 60px);
-  --paper: #fbf8f1; --rule: #ddd8ce;
+  --paper: #ece4d3; --rule: #cdc2ad;
   position: relative; font-size: var(--fs-18);
   max-width: calc(68ch + var(--pad-l) + var(--pad-r));
   padding: calc(var(--lh) * 2) var(--pad-r) calc(var(--lh) * 2) var(--pad-l);
   background-color: var(--paper);
   background-image:
-    linear-gradient(100deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 40%, rgba(43, 29, 22, .035)), /* soft light across the sheet */
+    linear-gradient(100deg, rgba(255, 255, 255, .32), rgba(255, 255, 255, 0) 40%, rgba(43, 29, 22, .04)), /* soft light across the sheet */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .5 -.16'/%3E%3C/filter%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='1' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .22 0 0 0 0 .14 0 0 0 9 -6.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"), /* paper grain + fibre flecks */
     repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 1px), var(--rule) calc(var(--lh) - 1px) var(--lh));
-  background-position: 0 0, 0 -.38em; /* rules sit just under the text's baseline */
+  background-position: 0 0, 0 0, 0 -.38em; /* rules sit just under the text's baseline */
   border-radius: 2px;
   box-shadow: 0 1px 1px rgba(43, 29, 22, .1), 0 18px 28px -16px rgba(43, 29, 22, .38), 0 44px 70px -44px rgba(43, 29, 22, .45);
   transform: rotate(-1.5deg);
@@ -765,15 +766,15 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 
 /* her signature after the last paragraph, sitting on a rule */
 .letter__sign {
-  display: block; margin: calc(var(--lh) * .62) 0 0 auto;
-  height: calc(var(--lh) * 1.2); width: auto; max-width: 70%;
+  display: block; margin: calc(var(--lh) * .5) 0 0 auto;
+  height: calc(var(--lh) * 1.75); width: auto; max-width: 78%;
 }
 
 /* a wooden chess knight resting on the bottom-left edge of the paper */
 .letter__knight {
   position: absolute; z-index: 2; left: clamp(-34px, -2.4vw, -18px); bottom: 0;
-  width: clamp(76px, 8vw, 112px); height: auto;
-  filter: drop-shadow(6px 10px 7px rgba(43, 29, 22, .38));
+  width: clamp(72px, 7vw, 104px); height: auto;
+  filter: drop-shadow(8px 10px 8px rgba(43, 29, 22, .35)) drop-shadow(1px 2px 2px rgba(43, 29, 22, .3));
   transform-origin: 50% 96%;
   transition: transform .4s var(--ease-parse);
 }
@@ -790,7 +791,7 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
   .letter__tape--l { left: calc(50% - 82px); }
   .letter__tape--r { right: calc(50% - 82px); }
   .letter__tape { width: 64px; height: 18px; top: 12px; }
-  .letter__knight { width: 54px; left: 8px; }
+  .letter__knight { width: 50px; left: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .letter__photo, .letter__photo .print, .letter__knight { transition: none; }
