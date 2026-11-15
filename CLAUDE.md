@@ -17,9 +17,9 @@ one ID badge per role hanging from a lanyard on a wooden peg rail (same wood as 
 student card with her photo. Hover = the badge swings on its hook; click/tap (or the ↻ chip, for keyboards)
 = flips to the back: `result` (one line) + `detail` + optional `link`. Data: content.js `experience`
 (`mark` = monogram, optional `logo` image, `accent` = espresso|caramel|cherry|roast). Card text is sized
-in cqi (container query units) so badges scale as a unit. Phones: one swipe row; reduced motion: no
+in cqi (container query units) so badges scale as a unit. Phones: same rail, two badges per row (each row has its own stretch of rail); colours = each organisation's brand (accent skema/ohmyats/nomadx/keka in main.css); reduced motion: no
 swing, flip = cross-fade. Strap lengths/tilts: LEN/TILT at the top of pass03() in app.js.
-Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones get a swipe row of cards. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
+Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
 tagline move from the notebook pages to #chaosInk on the desk). Desktop only.
@@ -70,7 +70,7 @@ resume.pdf          downloadable CV (linked from meta.resume)
 - Each pass in app.js is wrapped in try/catch at init, so one failure can't blank the page.
 - Mobile breakpoint: 860px (`isMobile` in JS, `@media (max-width: 860px)` in CSS).
   Desk objects drag anywhere on the page (desktop); dragging near the window edge auto-scrolls.
-  On mobile the desk becomes a tap grid and the badges become a swipe row.
+  Phones show the same layouts as the laptop, scaled down (the desk scene, letter, split Featured Work). Only dragging is laptop-only (`canDrag` = mouse/trackpad), so touch scrolling works.
 - Targeted edits over rewrites. Commit after each phase.
 
 ## Design tokens ("Coffee")

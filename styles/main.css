@@ -473,6 +473,11 @@ section { position: relative; }
 .hanger[data-accent="caramel"] { --acc: var(--caramel); --band: color-mix(in srgb, var(--caramel) 78%, var(--roast)); }
 .hanger[data-accent="cherry"]  { --acc: var(--cherry); }
 .hanger[data-accent="roast"]   { --acc: var(--roast); }
+/* each organisation's own brand colour (lanyard, top band, back edge) */
+.hanger[data-accent="skema"]   { --acc: #7A1A20; }   /* SKEMA red (their brand palette) */
+.hanger[data-accent="ohmyats"] { --acc: #F7931A; --band-ink: var(--roast); --strap-ink: rgba(43, 29, 22, .75); } /* ohmyATS orange: dark text reads better on it */
+.hanger[data-accent="nomadx"]  { --acc: #111111; }   /* NOMAD X black */
+.hanger[data-accent="keka"]    { --acc: #5010A8; }   /* Keka purple */
 
 .hanger {
   position: relative; width: 100%; max-width: var(--bw);
@@ -508,7 +513,7 @@ section { position: relative; }
 .hanger__strap::after {
   right: 0; content: attr(data-label); overflow: hidden;
   writing-mode: vertical-rl; padding-top: 22px; line-height: 12px; white-space: nowrap;
-  font-size: 7.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: rgba(246, 239, 230, .78);
+  font-size: 7.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--strap-ink, rgba(246, 239, 230, .78));
 }
 /* metal swivel clip: ring + tongue going into the card's slot */
 .hanger__clip {
@@ -552,7 +557,7 @@ section { position: relative; }
 }
 
 /* front: colour band with logo + organisation */
-.badge__band { display: flex; align-items: center; gap: 4cqi; padding: 13cqi 7cqi 6cqi; background: var(--band); color: var(--cream); }
+.badge__band { display: flex; align-items: center; gap: 4cqi; padding: 13cqi 7cqi 6cqi; background: var(--band); color: var(--band-ink, var(--cream)); }
 .badge__logo { flex: none; width: 15cqi; height: 15cqi; border-radius: 3cqi; object-fit: contain; background: var(--cream); }
 /* real logos keep their own shape (ohmyATS is wide); white behind ones with transparent edges */
 img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background: #fff; }
@@ -607,14 +612,21 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .badge__link:hover { color: var(--caramel); }
 
 @media (max-width: 860px) {
-  /* phones: one swipeable row of badges (like Featured Work), the rail scrolls with them */
-  .badges {
-    display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory;
-    margin-inline: calc(var(--gutter) * -1); padding: 0 var(--gutter) 36px; scroll-padding-inline: var(--gutter);
-    scrollbar-width: none; overscroll-behavior-x: contain;
+  /* phones: the same rail and badges, two to a row (four across would be too small to read);
+     each row gets its own stretch of rail */
+  .badges { --gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px var(--gap); padding: 0 4px 24px; background: none; }
+  .badge-slot::after {
+    content: ""; position: absolute; z-index: 0; top: 0; left: calc(var(--gap) / -2 - 4px); right: calc(var(--gap) / -2 - 4px); height: var(--rail-h);
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 3px, transparent 3px 11px, rgba(60, 30, 10, .07) 11px 13px, transparent 13px 29px),
+      linear-gradient(180deg, #c99662 0, #a8713f 50%, #8a5a33 100%);
+    box-shadow: 0 10px 12px -8px rgba(43, 29, 22, .35);
   }
-  .badges::-webkit-scrollbar { display: none; }
-  .badge-slot { flex: 0 0 min(66vw, 240px); scroll-snap-align: center; }
+  .badge-slot:nth-child(odd)::after { left: -4px; }
+  .badge-slot:nth-child(even)::after { right: -4px; }
+  .hanger { z-index: 1; padding-top: calc(var(--len, 130px) * .5); }
+  .hanger__strap { height: calc(var(--len, 130px) * .5 - 8px); }
+  .hanger__clip { top: calc(var(--len, 130px) * .5 - 20px); }
 }
 @media (prefers-reduced-motion: reduce) {
   /* no swing; the flip becomes a quick cross-fade instead of a turn */
@@ -684,26 +696,16 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .work__open { color: var(--espresso); transition: transform .25s var(--ease-parse); }
 .work__open:hover, .work__stage:hover ~ .work__meta .work__open { transform: translateX(4px); }
 @media (max-width: 860px) {
-  /* phones: the panel can't sit beside the list, so each row becomes a swipeable card */
-  .work { display: block; }
-  .work__panel { display: none; }
-  .work__list {
-    display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; border-top: 0;
-    margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 14px; scroll-padding-inline: var(--gutter);
-    scrollbar-width: none; overscroll-behavior-x: contain;
-  }
-  .work__list::-webkit-scrollbar { display: none; }
-  .work__row, .work__row.is-on {
-    flex: 0 0 82%; scroll-snap-align: start; padding: 0 0 16px; border: 1px solid var(--latte); border-radius: 12px;
-    background: color-mix(in srgb, var(--latte) 25%, var(--cream)); overflow: hidden; grid-template-columns: auto 1fr; align-content: start;
-  }
-  .work__row::before { display: none; }
-  .work__cover { display: block; grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; margin-bottom: 10px; }
-  .work__cover.work__cover--text { display: grid; }
-  .work__idx { padding-left: 14px; }
-  .work__client { padding-right: 14px; font-size: 1.35rem; }
-  .work__score--card { display: block; grid-column: 1 / -1; padding: 10px 14px 0; font-size: 1.6rem; }
-  .work__go { display: block; grid-column: 1 / -1; padding: 10px 14px 0; color: var(--espresso); }
+  /* phones: same list + preview side by side as on a laptop, with smaller type */
+  .work { gap: 14px; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+  .work__row { padding-block: 10px; gap: 2px 8px; }
+  .work__row.is-on { padding-left: 12px; }
+  .work__client { font-size: 1rem; }
+  .work__client small { font-size: .62rem; margin-top: 2px; }
+  .work__panel { position: static; gap: 10px; }
+  .work__meta { flex-direction: column; align-items: start; gap: 8px; }
+  .work__score { font-size: 1.5rem; }
+  .work__score small { font-size: .55rem; margin-top: 4px; }
 }
 @media (prefers-reduced-motion: reduce) { .work__shot, .work__row, .work__row::before, .work__open { transition: none; } .work__shot { transform: none; } }
 
@@ -778,23 +780,20 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .letter__knight:hover { transform: rotate(-7deg); }
 
 @media (max-width: 860px) {
-  /* phones: flat, full width with a 16px margin, photo above the text */
-  .letter-wrap { max-width: none; margin-left: calc(16px - var(--gutter)); margin-right: calc(16px - var(--gutter)); }
-  .letter { transform: none; --pad-l: 26px; --pad-r: 18px; padding-top: var(--lh); padding-bottom: calc(var(--lh) * 2.5); }
-  .letter__photo { float: none; width: auto; height: calc(var(--lh) * 7); margin: 0 0 var(--lh); display: grid; place-items: center; }
-  .letter__photo { transform: none; }
-  .letter__photo .print { width: 118px; padding: 8px 8px 30px; transform: rotate(4deg); } /* px: % padding would follow the full-width row */
-  .letter__photo:hover { transform: none; }
-  .letter__tape--l { left: calc(50% - 82px); }
-  .letter__tape--r { right: calc(50% - 82px); }
-  .letter__tape { width: 64px; height: 18px; top: 12px; }
-  .letter__knight { width: 50px; left: 8px; }
+  /* phones: same tilted letter as on a laptop (photo taped top-right, text wrapping round it),
+     a little smaller, with a 16px margin each side */
+  .letter-wrap { max-width: none; margin-left: calc(16px - var(--gutter) + 6px); margin-right: calc(16px - var(--gutter) + 6px); }
+  .letter { --pad-l: 22px; --pad-r: 16px; transform: rotate(-1.2deg); }
+  .letter__photo { width: 96px; margin: calc(var(--lh) * -2 - 18px) calc(var(--pad-r) * -1 - 4px) 8px 12px; }
+  .letter__photo .print { padding: 6px 6px 22px; }
+  .letter__tape { width: 50%; height: 14px; }
+  .letter__knight { width: 52px; left: -4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .letter__photo, .letter__photo .print, .letter__knight { transition: none; }
   .letter__knight:hover { transform: none; }
 }
-@media (prefers-reduced-motion: reduce) and (min-width: 861px) { .letter__photo:hover { transform: rotate(4deg); } }
+@media (prefers-reduced-motion: reduce) { .letter__photo:hover { transform: rotate(4deg); } }
 /* link inside running text (About -> On My Shelf): caramel underline that thickens on hover */
 .inline-link {
   color: var(--espresso); text-decoration: underline; text-decoration-color: var(--caramel);
@@ -1022,30 +1021,22 @@ html.deck-open { overflow: hidden; }
   /* minmax(0,1fr): stop wide children (photo, long words) from stretching the column past the screen */
   .hero, .pass__grid { grid-template-columns: minmax(0, 1fr); }
   .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-  .contact-form__row { grid-template-columns: minmax(0, 1fr); }
-  /* desk -> tap grid; no dragging (it would fight scrolling) */
-  .hero.desk { min-height: auto; padding-top: 16px; padding-bottom: 56px; }
-  .kit__grid {
-    width: 100%; aspect-ratio: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px; padding: 4px 0 12px; align-items: center;
-  }
-  .kit__item { position: relative; left: auto !important; top: auto !important; width: auto !important;
-    transform: rotate(calc(var(--r, 0deg) * .4)) scale(var(--s, 1)); cursor: pointer; touch-action: manipulation; padding: 14px 10px; }
-  .kit__item.is-hidden { display: none; }
-  .kit__item--notebook { grid-column: 1 / -1; order: 0; }
-  .kit__item--camera { order: 1; }
-  .kit__item--print { order: 2; padding-inline: 22%; }
-  .kit__item--headphones { order: 3; }
-  .kit__item--pen { order: 4; padding: 14px 10px; }
-  .kit__item--pen img { width: auto; height: 120px; margin-inline: auto; }
-  .kit__item--headphones img { width: auto; height: 120px; margin-inline: auto; }
-  .kit__item--cup { order: 5; padding: 18px; }
-  .folder { position: relative; left: auto; top: auto; width: 84px; order: 6; justify-self: center; }
-  .toolkit { position: static; width: auto; height: auto; grid-column: 1 / -1; order: 7; display: none;
-    grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 6px; padding: 6px 0 14px; }
-  .toolkit.is-open { display: grid; }
-  .tool { position: static; width: auto; margin: 0; opacity: 1; }
-  .modes, .chaos-ink { display: none; } /* phones: tap grid only, no chaos mode */
+  /* phones: the same desk scene as on a laptop, just smaller (positions are % of the desk,
+     the writing is in cqw). The desk uses the full screen width; the HY mark sits above it. */
+  .hero.desk { min-height: auto; padding: 76px 6px 40px; }
+  .kit__grid { width: 100%; }
+  .kit__item { padding: .7cqw; } /* padding shrinks with the desk, so small objects (the clip) keep their size */
+  .folder { min-width: 34px; padding: 4px 2px; }
+  .folder__name { font-size: 10px; padding: 1px 4px; }
+  .tool { width: 34px; margin: -17px 0 0 -17px; gap: 2px; }
+  .tool__tile { width: 30px; height: 30px; padding: 4px; border-radius: 7px; }
+  .tool__name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } /* no room for ten labels: icons only (names stay for screen readers) */
+  .modes__btn { width: 44px; height: 44px; }
+  .modes__btn svg { width: 26px; height: 26px; }
+}
+@media (pointer: coarse) {
+  .kit__item { cursor: pointer; touch-action: manipulation; } /* tap only: no drag, so the page scrolls */
+}
   
 /* ============================================================
    Reduced motion — first-class, composed static state

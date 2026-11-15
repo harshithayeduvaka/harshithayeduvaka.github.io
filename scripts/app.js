@@ -1,20 +1,21 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115k";
-import { initMusic } from "./music.js?v=20261115k";
-import { initBookshelf } from "./bookshelf.js?v=20261115k";
+import { play, playFile } from "./sound.js?v=20261115l";
+import { initMusic } from "./music.js?v=20261115l";
+import { initBookshelf } from "./bookshelf.js?v=20261115l";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115k";
+} from "./content.js?v=20261115l";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
 gsap.defaults({ ease: "power3.out" });
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isMobile = matchMedia("(max-width: 860px)").matches;
+const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: objects can be dragged (touch: tap only, so the page still scrolls)
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115k";
+const ASSET_V = "20261115l";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -82,7 +83,7 @@ function hero() {
 function passKit() {
   const grid = $("#kitGrid");
   const note = $("#kitNote");
-  const desk = !isMobile; // free-placement layout only on desktop
+  const desk = true; // the same desk scene on every screen size
   let top = 10;           // z-index counter: last touched object comes to the front
   let mode = "notebook";                        // "notebook" | "chaos"
   const place = (k) => (mode === "chaos" && k.chaos) || k.desk; // where an object sits in this mode
@@ -185,12 +186,12 @@ function passKit() {
       }
     });
 
-    // drag (desktop only). Objects can go anywhere on the page, not just the desk:
+    // drag (mouse/trackpad only; on touch screens a drag would fight scrolling). Objects can go anywhere on the page, not just the desk:
     // they're only kept inside the page itself (left/right edges, top/bottom of the
     // document). Dragging near the top/bottom of the window scrolls the page, so an
     // object can be carried down into any section. Offsets live in --dx/--dy so the
     // tilt stays intact.
-    if (desk) {
+    if (canDrag) {
       let sx, sy, sScroll, ox, oy, minX, maxX, minY, maxY, moving = false, px = 0, py = 0, raf = 0;
       const scrollY = () => (lenis ? lenis.scroll : window.scrollY);
       const place = () => {
@@ -265,8 +266,9 @@ function passKit() {
     }
     const v = (el, n) => parseFloat(el.style.getPropertyValue(n)) || 0;
     const camDx = v(camBtn, "--dx"), camDy = v(camBtn, "--dy");
-    // camera body size + centre (offsets ignore transforms; buttons have 10px padding)
-    const camW = camBtn.offsetWidth - 20, camH = camW * (camSpec.h / camSpec.w);
+    // camera body size + centre (offsets ignore transforms; minus the button's padding)
+    const pad = parseFloat(getComputedStyle(camBtn).paddingLeft) || 0;
+    const camW = camBtn.offsetWidth - pad * 2, camH = camW * (camSpec.h / camSpec.w);
     const camCx = camBtn.offsetLeft + camBtn.offsetWidth / 2 + camDx;
     const camCy = camBtn.offsetTop + camBtn.offsetHeight / 2 + camDy;
     const a = (place(camSpec).r * Math.PI) / 180, cos = Math.cos(a), sin = Math.sin(a);
@@ -400,8 +402,9 @@ function passToolkit() {
   // sliding over the folder.
   const fan = () => {
     const fw = folder.offsetWidth, n = items.length;
-    let step = Math.max(72, fw * 1.15);
-    const gap = Math.max(70, fw * 1.1), half = 40;
+    const tw = items[0] ? items[0].offsetWidth : 62; // icon width (62px; smaller on phones)
+    let step = Math.max(tw * 1.16, fw * 1.15);
+    const gap = Math.max(tw * 1.13, fw * 1.1), half = tw * 0.65;
     const gl = list.offsetParent ? list.offsetParent.getBoundingClientRect().left : 0;
     const cx = gl + centreX(), vw = document.documentElement.clientWidth;
     const roomL = cx - 8, roomR = vw - 8 - cx;
@@ -412,7 +415,7 @@ function passToolkit() {
       // so every icon still fits (both sides keep the same, equal step)
       const usable = Math.max(0, roomL - gap - half) + Math.max(0, roomR - gap - half);
       const sides = (roomL >= gap + half ? 1 : 0) + (roomR >= gap + half ? 1 : 0);
-      step = Math.max(44, usable / Math.max(1, n - sides));
+      step = Math.max(tw * 0.71, usable / Math.max(1, n - sides));
       capL = fits(roomL); capR = fits(roomR);
     }
     let nL = Math.floor(n / 2);                       // odd count: extra one goes right
@@ -430,7 +433,7 @@ function passToolkit() {
 
   // re-place an open fan around the folder's current spot (no animation)
   const relayout = () => {
-    if (!open || isMobile) return;
+    if (!open) return;
     anchor();
     const pos = fan();
     items.forEach((it, i) => gsap.set(it, { x: pos[i].x, y: pos[i].y, rotate: pos[i].r }));
@@ -441,10 +444,6 @@ function passToolkit() {
     folder.setAttribute("aria-expanded", String(on));
     list.classList.toggle("is-open", on);
     if (tl) tl.kill();
-    if (isMobile) { // grid layout: just scale them in
-      if (!reduced && on) gsap.fromTo(items, { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2)", stagger: 0.02 });
-      return;
-    }
     // park the list on the folder's centre, then fan the icons out from there
     anchor(); // level with the folder, wherever it has been dragged
     const pos = fan();
@@ -474,7 +473,7 @@ function passToolkit() {
 
   // the folder is draggable (desktop); an open fan travels with it. A press that
   // doesn't move is still a normal click (opens/closes the stack).
-  if (!isMobile) {
+  if (canDrag) {
     let sx, sy, ox, oy, moving = false, moved = false;
     folder.style.cursor = "grab";
     folder.addEventListener("pointerdown", (e) => {
@@ -758,9 +757,8 @@ function passAboutMe() {
 
   // scroll in: the sheet fades in and settles into its tilt, then the photo and the knight land
   if (!reduced) {
-    const tilted = matchMedia("(min-width: 861px)").matches;
     const tl = gsap.timeline({ scrollTrigger: { trigger: letter, start: "top 82%" } });
-    tl.from(letter, { opacity: 0, y: 40, rotation: tilted ? 1.5 : 0, duration: 1, ease: "power3.out", clearProps: "transform,opacity" })
+    tl.from(letter, { opacity: 0, y: 40, rotation: 1.5, duration: 1, ease: "power3.out", clearProps: "transform,opacity" })
       .from($(".letter__photo", letter), { opacity: 0, y: -18, scale: 1.08, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "-=0.45")
       .from(".letter__knight", { opacity: 0, x: -24, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "<0.1");
   }
