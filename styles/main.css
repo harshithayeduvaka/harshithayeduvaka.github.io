@@ -565,10 +565,7 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .badge__when { margin-top: 5cqi; color: var(--espresso); }
 .badge__city { margin-top: 1cqi; color: var(--roast); opacity: .7; }
 .badge__foot { padding: 0 7cqi 7cqi; }
-.badge__barcode {
-  display: block; width: 52%; height: 9cqi; opacity: .85;
-  background: repeating-linear-gradient(90deg, var(--roast) 0 1.2cqi, transparent 1.2cqi 2cqi, var(--roast) 2cqi 2.6cqi, transparent 2.6cqi 4.1cqi, var(--roast) 4.1cqi 5.8cqi, transparent 5.8cqi 6.6cqi, var(--roast) 6.6cqi 7.1cqi, transparent 7.1cqi 8.4cqi);
-}
+.badge__foot:empty { height: 16cqi; } /* work badges: no barcode, just room for the flip chip */
 /* small "flip" chip; the whole card is clickable too, this is the keyboard way in */
 .badge__flip {
   position: absolute; z-index: 2; right: 5cqi; bottom: 5cqi;

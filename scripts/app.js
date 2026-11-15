@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115j";
-import { initMusic } from "./music.js?v=20261115j";
-import { initBookshelf } from "./bookshelf.js?v=20261115j";
+import { play, playFile } from "./sound.js?v=20261115k";
+import { initMusic } from "./music.js?v=20261115k";
+import { initBookshelf } from "./bookshelf.js?v=20261115k";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115j";
+} from "./content.js?v=20261115k";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115j";
+const ASSET_V = "20261115k";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -535,7 +535,7 @@ function pass03() {
            <p class="badge__when mono">${e.dates}</p>
            <p class="badge__city mono">${e.city}</p>
          </div>
-         <p class="badge__foot"><span class="badge__barcode" aria-hidden="true"></span></p>`;
+         <p class="badge__foot" aria-hidden="true"></p>`; // empty: keeps room for the flip chip
     const kind = student ? "card" : "badge";
     return `
       <li class="badge-slot" style="--len:${LEN[i % LEN.length]}px; --tilt:${TILT[i % TILT.length]}deg">
