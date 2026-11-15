@@ -192,7 +192,7 @@ export const experience = [
     link: "https://ohmyats.lovable.app/",
     role: "Founder & Developer",
     city: "Paris",
-    accent: "ohmyats",
+    accent: "cherry",
     result: "Built a CV-screening tool from scratch, solo.",
     detail: "It scores graduate CVs against ATS filters in English, French and German, tuned on 100+ real profiles.",
   },

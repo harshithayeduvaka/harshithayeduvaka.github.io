@@ -475,7 +475,6 @@ section { position: relative; }
 .hanger[data-accent="roast"]   { --acc: var(--roast); }
 /* each organisation's own brand colour (lanyard, top band, back edge) */
 .hanger[data-accent="skema"]   { --acc: #7A1A20; }   /* SKEMA red (their brand palette) */
-.hanger[data-accent="ohmyats"] { --acc: #F7931A; --band-ink: var(--roast); --strap-ink: rgba(43, 29, 22, .75); } /* ohmyATS orange: dark text reads better on it */
 .hanger[data-accent="nomadx"]  { --acc: #111111; }   /* NOMAD X black */
 .hanger[data-accent="keka"]    { --acc: #5010A8; }   /* Keka purple */
 
