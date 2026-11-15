@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261112k";
-import { initMusic } from "./music.js?v=20261112k";
-import { initBookshelf } from "./bookshelf.js?v=20261112k";
+import { play, playFile } from "./sound.js?v=20261115a";
+import { initMusic } from "./music.js?v=20261115a";
+import { initBookshelf } from "./bookshelf.js?v=20261115a";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261112k";
+} from "./content.js?v=20261115a";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261112k";
+const ASSET_V = "20261115a";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -504,40 +504,105 @@ function passToolkit() {
 }
 
 // ------------------------------------------------------------------
-// Experience — vertical timeline
+// The Story So Far: ID badges hanging from lanyards (a student card for education).
+// Hover = the badge swings on its hook. Click/tap (or the ↻ button) = it flips to the
+// one-line result on the back. Content: content.js `experience`.
 // ------------------------------------------------------------------
 function pass03() {
-  // One vertical timeline, in the order of content.js `experience`.
-  // A group heading is printed once, where the type changes:
-  // "Foundations" before education, "The Story So Far" before work.
-  const tl = $("#timeline");
-  const heading = { education: "Foundations", work: "The Story So Far" };
-  let last = null, html = "";
-  experience.forEach((e) => {
-    if (e.type !== last) {
-      html += `<li class="tl__group"><h3 class="tl__heading mono">${heading[e.type] || ""}</h3></li>`;
-      last = e.type;
-    }
-    html += `
-      <li class="tl__item">
-        <p class="tl__when mono">${e.dates}</p>
-        <div class="tl__body">
-          <h4 class="tl__org display">${e.link ? `<a href="${e.link}" target="_blank" rel="noopener">${e.org}<svg class="tl__ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg><span class="visually-hidden"> (opens in a new tab)</span></a>` : e.org}</h4>
-          <p class="tl__role mono">${e.role}</p>
-          ${e.bullets.length ? `<ul class="tl__bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
+  const list = $("#badges");
+  // strap lengths + resting tilts, so the row hangs a bit unevenly like real lanyards
+  const LEN = [118, 150, 128, 160];
+  const TILT = [-1.1, 0.7, -0.5, 1.2];
+  const logo = (e) => e.logo
+    ? `<img class="badge__logo" src="${e.logo}" alt="" width="64" height="64" loading="lazy" decoding="async" />`
+    : `<span class="badge__logo badge__logo--mark" aria-hidden="true">${e.mark || e.org[0]}</span>`;
+
+  list.innerHTML = experience.map((e, i) => {
+    const student = e.type === "education";
+    const front = student
+      ? `<p class="badge__band mono"><span>Student card</span>${logo(e)}</p>
+         <div class="badge__main">
+           <h3 class="badge__org">${e.org}</h3>
+           <img class="badge__photo" src="${about.photo.src}?v=${ASSET_V}" alt="" width="${about.photo.w}" height="${about.photo.h}" loading="lazy" decoding="async" />
+           <p class="badge__name">${meta.name}</p>
+           <p class="badge__role mono">${e.role}</p>
+         </div>
+         <p class="badge__foot mono"><span>Valid ${e.dates}</span><span>${e.city}</span></p>`
+      : `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
+         <div class="badge__main">
+           <p class="badge__name">${meta.name}</p>
+           <h3 class="badge__role-big">${e.role}</h3>
+           <p class="badge__when mono">${e.dates}</p>
+           <p class="badge__city mono">${e.city}</p>
+         </div>
+         <p class="badge__foot"><span class="badge__barcode" aria-hidden="true"></span></p>`;
+    const kind = student ? "card" : "badge";
+    return `
+      <li class="badge-slot" style="--len:${LEN[i % LEN.length]}px; --tilt:${TILT[i % TILT.length]}deg">
+        <div class="hanger" data-accent="${e.accent || "espresso"}">
+          <span class="hanger__strap" data-label="${e.org}" aria-hidden="true"></span>
+          <span class="hanger__clip" aria-hidden="true"></span>
+          <article class="badge${student ? " badge--student" : ""}" aria-label="${e.org}">
+            <div class="badge__inner">
+              <div class="badge__face badge__front">
+                <span class="badge__slot" aria-hidden="true"></span>
+                ${front}
+                <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} to see the result">↻ Flip</button>
+              </div>
+              <div class="badge__face badge__back" inert>
+                <span class="badge__slot" aria-hidden="true"></span>
+                <p class="badge__label mono">${e.org}</p>
+                <p class="badge__result">${e.result}</p>
+                ${e.detail ? `<p class="badge__detail">${e.detail}</p>` : ""}
+                ${e.link ? `<a class="badge__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} ↗<span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
+                <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} back">↻ Back</button>
+              </div>
+            </div>
+          </article>
         </div>
       </li>`;
+  }).join("");
+
+  // swing once on its hook; dir = which way it was pushed (+1 / -1)
+  const swing = (hanger, dir = 1) => {
+    if (reduced) return;
+    hanger.style.setProperty("--dir", dir);
+    hanger.classList.remove("is-swinging");
+    void hanger.offsetWidth; // restart the animation if it's already swinging
+    hanger.classList.add("is-swinging");
+  };
+
+  const flip = (badge, viaKeyboard) => {
+    const on = badge.classList.toggle("is-flipped");
+    const [front, back] = $$(".badge__face", badge);
+    front.inert = on; back.inert = !on; // only the visible side can be focused / read
+    if (viaKeyboard) (on ? back : front).querySelector(".badge__flip").focus();
+    swing(badge.closest(".hanger"), on ? 1 : -1);
+    play("page");
+  };
+
+  $$(".hanger", list).forEach((hanger) => {
+    hanger.addEventListener("animationend", () => hanger.classList.remove("is-swinging"));
+    // mouse only: pushed from the left swings right, and the other way round
+    hanger.addEventListener("pointerenter", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const r = hanger.getBoundingClientRect();
+      swing(hanger, e.clientX < r.left + r.width / 2 ? -1 : 1);
+    });
+    const badge = $(".badge", hanger);
+    badge.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return; // the link on the back just opens
+      flip(badge, !!e.target.closest(".badge__flip") && e.detail === 0);
+    });
   });
-  tl.innerHTML = html;
 
   if (reduced) return;
-  // the line draws down as you scroll; each entry rises in as it arrives
-  gsap.fromTo(tl, { "--draw": 0 }, {
-    "--draw": 1, ease: "none",
-    scrollTrigger: { trigger: tl, start: "top 75%", end: "bottom 60%", scrub: 0.4 },
-  });
-  $$(".tl__item, .tl__group", tl).forEach((it) => {
-    gsap.from(it, { y: 24, opacity: 0, duration: 0.7, scrollTrigger: { trigger: it, start: "top 85%" } });
+  // the badges drop onto their hooks as the section scrolls in, then settle with a swing
+  const slots = $$(".badge-slot", list);
+  gsap.from(slots, {
+    y: -70, opacity: 0, duration: 0.8, ease: "back.out(1.4)", stagger: 0.12,
+    scrollTrigger: { trigger: list, start: "top 80%" },
+    onComplete: () => slots.forEach((s, i) => setTimeout(() => swing($(".hanger", s), i % 2 ? -1 : 1), i * 90)),
   });
 }
 
@@ -695,15 +760,16 @@ function revealTitles() {
       scrollTrigger: { trigger: t, start: "top 85%" } });
   });
 
-  // About + Featured Work titles: zoom in slightly while hovered (back on leave),
+  // Story So Far + About + Featured Work titles: zoom in slightly while hovered (back on leave),
   // and a small zoom "pulse" on click/tap (also works on touch screens without hover)
   if (reduced) return;
-  ["#about-h", "#p05-h"].forEach((sel) => {
+  ["#p03-h", "#about-h", "#p05-h"].forEach((sel) => {
     const t = $(sel);
     if (!t) return;
     t.style.cursor = "pointer";
     t.style.transformOrigin = "left center";
-    t.style.width = "max-content";
+    t.style.width = "fit-content"; // hug the text so the zoom starts at its edge,
+    t.style.maxWidth = "100%";     // but still wrap on narrow phones
     let hovering = false;
     t.addEventListener("pointerenter", (e) => {
       if (e.pointerType !== "mouse") return;

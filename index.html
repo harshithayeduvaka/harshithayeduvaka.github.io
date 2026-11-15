@@ -11,11 +11,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,50;1,9..144,400..800,50&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261112k" />
+<link rel="stylesheet" href="styles/main.css?v=20261115a" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261112k" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261112k" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261115a" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261115a" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -78,12 +78,12 @@
     </div>
   </header>
 
-  <!-- Experience — one vertical timeline, built from content.js `experience` -->
+  <!-- The Story So Far: ID badges on lanyards (student card for SKEMA), built from content.js `experience` -->
   <section class="pass" id="p03" aria-labelledby="p03-h">
     <div class="pass__grid">
       <div class="content">
-        <h2 id="p03-h" class="visually-hidden">Education and work experience</h2>
-        <ol class="timeline" id="timeline"></ol>
+        <h2 id="p03-h" class="pass__title display">The Story So Far <span class="about-me__cmd" aria-hidden="true">✦</span></h2>
+        <ul class="badges" id="badges" aria-label="Education and work experience"></ul>
       </div>
     </div>
   </section>
@@ -187,6 +187,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261112k"></script>
+<script type="module" src="scripts/app.js?v=20261115a"></script>
 </body>
 </html>

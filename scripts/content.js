@@ -158,57 +158,60 @@ export const playlist = {
 
 // Order shown on the site: education first, then work experience (newest first).
 // type: "work" | "education" (education panels get their own label).
+// "The Story So Far": each entry is an ID badge hanging from a lanyard (a student card for
+// education). Front: organisation, role, dates. Click/tap flips it to the back:
+//   result = the one line on the back (keep it short, it's the headline)
+//   detail = optional second line under it
+//   link   = optional; shown as a link on the back (opens in a new tab)
+//   logo   = optional image path (e.g. "assets/logos/keka.png"); without it the badge
+//            shows a monogram tile using `mark`
+//   accent = lanyard + badge colour: "espresso" | "caramel" | "cherry" | "roast"
+// Order here = order on the page, left to right.
 export const experience = [
   {
-    year: "2024",
     dates: "2024 – 2027",
     type: "education",
     org: "SKEMA Business School",
+    mark: "S",
     role: "MSc International Marketing & Business Development",
     city: "Paris",
-    accent: "ultramarine",
-    vocab: ["Brand Strategy", "GTM", "Market Research", "ROI"],
-    bullets: [],
+    accent: "roast",
+    result: "Coursework in brand strategy, GTM strategy and market research.",
+    detail: "Plus design-led marketing and ROI analysis.",
   },
   {
-    year: "2026",
     dates: "Mar 2026 – Present",
     type: "work",
     org: "ohmyATS",
-    link: "https://ohmyats.lovable.app/", // the org name links here (opens in a new tab)
+    mark: "oA",
+    link: "https://ohmyats.lovable.app/",
     role: "Founder & Developer",
     city: "Paris",
-    accent: "signal-red",
-    vocab: ["ATS", "scoring", "EN·FR·DE", "100+ profiles", "frontend"],
-    bullets: [
-      "Built a CV-screening tool from scratch, solo. It scores graduate CVs against ATS filters in English, French and German, tuned on 100+ real profiles.",
-    ],
+    accent: "cherry",
+    result: "Built a CV-screening tool from scratch, solo.",
+    detail: "It scores graduate CVs against ATS filters in English, French and German, tuned on 100+ real profiles.",
   },
   {
-    year: "2025",
     dates: "Aug 2025 – Jan 2026",
     type: "work",
     org: "NOMAD X COLLECTIVE",
+    mark: "NX",
     role: "Marketing Intern",
     city: "Berlin",
-    accent: "saffron",
-    vocab: ["A/B", "+15% open", "+12% follows", "+17% eng", "Meta Ads", "ROI"],
-    bullets: [
-      "Lifted email open rates 15% by testing. A/B tested sequences to find the message that drove sign-ups. Grew followers 12% and engagement 17%, and ran Meta Ads.",
-    ],
+    accent: "caramel",
+    result: "Lifted email open rates 15% by A/B testing.",
+    detail: "Found the message that drove sign-ups. Grew followers 12% and engagement 17%, and ran Meta Ads.",
   },
   {
-    year: "2023",
     dates: "Jan 2023 – Jul 2024",
     type: "work",
     org: "Keka HR Technologies",
+    mark: "K",
     role: "Implementation Consultant",
     city: "Hyderabad",
-    accent: "ultramarine",
-    vocab: ["65+ accounts", "Zivame", "Future Group", "churn −15%", "CLV", "lead scoring"],
-    bullets: [
-      "Cut client churn 15% in one quarter. That was across 25+ SME accounts. Also onboarded 65+ enterprise clients, including Zivame and Future Group, and trained them to run the platform themselves.",
-    ],
+    accent: "espresso",
+    result: "Cut client churn 15% in one quarter.",
+    detail: "Across 25+ SME accounts. Also onboarded 65+ enterprise clients, including Zivame and Future Group.",
   },
 ];
 

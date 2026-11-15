@@ -9,12 +9,16 @@ an open notebook with her name, title and tagline written on it, plus headphones
 an instax camera (click = her photo slides out as a print), a pen, a cappuccino, an alarm clock (click = short ring + shake) and a binder clip (click = snap), both where the vinyl card used to be, and a stained-glass lamp partly behind the notebook (click = lights up 1s + switch click; kit item listed first so it sits under the notebook). A small player (⏮ ▶ ⏭) is fixed on the right edge;
 it only moves when dragged. Playlist data lives in content.js `playlist`; audio via Spotify's official
 iFrame embed (loaded on first play; 30s previews unless logged in). Vinyl record card removed.
-Below it: experience timeline, case studies, About, "On My Shelf" (scripts/bookshelf.js: books from content.js `books`, covers in assets/covers/<slug>.jpg; click a spine = tip, neighbours lean, slide out + turn to the cover in a <dialog>; tunables at the top of bookshelf.js), contact. (ohmyATS demo removed: the
-timeline links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
+Below it: "The Story So Far" badges, case studies, About, "On My Shelf" (scripts/bookshelf.js: books from content.js `books`, covers in assets/covers/<slug>.jpg; click a spine = tip, neighbours lean, slide out + turn to the cover in a <dialog>; tunables at the top of bookshelf.js), contact. (ohmyATS demo removed: its badge
+links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
-no "PASS" rail labels. Experience is ONE vertical timeline (dates | line + dots | entry); the group headings
-"Foundations" (education) and "The Story So Far" (work) appear once each. Layout: line on the
-left edge (aligned with section headings), dates above each organisation, on every screen size.
+no "PASS" rail labels. Experience = "The Story So Far ✦" (heading styled like Featured Work / On My Shelf):
+one ID badge per role hanging from a lanyard on a wooden peg rail (same wood as the bookshelf); SKEMA is a
+student card with her photo. Hover = the badge swings on its hook; click/tap (or the ↻ chip, for keyboards)
+= flips to the back: `result` (one line) + `detail` + optional `link`. Data: content.js `experience`
+(`mark` = monogram, optional `logo` image, `accent` = espresso|caramel|cherry|roast). Card text is sized
+in cqi (container query units) so badges scale as a unit. Phones: one swipe row; reduced motion: no
+swing, flip = cross-fade. Strap lengths/tilts: LEN/TILT at the top of pass03() in app.js.
 Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones get a swipe row of cards. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
@@ -66,7 +70,7 @@ resume.pdf          downloadable CV (linked from meta.resume)
 - Each pass in app.js is wrapped in try/catch at init, so one failure can't blank the page.
 - Mobile breakpoint: 860px (`isMobile` in JS, `@media (max-width: 860px)` in CSS).
   Desk objects drag anywhere on the page (desktop); dragging near the window edge auto-scrolls.
-  On mobile the desk becomes a tap grid and the timeline puts dates above each entry.
+  On mobile the desk becomes a tap grid and the badges become a swipe row.
 - Targeted edits over rewrites. Commit after each phase.
 
 ## Design tokens ("Coffee")
