@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115f";
-import { initMusic } from "./music.js?v=20261115f";
-import { initBookshelf } from "./bookshelf.js?v=20261115f";
+import { play, playFile } from "./sound.js?v=20261115g";
+import { initMusic } from "./music.js?v=20261115g";
+import { initBookshelf } from "./bookshelf.js?v=20261115g";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115f";
+} from "./content.js?v=20261115g";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115f";
+const ASSET_V = "20261115g";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -523,7 +523,7 @@ function pass03() {
       ? `<p class="badge__band mono"><span>Student card</span>${logo(e)}</p>
          <div class="badge__main">
            <h3 class="badge__org">${e.org}</h3>
-           <img class="badge__photo" src="${about.photo.src}?v=${ASSET_V}" alt="" width="${about.photo.w}" height="${about.photo.h}" loading="lazy" decoding="async" />
+           <img class="badge__photo" src="${about.idPhoto.src}?v=${ASSET_V}" alt="" width="${about.idPhoto.w}" height="${about.idPhoto.h}" loading="lazy" decoding="async" />
            <p class="badge__name">${meta.name}</p>
            <p class="badge__role mono">${e.role}</p>
          </div>
@@ -751,7 +751,7 @@ function passAboutMe() {
     <figure class="letter__photo">
       <span class="letter__tape letter__tape--l" aria-hidden="true"></span>
       <span class="letter__tape letter__tape--r" aria-hidden="true"></span>
-      <span class="print"><img src="${about.photo.src}?v=${ASSET_V}" alt="Photo of Harshitha" width="${about.photo.w}" height="${about.photo.h}" loading="lazy" decoding="async" draggable="false" /></span>
+      <span class="print"><img src="${about.letterPhoto.src}?v=${ASSET_V}" alt="Photo of Harshitha" width="${about.letterPhoto.w}" height="${about.letterPhoto.h}" loading="lazy" decoding="async" draggable="false" /></span>
     </figure>`);
   body.insertAdjacentHTML("afterend",
     `<img class="letter__sign" src="assets/signature.png?v=${ASSET_V}" alt="Signed, Harshitha Yeduvaka" width="959" height="131" loading="lazy" decoding="async" draggable="false" />`);
