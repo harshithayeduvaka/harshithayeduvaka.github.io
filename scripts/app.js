@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115d";
-import { initMusic } from "./music.js?v=20261115d";
-import { initBookshelf } from "./bookshelf.js?v=20261115d";
+import { play, playFile } from "./sound.js?v=20261115e";
+import { initMusic } from "./music.js?v=20261115e";
+import { initBookshelf } from "./bookshelf.js?v=20261115e";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115d";
+} from "./content.js?v=20261115e";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +14,7 @@ const isMobile = matchMedia("(max-width: 860px)").matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115d";
+const ASSET_V = "20261115e";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -744,6 +744,26 @@ function passAboutMe() {
   if (!body) return;
   body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
   // static text (the pool-water ripple was removed at her request)
+
+  // the letter: her instax photo taped to the top-right corner, her signature at the end
+  const letter = $("#letter");
+  body.insertAdjacentHTML("beforebegin", `
+    <figure class="letter__photo">
+      <span class="letter__tape letter__tape--l" aria-hidden="true"></span>
+      <span class="letter__tape letter__tape--r" aria-hidden="true"></span>
+      <span class="print"><img src="${about.photo.src}?v=${ASSET_V}" alt="Photo of Harshitha" width="${about.photo.w}" height="${about.photo.h}" loading="lazy" decoding="async" draggable="false" /></span>
+    </figure>`);
+  body.insertAdjacentHTML("afterend",
+    `<img class="letter__sign" src="assets/signature.png?v=${ASSET_V}" alt="Signed, Harshitha Yeduvaka" width="959" height="131" loading="lazy" decoding="async" draggable="false" />`);
+
+  // scroll in: the sheet fades in and settles into its tilt, then the photo and the knight land
+  if (!reduced) {
+    const tilted = matchMedia("(min-width: 861px)").matches;
+    const tl = gsap.timeline({ scrollTrigger: { trigger: letter, start: "top 82%" } });
+    tl.from(letter, { opacity: 0, y: 40, rotation: tilted ? 1.5 : 0, duration: 1, ease: "power3.out", clearProps: "transform,opacity" })
+      .from($(".letter__photo", letter), { opacity: 0, y: -18, scale: 1.08, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "-=0.45")
+      .from(".letter__knight", { opacity: 0, x: -24, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "<0.1");
+  }
 
   // in-page links in the text (e.g. "reading fiction" -> On My Shelf): glide there with
   // the site's smooth scroll, then move keyboard focus to that section's heading

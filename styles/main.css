@@ -716,8 +716,87 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 
 /* About ⌘ (near the bottom) */
 .about-me__cmd { color: var(--caramel); font-weight: 400; font-size: .7em; vertical-align: .12em; margin-left: .1em; }
-.about-me__body { display: grid; gap: 1.1em; max-width: none; } /* text spans the full content width */
-.about-me__body p { font-size: var(--fs-18); line-height: 1.65; color: var(--roast); }
+/* ---- The letter: About text on a sheet of ruled notebook paper lying on the desk ----
+   --lh = one text line = one ruled line, so the text sits on the rules (paragraph gaps are one
+   empty line). Paper + rule colours are sampled from the hero notebook photo. */
+.letter-wrap { position: relative; max-width: fit-content; margin-left: clamp(0px, 2vw, 32px); padding-bottom: 28px; }
+.letter {
+  --lh: calc(var(--fs-18) * 1.65);
+  --pad-l: clamp(40px, 6vw, 84px); --pad-r: clamp(28px, 4vw, 60px);
+  --paper: #fbf8f1; --rule: #ddd8ce;
+  position: relative; font-size: var(--fs-18);
+  max-width: calc(68ch + var(--pad-l) + var(--pad-r));
+  padding: calc(var(--lh) * 2) var(--pad-r) calc(var(--lh) * 2) var(--pad-l);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(100deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 40%, rgba(43, 29, 22, .035)), /* soft light across the sheet */
+    repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 1px), var(--rule) calc(var(--lh) - 1px) var(--lh));
+  background-position: 0 0, 0 -.38em; /* rules sit just under the text's baseline */
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(43, 29, 22, .1), 0 18px 28px -16px rgba(43, 29, 22, .38), 0 44px 70px -44px rgba(43, 29, 22, .45);
+  transform: rotate(-1.5deg);
+}
+.about-me__body { max-width: 68ch; }
+.about-me__body p { font-size: var(--fs-18); line-height: var(--lh); color: var(--roast); }
+.about-me__body p + p { margin-top: var(--lh); }
+
+/* her instax print taped over the top-right corner (the text wraps around it) */
+.letter__photo {
+  float: right; position: relative; z-index: 1;
+  width: clamp(128px, 13vw, 172px);
+  margin: calc(var(--lh) * -2 - 26px) calc(var(--pad-r) * -1 - 22px) 12px 24px;
+  transform: rotate(4deg);
+  transition: transform .35s var(--ease-parse);
+}
+.letter__photo .print { transition: box-shadow .35s var(--ease-parse); }
+.letter__photo img { width: 100%; height: auto; }
+.letter__photo:hover { transform: rotate(4deg) translateY(-4px) scale(1.04); }
+.letter__photo:hover .print { box-shadow: 0 22px 30px -12px rgba(43, 29, 22, .42), 0 2px 4px rgba(43, 29, 22, .18); }
+/* semi-transparent washi tape with torn ends */
+.letter__tape {
+  position: absolute; z-index: 2; top: -9px; width: 54%; height: 22px; pointer-events: none;
+  background: repeating-linear-gradient(-45deg, rgba(168, 105, 46, .34) 0 5px, rgba(205, 180, 152, .62) 5px 10px);
+  box-shadow: 0 1px 2px rgba(43, 29, 22, .12);
+  opacity: .9;
+  clip-path: polygon(3% 0, 97% 0, 100% 22%, 96% 48%, 100% 74%, 97% 100%, 3% 100%, 0 76%, 4% 50%, 0 24%);
+}
+.letter__tape--l { left: -16%; transform: rotate(-34deg); top: 4px; }
+.letter__tape--r { right: -16%; transform: rotate(32deg); top: 4px; }
+
+/* her signature after the last paragraph, sitting on a rule */
+.letter__sign {
+  display: block; margin: calc(var(--lh) * .62) 0 0 auto;
+  height: calc(var(--lh) * 1.2); width: auto; max-width: 70%;
+}
+
+/* a wooden chess knight resting on the bottom-left edge of the paper */
+.letter__knight {
+  position: absolute; z-index: 2; left: clamp(-34px, -2.4vw, -18px); bottom: 0;
+  width: clamp(76px, 8vw, 112px); height: auto;
+  filter: drop-shadow(6px 10px 7px rgba(43, 29, 22, .38));
+  transform-origin: 50% 96%;
+  transition: transform .4s var(--ease-parse);
+}
+.letter__knight:hover { transform: rotate(-7deg); }
+
+@media (max-width: 860px) {
+  /* phones: flat, full width with a 16px margin, photo above the text */
+  .letter-wrap { max-width: none; margin-left: calc(16px - var(--gutter)); margin-right: calc(16px - var(--gutter)); }
+  .letter { transform: none; --pad-l: 26px; --pad-r: 18px; padding-top: var(--lh); padding-bottom: calc(var(--lh) * 2.5); }
+  .letter__photo { float: none; width: auto; height: calc(var(--lh) * 7); margin: 0 0 var(--lh); display: grid; place-items: center; }
+  .letter__photo { transform: none; }
+  .letter__photo .print { width: 118px; padding: 8px 8px 30px; transform: rotate(4deg); } /* px: % padding would follow the full-width row */
+  .letter__photo:hover { transform: none; }
+  .letter__tape--l { left: calc(50% - 82px); }
+  .letter__tape--r { right: calc(50% - 82px); }
+  .letter__tape { width: 64px; height: 18px; top: 12px; }
+  .letter__knight { width: 54px; left: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter__photo, .letter__photo .print, .letter__knight { transition: none; }
+  .letter__knight:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 861px) { .letter__photo:hover { transform: rotate(4deg); } }
 /* link inside running text (About -> On My Shelf): caramel underline that thickens on hover */
 .inline-link {
   color: var(--espresso); text-decoration: underline; text-decoration-color: var(--caramel);
