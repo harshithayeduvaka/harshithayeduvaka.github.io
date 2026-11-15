@@ -554,6 +554,8 @@ section { position: relative; }
 /* front: colour band with logo + organisation */
 .badge__band { display: flex; align-items: center; gap: 4cqi; padding: 13cqi 7cqi 6cqi; background: var(--band); color: var(--cream); }
 .badge__logo { flex: none; width: 15cqi; height: 15cqi; border-radius: 3cqi; object-fit: contain; background: var(--cream); }
+/* real logos keep their own shape (ohmyATS is wide); white behind ones with transparent edges */
+img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background: #fff; }
 .badge__logo--mark { display: grid; place-items: center; color: var(--band); font-weight: 800; font-size: 6.5cqi; letter-spacing: -.02em; text-transform: none; }
 .badge__org-band { font-weight: 700; font-size: 7cqi; line-height: 1.08; }
 .badge__main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 6cqi 7cqi; min-height: 0; }
