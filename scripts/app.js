@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261115n";
-import { initMusic } from "./music.js?v=20261115n";
-import { initBookshelf } from "./bookshelf.js?v=20261115n";
+import { play, playFile } from "./sound.js?v=20261116a";
+import { initMusic } from "./music.js?v=20261116a";
+import { initBookshelf } from "./bookshelf.js?v=20261116a";
 import {
   meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261115n";
+} from "./content.js?v=20261116a";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261115n";
+const ASSET_V = "20261116a";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -523,11 +523,10 @@ function pass03() {
       ? `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
          <div class="badge__main">
            <h3 class="badge__org mono">Student card</h3>
-           <img class="badge__photo" src="${about.idPhoto.src}?v=${ASSET_V}" alt="" width="${about.idPhoto.w}" height="${about.idPhoto.h}" loading="lazy" decoding="async" />
            <p class="badge__name">${meta.name}</p>
            <p class="badge__role mono">${e.role}</p>
          </div>
-         <p class="badge__foot mono"><span>Valid ${e.dates}</span><span>${e.city}</span></p>`
+         <p class="badge__foot mono"><span>${e.dates}</span><span>${e.city}</span></p>`
       : `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
          <div class="badge__main">
            <p class="badge__name">${meta.name}</p>
@@ -745,23 +744,16 @@ function passAboutMe() {
   body.innerHTML = about.paragraphs.map((p) => `<p>${p}</p>`).join(""); // all paragraphs same size + style
   // static text (the pool-water ripple was removed at her request)
 
-  // the letter: her instax photo taped to the top-right corner, her signature at the end
+  // the letter: her signature at the end (no photo, at her request)
   const letter = $("#letter");
-  body.insertAdjacentHTML("beforebegin", `
-    <figure class="letter__photo">
-      <span class="letter__tape letter__tape--l" aria-hidden="true"></span>
-      <span class="letter__tape letter__tape--r" aria-hidden="true"></span>
-      <span class="print"><img src="${about.letterPhoto.src}?v=${ASSET_V}" alt="Photo of Harshitha" width="${about.letterPhoto.w}" height="${about.letterPhoto.h}" loading="lazy" decoding="async" draggable="false" /></span>
-    </figure>`);
   body.insertAdjacentHTML("afterend",
     `<img class="letter__sign" src="assets/signature.png?v=${ASSET_V}" alt="Signed, Harshitha Yeduvaka" width="959" height="131" loading="lazy" decoding="async" draggable="false" />`);
 
-  // scroll in: the sheet fades in and settles into its tilt, then the photo and the knight land
+  // scroll in: the sheet fades in and settles into its tilt, then the knight lands
   if (!reduced) {
     const tl = gsap.timeline({ scrollTrigger: { trigger: letter, start: "top 82%" } });
     tl.from(letter, { opacity: 0, y: 40, rotation: 1.5, duration: 1, ease: "power3.out", clearProps: "transform,opacity" })
-      .from($(".letter__photo", letter), { opacity: 0, y: -18, scale: 1.08, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "-=0.45")
-      .from(".letter__knight", { opacity: 0, x: -24, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "<0.1");
+      .from(".letter__knight", { opacity: 0, x: -24, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "-=0.45");
   }
 
   // in-page links in the text (e.g. "reading fiction" -> On My Shelf): glide there with

@@ -583,16 +583,16 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 /* student card: logo on the left, school name beside it (like the work badges) */
 .badge--student .badge__band .badge__logo { width: 12cqi; height: 12cqi; }
 .badge--student .badge__main {
-  display: grid; grid-template-columns: 36cqi minmax(0, 1fr); grid-template-areas: "org org" "photo name" "role role";
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "org" "name" "role"; /* no photo, at her request */
   align-content: center; gap: 4cqi; position: relative;
 }
 .badge__org { grid-area: org; font-size: 4.6cqi; letter-spacing: .14em; text-transform: uppercase; color: var(--espresso); } /* "Student card" label */
 .badge__photo { grid-area: photo; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2cqi; box-shadow: 0 0 0 1px rgba(43, 29, 22, .12); }
 .badge--student .badge__name { grid-area: name; align-self: end; font-size: 8.5cqi; }
 .badge--student .badge__role { grid-area: role; line-height: 1.35; color: var(--roast); }
-/* hologram sticker: sits in the name cell, above the name */
+/* hologram sticker: top-right of the card body, level with the "Student card" label */
 .badge--student .badge__main::after {
-  content: ""; grid-area: name; align-self: start; justify-self: start; width: 12cqi; height: 12cqi; border-radius: 50%; opacity: .55;
+  content: ""; grid-area: org; align-self: center; justify-self: end; width: 12cqi; height: 12cqi; border-radius: 50%; opacity: .55;
   background: conic-gradient(from 30deg, #f5c4a1, #d8e6c2, #b9d4ea, #e3c3e8, #f5c4a1);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6);
 }

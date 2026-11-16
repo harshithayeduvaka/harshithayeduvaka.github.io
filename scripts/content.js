@@ -26,8 +26,6 @@ export const about = {
   photo: { src: "assets/harshitha.avif", w: 300, h: 400,
            alt: "Harshitha Yeduvaka smiling, standing on a tree-lined street in a yellow dress" },
   // Her photo taped to the About letter, and the one on the SKEMA student card
-  letterPhoto: { src: "assets/harshitha-cardigan.avif", w: 540, h: 960 },
-  idPhoto: { src: "assets/harshitha-coat.avif", w: 540, h: 960 },
   // The "About ⌘" section near the bottom of the page (her words).
   title: "About",
   paragraphs: [
