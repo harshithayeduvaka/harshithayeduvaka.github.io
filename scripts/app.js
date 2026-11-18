@@ -1,11 +1,11 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118q";
-import { initMusic } from "./music.js?v=20261118q";
-import { initBookshelf } from "./bookshelf.js?v=20261118q";
-import { initCup } from "./cup.js?v=20261118q";
+import { play, playFile } from "./sound.js?v=20261118s";
+import { initMusic } from "./music.js?v=20261118s";
+import { initBookshelf } from "./bookshelf.js?v=20261118s";
+import { initCup } from "./cup.js?v=20261118s";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118q";
+} from "./content.js?v=20261118s";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +19,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118q";
+const ASSET_V = "20261118s";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -430,9 +430,12 @@ function passKit() {
       const rp = deg(pen) * Math.PI / 180;
       const pr = pen.getBoundingClientRect(), penImg = $("img", pen);
       const nib = $(".pen-nib", pen);
-      const L = penImg.offsetHeight + (nib ? nib.offsetHeight * 2 - 4 : 0); // to the ball point (nib overlaps the end by 2px)
-      // the tip is the bottom end of the (upright) pen image, turned by the pen's tilt
-      const tip0 = { x: pr.left + pr.width / 2 - g.left - (L / 2) * Math.sin(rp), y: pr.top + pr.height / 2 - g.top + (L / 2) * Math.cos(rp) };
+      // the writing point = the nib's ball point: in the upright pen image it hangs from the tapered
+      // end (66% across, 98.5% down, see .pen-nib), then everything turns with the pen's tilt
+      const ox = penImg.offsetWidth * (0.66 - 0.5);
+      const oy = penImg.offsetHeight * (0.985 - 0.5) + (nib ? penImg.offsetWidth * 0.26 * 2.2 : 0); // nib: 26% of the pen's width, 10:22 (SVG has no offsetHeight)
+      const tip0 = { x: pr.left + pr.width / 2 - g.left + ox * Math.cos(rp) - oy * Math.sin(rp),
+                     y: pr.top + pr.height / 2 - g.top + ox * Math.sin(rp) + oy * Math.cos(rp) };
       const to = (pt) => ({ "--dx": pt.x - tip0.x + "px", "--dy": pt.y - tip0.y + "px" });
       const tl = gsap.timeline({ onComplete: () => {
         gsap.set(lines, { clearProps: "clipPath" });
