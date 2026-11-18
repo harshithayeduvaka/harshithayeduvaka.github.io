@@ -584,7 +584,8 @@ section { position: relative; }
 }
 .snap__meta { color: var(--text-muted); text-align: center; }
 .snap__meta span:first-child { color: var(--text); }
-.snap__link { color: var(--link); border-bottom: 1px solid currentColor; }
+.snap__link { display: inline-flex; align-items: center; gap: .45em; color: var(--link); border-bottom: 1px solid currentColor; }
+.snap__link-icon { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } /* chain link */
 @media (max-width: 860px) {
   /* phones: stacked, one photo per screen width */
   .snaps__row { grid-template-columns: minmax(0, 1fr); gap: 44px; }

@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118d";
-import { initMusic } from "./music.js?v=20261118d";
-import { initBookshelf } from "./bookshelf.js?v=20261118d";
+import { play, playFile } from "./sound.js?v=20261118e";
+import { initMusic } from "./music.js?v=20261118e";
+import { initBookshelf } from "./bookshelf.js?v=20261118e";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118d";
+} from "./content.js?v=20261118e";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118d";
+const ASSET_V = "20261118e";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -528,7 +528,7 @@ function pass03() {
         </figcaption>
       </figure>
       <p class="snap__meta mono"><span>${e.org}</span> <span aria-hidden="true">·</span> <span>${e.dates}</span></p>
-      ${e.link ? `<a class="snap__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} ↗<span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
+      ${e.link ? `<a class="snap__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} <svg class="snap__link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
     </li>`).join("");
 
   if (reduced) return;
