@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118h";
-import { initMusic } from "./music.js?v=20261118h";
-import { initBookshelf } from "./bookshelf.js?v=20261118h";
+import { play, playFile } from "./sound.js?v=20261118j";
+import { initMusic } from "./music.js?v=20261118j";
+import { initBookshelf } from "./bookshelf.js?v=20261118j";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118h";
+} from "./content.js?v=20261118j";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -18,10 +18,10 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118h";
+const ASSET_V = "20261118j";
 
 // ------------------------------------------------------------------
-// Paris time + theme (Iced Latte / Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
+// Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
 // The <head> script applies the same rules before paint.
 // ------------------------------------------------------------------
 const root = document.documentElement;
@@ -34,8 +34,8 @@ function parisNow() {
   } catch { const d = new Date(); return { h: d.getHours(), m: d.getMinutes(), s: d.getSeconds() }; }
 }
 const phaseOf = (h) => (h >= 6 && h < 11 ? "morning" : h >= 11 && h < 18 ? "day" : h >= 18 && h < 22 ? "evening" : "night");
-const savedTheme = () => { try { const v = localStorage.getItem("theme"); return v === "iced-latte" || v === "espresso" ? v : null; } catch { return null; } };
-const autoTheme = (h) => (h >= 18 || h < 6 ? "espresso" : darkOS.matches ? "espresso" : "iced-latte");
+const savedTheme = () => { try { const v = localStorage.getItem("theme"); return v === "light" || v === "dark" ? v : null; } catch { return null; } };
+const autoTheme = (h) => (h >= 18 || h < 6 ? "dark" : darkOS.matches ? "dark" : "light");
 const themeListeners = [];
 function setTheme(t, save) {
   if (save) { try { localStorage.setItem("theme", t); } catch {} }
@@ -124,7 +124,8 @@ function passKit() {
 
   // Lamp = the dark-mode switch. Lit whenever the theme is Espresso (CSS: the shade glows and a
   // warm pool of light (.lamp-glow, inside the lamp, so it follows drags) spreads over the desk).
-  const toggleLamp = () => setTheme(root.dataset.theme === "espresso" ? "iced-latte" : "espresso", true);
+  let placeCone = () => {};
+  const toggleLamp = () => setTheme(root.dataset.theme === "dark" ? "light" : "dark", true);
 
   // her handwriting (content.js kit.ink.hand): one <img> per written line
   const handImgs = (lines) => (lines || []).map((h) =>
@@ -161,12 +162,31 @@ function passKit() {
     }
     if (k.id === "camera") b.setAttribute("aria-label", "Camera: take a photo");
     if (k.id === "lamp") {
+      // warm pool + light cone (behind the lamp, on the desk) and a bead pull-chain under the shade
       $(".kit__img", b).insertAdjacentHTML("afterbegin", '<span class="lamp-glow" aria-hidden="true"></span>');
+      // the light cone lives on the desk itself, above the objects, so its light falls on them;
+      // it's placed under the lamp's shade (in % of the desk, so resizing keeps it in place)
+      grid.insertAdjacentHTML("beforeend", '<span class="lamp-cone" aria-hidden="true"><i></i></span>');
+      const cone = $(".lamp-cone", grid);
+      placeCone = () => {
+        const g = grid.getBoundingClientRect(), r = b.getBoundingClientRect();
+        if (!g.width) return;
+        cone.style.left = ((r.left + r.width / 2 - g.left) / g.width) * 100 + "%";
+        cone.style.top = ((r.top + r.height * 0.4 - g.top) / g.height) * 100 + "%";
+        cone.style.width = (r.width * 3.2 / g.width) * 100 + "%";
+        cone.style.height = (r.height * 1.5 / g.height) * 100 + "%";
+      };
+      b.addEventListener("pointerup", () => requestAnimationFrame(placeCone)); // after a drag
+      requestAnimationFrame(placeCone);
+      $(".kit__img", b).insertAdjacentHTML("beforeend", `<svg class="lamp-chain" viewBox="0 0 10 60" aria-hidden="true" focusable="false">
+        ${Array.from({ length: 11 }, (_, i) => `<circle cx="5" cy="${2 + i * 4.2}" r="1.35"/>`).join("")}
+        <path class="lamp-chain__pull" d="M5 47 q-3.2 0 -3.2 4.5 q0 6.5 3.2 7.5 q3.2 -1 3.2 -7.5 q0 -4.5 -3.2 -4.5z"/></svg>`);
       const syncLamp = (t) => {
-        const on = t === "espresso";
+        placeCone();
+        const on = t === "dark";
         b.setAttribute("aria-pressed", String(on));
-        b.setAttribute("aria-label", "Lamp: dark mode (Espresso)");
-        b.title = on ? "Switch the lamp off (Iced Latte)" : "Switch the lamp on (Espresso)";
+        b.setAttribute("aria-label", "Toggle lamp (dark mode)");
+        b.title = on ? "Switch the lamp off" : "Switch the lamp on";
       };
       themeListeners.push(syncLamp); syncLamp(root.dataset.theme);
     }
@@ -197,7 +217,17 @@ function passKit() {
         if (k.cup) playFile("assets/sounds/sip.mp3", "sip", 0.75, 0.09);
         // alarm / clip: a recorded effect if saved as assets/sounds/<ring|snap>.mp3, else the 2s synth
         else if (k.sound === "ring" || k.sound === "snap") playFile(`assets/sounds/${k.sound}.mp3`, k.sound, 2);
-        else if (k.sound === "lamp") { playFile("assets/sounds/lamp.mp3", "lamp", 1); toggleLamp(); }
+        else if (k.sound === "lamp") { // pull the chain: it swings and settles (~0.4s), the light switches
+          playFile("assets/sounds/lamp.mp3", "lamp", 1);
+          if (!reduced) gsap.fromTo($(".lamp-chain", b), { rotation: 0, y: 0 }, { keyframes: [
+            { y: 3, rotation: 0, duration: 0.07, ease: "power1.out" },
+            { y: 0, rotation: 16, duration: 0.1, ease: "power1.out" },
+            { rotation: -10, duration: 0.1, ease: "sine.inOut" },
+            { rotation: 5, duration: 0.08, ease: "sine.inOut" },
+            { rotation: 0, duration: 0.1, ease: "sine.out" },
+          ] });
+          toggleLamp();
+        }
         else play(k.sound);
         if (k.sound === "shutter") ejectPrint();
         if (k.cup) steam(b);
@@ -380,6 +410,7 @@ function passKit() {
 
     // the writing: positions are measured when it starts (everything has landed by then)
     deskIntro.add(() => {
+      placeCone(); // everything has landed: put the lamp's light where the lamp now is
       if (!pen || !nb || !lines.length) { gsap.set(lines, { clipPath: "none" }); return; }
       const g = grid.getBoundingClientRect();
       const deg = (el) => parseFloat(getComputedStyle(el).getPropertyValue("--r")) || 0;
@@ -446,6 +477,7 @@ function passKit() {
         "--dx": "0px", "--dy": "0px", duration: t, ease: "power3.inOut", delay: reduced ? 0 : i * 0.04 });
     });
     music.closeCard();
+    gsap.delayedCall(t + 0.1, () => placeCone()); // the lamp moved
     // the writing: off the notebook pages and onto the desk (or back)
     gsap.to(nbInk, { opacity: mode === "chaos" ? 0 : 1, duration: t * 0.5 });
     if (mode === "chaos") {

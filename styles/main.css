@@ -49,8 +49,8 @@
   --content-w: min(1600px, calc((100svh - 110px) * 1.45));
 }
 
-/* Iced Latte (light): the default, and what a first visit gets unless the OS is in dark mode */
-:root, :root[data-theme="iced-latte"] {
+/* Iced Latte (light, data-theme="light"): the default, and what a first visit gets unless the OS is in dark mode */
+:root, :root[data-theme="light"] {
   color-scheme: light;
   --bg: #F7F5F0;          /* oat milk */
   --text: #3C2A21;        /* espresso */
@@ -74,8 +74,8 @@
   --blob-c: rgba(176, 120, 72, .22);   /* toasted */
   --brand-filter: none;
 }
-/* Espresso (dark) */
-:root[data-theme="espresso"] {
+/* Espresso (dark, data-theme="dark"). Text contrast: cream on espresso 14.94:1, muted 8.08:1, caramel 8.22:1 */
+:root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #1A110D;
   --text: #EAE6DF;        /* cream */
@@ -301,9 +301,28 @@ section { position: relative; }
   background: radial-gradient(circle, rgba(255, 205, 130, .34) 0%, rgba(255, 190, 105, .18) 32%, rgba(255, 185, 95, .07) 52%, rgba(255, 180, 90, 0) 70%);
   transition: opacity var(--dur-slow) var(--ease);
 }
-:root[data-theme="espresso"] .kit__item--lamp img { filter: brightness(1.12) saturate(1.35) drop-shadow(0 0 16px rgba(255, 196, 110, .7)) drop-shadow(0 0 40px rgba(255, 176, 80, .35)); }
-:root[data-theme="espresso"] .kit__item--lamp .kit__img::after,
-:root[data-theme="espresso"] .lamp-glow { opacity: 1; }
+:root[data-theme="dark"] .kit__item--lamp img { filter: brightness(1.12) saturate(1.35) drop-shadow(0 0 16px rgba(255, 196, 110, .7)) drop-shadow(0 0 40px rgba(255, 176, 80, .35)); }
+:root[data-theme="dark"] .kit__item--lamp .kit__img::after,
+:root[data-theme="dark"] .lamp-glow,
+:root[data-theme="dark"] .lamp-cone { opacity: 1; }
+/* the light cone: a soft warm wedge from the shade down over the desk, above the objects (screen
+   blend: it only ever lightens, so the light falls on the notebook too). Placed by app.js placeCone().
+   A blurred wrapper around a clipped wedge, so the edges are soft. Fades in with the lamp. */
+.lamp-cone {
+  position: absolute; z-index: 56; translate: -50% 0; pointer-events: none;
+  opacity: 0; filter: blur(16px); mix-blend-mode: screen; transition: opacity var(--dur-slow) var(--ease);
+}
+.lamp-cone i {
+  position: absolute; inset: 0; clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, rgba(255, 196, 120, .42), rgba(255, 184, 100, .18) 55%, rgba(255, 180, 90, 0) 95%);
+}
+/* bead pull-chain under the shade; swings on click (app.js), pivoting where it leaves the lamp */
+.lamp-chain {
+  position: absolute; left: 56%; top: 40.5%; width: 4.6%; height: auto; pointer-events: none;
+  transform-origin: 50% 0; overflow: visible;
+}
+.lamp-chain circle { fill: #d9d5ce; stroke: rgba(43, 29, 22, .45); stroke-width: .5; } /* brushed-metal beads */
+.lamp-chain__pull { fill: #bd8c40; }
 
 /* the alarm clock's live face (app.js clockFace): drawn over the photo's dial, same spot + size */
 .kit__item--alarm .kit__img { position: relative; display: block; }
@@ -330,7 +349,7 @@ section { position: relative; }
   -webkit-mask-image: radial-gradient(closest-side at 40% 45%, #000 35%, transparent 100%); mask-image: radial-gradient(closest-side at 40% 45%, #000 35%, transparent 100%);
   filter: blur(14px); mix-blend-mode: multiply;
 }
-:root[data-daylight="morning"][data-theme="iced-latte"] .kit__grid::after { display: block; }
+:root[data-daylight="morning"][data-theme="light"] .kit__grid::after { display: block; }
 
 /* evening / night in Paris: the whole page warms a little (on top of the Espresso dim) */
 .ambient {
@@ -340,7 +359,7 @@ section { position: relative; }
 }
 :root[data-daylight="evening"] .ambient, :root[data-daylight="night"] .ambient { opacity: .55; }
 @media (prefers-reduced-motion: reduce) {
-  .lamp-glow, .kit__item--lamp .kit__img::after, .ambient, .kit__item--alarm .kit__img { transition: none; }
+  .lamp-glow, .lamp-cone, .kit__item--lamp .kit__img::after, .ambient, .kit__item--alarm .kit__img { transition: none; }
   .clock-face__s { display: none; }
   .kit__item--alarm:hover .kit__img { transform: none; }
 }

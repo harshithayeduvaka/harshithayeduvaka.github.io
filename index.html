@@ -10,7 +10,8 @@
 <!-- Theme + time of day, before any CSS paints (no flash of the wrong theme).
      Saved choice wins. Otherwise: Paris evening/night (18:00-06:00) = the lamp is on = Espresso;
      daytime follows the visitor's OS setting. data-daylight (morning/day/evening/night, Paris time)
-     drives the desk light. Old values "light"/"dark" are migrated to the new names. Same rules as app.js. -->
+     drives the desk light. Theme values: "light" / "dark"; older saved values ("iced-latte"/"espresso")
+     are migrated. Same rules as app.js. -->
 <script>
   (function () {
     var root = document.documentElement, h = new Date().getHours();
@@ -18,12 +19,12 @@
     root.dataset.daylight = h >= 6 && h < 11 ? "morning" : h >= 11 && h < 18 ? "day" : h >= 18 && h < 22 ? "evening" : "night";
     var v = null;
     try {
-      var k = "theme", legacy = { light: "iced-latte", dark: "espresso" };
+      var k = "theme", legacy = { "iced-latte": "light", espresso: "dark" };
       v = localStorage.getItem(k);
       if (legacy[v]) { v = legacy[v]; localStorage.setItem(k, v); }
-      if (v !== "iced-latte" && v !== "espresso") { if (v !== null) localStorage.removeItem(k); v = null; }
+      if (v !== "light" && v !== "dark") { if (v !== null) localStorage.removeItem(k); v = null; }
     } catch (e) {}
-    if (!v) v = (h >= 18 || h < 6) ? "espresso" : (matchMedia("(prefers-color-scheme: dark)").matches ? "espresso" : "iced-latte");
+    if (!v) v = (h >= 18 || h < 6) ? "dark" : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     root.dataset.theme = v;
   })();
 </script>
@@ -32,11 +33,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,50;1,9..144,400..800,50&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261118h" />
+<link rel="stylesheet" href="styles/main.css?v=20261118j" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261118h" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261118h" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261118j" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261118j" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -108,7 +109,7 @@
       <div class="content">
         <h2 id="p03-h" class="pass__title display">The Story So Far <span class="about-me__cmd" aria-hidden="true">✦</span></h2>
         <div class="snaps">
-          <img class="snaps__camera" src="assets/objects/camera.avif?v=20261118h" alt="" aria-hidden="true" width="361" height="259" loading="lazy" decoding="async" draggable="false" />
+          <img class="snaps__camera" src="assets/objects/camera.avif?v=20261118j" alt="" aria-hidden="true" width="361" height="259" loading="lazy" decoding="async" draggable="false" />
           <ul class="snaps__row" id="snaps" aria-label="Work experience"></ul>
         </div>
       </div>
@@ -220,6 +221,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261118h"></script>
+<script type="module" src="scripts/app.js?v=20261118j"></script>
 </body>
 </html>

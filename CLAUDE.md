@@ -42,13 +42,13 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 
 ## Time of day + lamp (2026-11-18)
 - Alarm clock = real Paris time: app.js clockFace() draws an SVG face (Fraunces numerals) over the photo's dial (.clock-face: left 11.76% / top 30.24% / width 78.43% of the image); hands set every second; aria-label says the time. Reduced motion: no second hand.
-- Lamp = the ONLY dark-mode switch (the Iced Latte/Espresso pill was removed at her request): lit (shade glow + .lamp-glow pool) whenever data-theme="espresso"; click toggles + saves (setTheme/themeListeners in app.js).
+- Lamp = the ONLY dark-mode switch (the Iced Latte/Espresso pill was removed at her request). Theme values are data-theme="light"/"dark" (saved "iced-latte"/"espresso" are migrated by the <head> script). Lit (shade glow, .lamp-glow pool, .lamp-cone light wedge on the desk above the objects, placed by placeCone()) whenever dark; click = the bead pull-chain (.lamp-chain SVG under the shade) swings ~0.4s + theme toggles + saves. aria-label "Toggle lamp (dark mode)", aria-pressed.
 - data-daylight on <html> (Paris time: morning 6-11, day 11-18, evening 18-22, night 22-6), set by the <head> script and re-checked every 30s. Morning + Iced Latte: soft blurred window shadows on the desk (.kit__grid::after). Evening/night: warm tint over the page (.ambient) and, if the visitor hasn't chosen a theme, the lamp switches on (Espresso). Saved choice always wins.
 
 ## Desk intro (animations brief, Phase 1, 2026-11-18)
 - First visit of the browser session only (sessionStorage "hy-booted"; `firstVisit` in app.js). After the loader: the desk is empty, objects arrive one by one (notebook, pen, cup, camera, lamp, headphones, alarm, clip, then the folder), each 0.4s, 0.13s apart; shadows fade in as each lands (.is-airborne). Then the pen lifts and writes her handwriting images (signature, title, tagline 1+2) left to right, its tip on the reveal edge, then returns to rest. Positions are measured at write time (works at any desk size). Reduced motion or a repeat visit: final desk at once.
 - The intro line is also real text: a visually-hidden <p> under the hidden <h1> in the hero.
-- Remaining phases of that brief (each needs her OK first): 2 lamp pull-chain + light cone + aria-label "Toggle lamp (dark mode)" + theme value "dark"; 3 fixed coffee-cup reading progress (bottom left); 4 wax-sealed envelope after a successful contact form send.
+- Phase 2 done (lamp, see above). Remaining (each needs her OK first): 3 fixed coffee-cup reading progress (bottom left); 4 wax-sealed envelope after a successful contact form send.
 
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.
