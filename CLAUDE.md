@@ -37,7 +37,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 - Themes: Iced Latte (light, default) / Espresso (dark). Tokens at the top of main.css: theme tokens (--bg, --text, --accent, --link, --border, --glass-*) vs a fixed material palette (--espresso, --cream, --roast... for paper, wood, badges, deck). Saved in localStorage "theme" ("iced-latte"/"espresso"; legacy "light"/"dark" migrated by the inline <head> script, which also prevents a flash). No saved choice = prefers-color-scheme. Switch = .theme-switch top right; cross-fade via View Transitions.
 - Fonts: Fraunces only, everywhere (her request, 2026-11-18). Her handwriting on the notebook is an image. Token: --font.
 - Featured Work = glass card grid (pass05): thumb, title, kind, The Stack (content.js projects[].stack, pulled from each project's text), The Impact (projects[].impact), Open deck. Blurred caramel blobs drift behind (#p05::before/::after).
-- "What makes me, me?" + "On My Shelf" merged into "Off the Menu" (#about): marquee (content.js `marquee`), letter, desk photo (about.deskPhoto, empty = warm placeholder frame; replaced the knight), shelf (#books kept for the in-text link).
+- "What makes me, me?" + "On My Shelf" merged into "Off the Menu" (#about): marquee (content.js `marquee`), letter (the knight and the desk photo slot were both removed at her request), shelf (#books kept for the in-text link).
 - Reveals for new elements: IntersectionObserver reveal() in app.js (existing GSAP reveals kept). Footer text is exact; "Say hi." = mailto.
 
 ## Time of day + lamp (2026-11-18)

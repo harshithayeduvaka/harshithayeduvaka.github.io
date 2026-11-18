@@ -726,7 +726,7 @@ section { position: relative; }
    --lh = one text line = one ruled line, so the text sits on the rules (paragraph gaps are one
    empty line). Recycled paper: warm oatmeal with a soft, uneven tone (low-frequency SVG noise, no specks). */
 /* letter + desk photo side by side; the marquee runs above, the shelf below */
-.about-me__row { display: grid; grid-template-columns: minmax(0, 1fr) clamp(200px, 22vw, 320px); gap: clamp(24px, 4vw, 64px); align-items: center; margin-top: clamp(28px, 4vw, 48px); }
+.about-me__row { margin-top: clamp(28px, 4vw, 48px); } /* the letter (the desk photo slot was removed at her request) */
 .letter-wrap { position: relative; max-width: fit-content; margin-left: clamp(0px, 2vw, 32px); padding-bottom: 28px; }
 .letter {
   --lh: calc(var(--fs-18) * 1.65);
@@ -778,15 +778,6 @@ section { position: relative; }
   height: calc(var(--lh) * 1.75); width: auto; max-width: 78%;
 }
 
-/* moody desk photo (content.js about.deskPhoto): portrait 2:3, warm frame while it loads / until set */
-.desk-photo {
-  margin: 0; aspect-ratio: 2 / 3; width: 100%; overflow: hidden; border-radius: var(--radius-lg);
-  background:
-    radial-gradient(120% 80% at 30% 20%, rgba(212, 163, 115, .45), transparent 60%),
-    linear-gradient(160deg, #C9A27C, #7A5236 70%, #4A3021);
-  box-shadow: var(--shadow-soft);
-}
-.desk-photo img { width: 100%; height: 100%; object-fit: cover; }
 
 /* the marquee: a slow ribbon of what she's reading / playing; pauses on hover + focus */
 .marquee {
@@ -813,8 +804,6 @@ section { position: relative; }
   .letter__photo { width: 96px; margin: calc(var(--lh) * -2 - 18px) calc(var(--pad-r) * -1 - 4px) 8px 12px; }
   .letter__photo .print { padding: 6px 6px 22px; }
   .letter__tape { width: 50%; height: 14px; }
-  .about-me__row { grid-template-columns: minmax(0, 1fr); }
-  .desk-photo { width: min(64%, 260px); justify-self: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .letter__photo, .letter__photo .print { transition: none; }

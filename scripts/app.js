@@ -780,16 +780,6 @@ function passAboutMe() {
       scrollTrigger: { trigger: letter, start: "top 82%" } });
   }
 
-  // desk photo beside the letter (content.js about.deskPhoto). Empty src = a warm frame of the
-  // same size, so nothing shifts when the real photo is added.
-  const fig = $("#deskPhoto");
-  if (fig) {
-    const d = about.deskPhoto || {};
-    if (d.src) fig.innerHTML = `<img src="${d.src}?v=${ASSET_V}" alt="${d.alt || ""}" width="400" height="600" loading="lazy" decoding="async" />`;
-    else fig.setAttribute("aria-hidden", "true");
-    reveal([fig]);
-  }
-
   // marquee: one list for everyone, plus an identical copy (aria-hidden) so the loop is seamless
   const mq = $("#marquee");
   if (mq && marquee && marquee.length) {

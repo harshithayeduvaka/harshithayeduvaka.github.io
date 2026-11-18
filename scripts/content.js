@@ -28,9 +28,6 @@ export const about = {
   // Her photo taped to the About letter, and the one on the SKEMA student card
   // The "About ⌘" section near the bottom of the page (her words).
   title: "About",
-  // Moody desk photo beside the letter (replaced the chess knight). Until `src` is set, a warm
-  // empty frame of the same size holds the space. Example: { src: "assets/desk.avif", alt: "My desk: ..." }
-  deskPhoto: { src: "", alt: "" },
   paragraphs: [
     "I’m a marketing and business development professional based in Paris, and I do my best work when something doesn’t add up yet.",
     "It might be a campaign that should have worked and didn’t, or a market nobody has cracked. That’s where I get curious. I like taking the problem apart and asking the slightly annoying questions until it fits back together as something a team can act on. My favourite part is the moment everyone finally sees the problem clearly and knows what to do next.",
