@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118e";
-import { initMusic } from "./music.js?v=20261118e";
-import { initBookshelf } from "./bookshelf.js?v=20261118e";
+import { play, playFile } from "./sound.js?v=20261118f";
+import { initMusic } from "./music.js?v=20261118f";
+import { initBookshelf } from "./bookshelf.js?v=20261118f";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118e";
+} from "./content.js?v=20261118f";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118e";
+const ASSET_V = "20261118f";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
