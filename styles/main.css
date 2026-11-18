@@ -274,7 +274,7 @@ section { position: relative; }
 .kit__img img { width: 100%; height: auto; pointer-events: none; transition: transform .35s var(--ease-parse); }
 /* hover lift: the whole object moves. The polaroid lifts as one piece (frame + photo);
    the coffee never moves. */
-.kit__item:not(.kit__item--cup):not(.kit__item--print):not(.kit__item--alarm):hover img { transform: translateY(-5px); }
+.kit__item:not(.kit__item--cup):not(.kit__item--print):not(.kit__item--alarm):not(.kit__item--pen):hover img { transform: translateY(-5px); }
 .kit__item:not(.kit__item--cup):not(.kit__item--print).is-dragging img { transform: scale(1.04); }
 .print { transition: transform .35s var(--ease-parse); }
 .print img { transition: none !important; transform: none !important; }
@@ -283,6 +283,12 @@ section { position: relative; }
 
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
 .kit__item--pen { padding: 2px; } /* thin object: barely any padding */
+/* the pen's nib (drawn; the photo is of a retracted pen): out of the tip end, tilts with the pen */
+.kit__item--pen .kit__img { position: relative; display: block; }
+.pen-nib { position: absolute; left: 50%; top: calc(100% - 3px); width: 52%; height: auto; translate: -50% 0; pointer-events: none; overflow: visible; }
+/* the pen lifts as one piece on hover (body + nib) */
+.kit__item--pen .kit__img { transition: transform .35s var(--ease); }
+.kit__item--pen:hover .kit__img { transform: translateY(-5px); }
 .kit__item--headphones img, .kit__item--pen img { filter: drop-shadow(0 10px 12px rgba(43, 29, 22, .2)) drop-shadow(0 1px 2px rgba(43, 29, 22, .18)); }
 .kit__item--print { padding: 0; }
 /* lamp = the dark-mode switch: lit whenever the theme is Espresso (click toggles it).
