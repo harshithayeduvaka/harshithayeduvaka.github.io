@@ -32,11 +32,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,50;1,9..144,400..800,50&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261118g" />
+<link rel="stylesheet" href="styles/main.css?v=20261118h" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261118g" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261118g" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261118h" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261118h" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -61,14 +61,11 @@
   <a class="brand" href="#top" aria-label="Harshitha Yeduvaka, back to top">
     <img src="assets/logo-hy.avif" alt="" width="200" height="140" fetchpriority="high" />
   </a>
-  <!-- Theme switch: Iced Latte (light) / Espresso (dark). app.js wires it up; the choice is saved. -->
-  <div class="theme-switch" role="group" aria-label="Colour theme">
-    <button type="button" class="theme-switch__btn" data-theme-set="iced-latte" aria-pressed="false">Iced Latte</button>
-    <button type="button" class="theme-switch__btn" data-theme-set="espresso" aria-pressed="false">Espresso</button>
-  </div>
 
   <header class="hero desk" id="top">
     <h1 class="visually-hidden">Harshitha Yeduvaka, Marketing &amp; Growth</h1>
+    <!-- the intro line, as real text (the notebook shows it in her handwriting, as images) -->
+    <p class="visually-hidden">Helping businesses turn marketing efforts into measurable growth.</p>
     <div class="kit">
       <div class="kit__grid" id="kitGrid">
         <!-- Folder: tools from content.js `tools` pop out of it (app.js passToolkit) -->
@@ -111,7 +108,7 @@
       <div class="content">
         <h2 id="p03-h" class="pass__title display">The Story So Far <span class="about-me__cmd" aria-hidden="true">✦</span></h2>
         <div class="snaps">
-          <img class="snaps__camera" src="assets/objects/camera.avif?v=20261118g" alt="" aria-hidden="true" width="361" height="259" loading="lazy" decoding="async" draggable="false" />
+          <img class="snaps__camera" src="assets/objects/camera.avif?v=20261118h" alt="" aria-hidden="true" width="361" height="259" loading="lazy" decoding="async" draggable="false" />
           <ul class="snaps__row" id="snaps" aria-label="Work experience"></ul>
         </div>
       </div>
@@ -224,6 +221,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261118g"></script>
+<script type="module" src="scripts/app.js?v=20261118h"></script>
 </body>
 </html>

@@ -1,25 +1,27 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118g";
-import { initMusic } from "./music.js?v=20261118g";
-import { initBookshelf } from "./bookshelf.js?v=20261118g";
+import { play, playFile } from "./sound.js?v=20261118h";
+import { initMusic } from "./music.js?v=20261118h";
+import { initBookshelf } from "./bookshelf.js?v=20261118h";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118g";
+} from "./content.js?v=20261118h";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
 gsap.defaults({ ease: "power3.out" });
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+// the desk intro plays once per browser session (boot() sets the flag)
+let firstVisit = true;
+try { firstVisit = sessionStorage.getItem("hy-booted") !== "1"; } catch {}
 const isMobile = matchMedia("(max-width: 860px)").matches;
 const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: objects can be dragged (touch: tap only, so the page still scrolls)
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118g";
+const ASSET_V = "20261118h";
 
 // ------------------------------------------------------------------
-// Paris time + theme (Iced Latte / Espresso). The lamp on the desk and the pill top right both
-// switch it; with no saved choice it follows the time of day in Paris (evening = lamp on).
+// Paris time + theme (Iced Latte / Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
 // The <head> script applies the same rules before paint.
 // ------------------------------------------------------------------
 const root = document.documentElement;
@@ -342,17 +344,73 @@ function passKit() {
     ] });
   }
 
-  // --- intro: objects settle onto the desk, then the name is written ---
-  const sign = $(".kit__sign"), typed = $$(".kit__type");
-  const settle = $$(".kit__item:not(.kit__item--print)");
-  if (!reduced) {
-    gsap.set(settle, { opacity: 0, "--s": 1.12 });
-    if (sign) gsap.set(sign, { clipPath: "inset(-30% 100% -30% -5%)" });
-    gsap.set(typed, { opacity: 0, y: 6 });
-    deskIntro = gsap.timeline({ paused: true })
-      .to(settle, { opacity: 1, "--s": 1, duration: 0.7, stagger: 0.09, ease: "power2.out" })
-      .to(sign, { clipPath: "inset(-30% -5% -30% -5%)", duration: 1.6, ease: "power1.inOut" }, "-=0.2")
-      .to(typed, { opacity: 1, y: 0, duration: 0.5, stagger: 0.25 }, "-=0.2");
+  // --- intro (first visit of the session only; reduced motion: none) ---
+  // 1) The desk starts empty; someone sits down to work: the notebook slides in, the pen rolls
+  //    in, the cup is set down, then camera, lamp, headphones, clock, clip and folder (~1.5s).
+  //    Each object's shadow fades in as it lands.
+  // 2) The pen lifts and writes her name, title and tagline in her own handwriting: each line is
+  //    revealed left to right with the pen tip on the reveal edge. Then the pen goes back to rest.
+  if (!reduced && firstVisit) {
+    const W = () => grid.offsetWidth;
+    const item = (id) => $(`.kit__item--${id}`, grid);
+    const pen = item("pen"), nb = item("notebook");
+    const lines = $$(".kit__sign img, .kit__type .hand", grid);
+    // how each object arrives (offsets in % of the desk width, so phones match laptops)
+    const arrive = {
+      notebook: { dy: 0.06 }, pen: { dx: 0.1, dy: -0.03 }, cup: { dy: -0.02, s: 1.1 },
+      camera: { dx: -0.07 }, lamp: { dy: -0.05, s: 1.04 }, headphones: { dx: -0.06 },
+      alarm: { dy: -0.04 }, clip: { s: 1.25 },
+    };
+    const order = Object.keys(arrive).map(item).filter(Boolean);
+    const folderEl = $("#folder");
+    gsap.set(order, { opacity: 0 });
+    order.forEach((el) => el.classList.add("is-airborne"));
+    if (folderEl) gsap.set(folderEl, { opacity: 0, y: 12 });
+    gsap.set(lines, { clipPath: "inset(-40% 100% -40% -5%)" });
+
+    deskIntro = gsap.timeline({ paused: true, onStart: () => grid.classList.add("is-intro") });
+    order.forEach((el, i) => {
+      const a = arrive[Object.keys(arrive)[i]];
+      deskIntro.fromTo(el,
+        { opacity: 0, "--dx": (a.dx || 0) * W() + "px", "--dy": (a.dy || 0) * W() + "px", "--s": a.s || 1 },
+        { opacity: 1, "--dx": "0px", "--dy": "0px", "--s": 1, duration: 0.4, ease: "power2.out",
+          onComplete: () => el.classList.remove("is-airborne") }, i * 0.13);
+    });
+    if (folderEl) deskIntro.to(folderEl, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", clearProps: "transform,opacity" }, order.length * 0.13);
+
+    // the writing: positions are measured when it starts (everything has landed by then)
+    deskIntro.add(() => {
+      if (!pen || !nb || !lines.length) { gsap.set(lines, { clipPath: "none" }); return; }
+      const g = grid.getBoundingClientRect();
+      const deg = (el) => parseFloat(getComputedStyle(el).getPropertyValue("--r")) || 0;
+      const rp = deg(pen) * Math.PI / 180;
+      const pr = pen.getBoundingClientRect(), penImg = $("img", pen);
+      const L = penImg.offsetHeight;
+      // the tip is the bottom end of the (upright) pen image, turned by the pen's tilt
+      const tip0 = { x: pr.left + pr.width / 2 - g.left - (L / 2) * Math.sin(rp), y: pr.top + pr.height / 2 - g.top + (L / 2) * Math.cos(rp) };
+      const to = (pt) => ({ "--dx": pt.x - tip0.x + "px", "--dy": pt.y - tip0.y + "px" });
+      const tl = gsap.timeline({ onComplete: () => {
+        gsap.set(lines, { clearProps: "clipPath" });
+        grid.classList.remove("is-intro");
+      } });
+      const widths = lines.map((im) => im.offsetWidth), total = widths.reduce((x, y) => x + y, 0);
+      tl.to(pen, { "--s": 1.08, duration: 0.15, ease: "power1.out" }); // lifts
+      lines.forEach((im, i) => {
+        const r = im.getBoundingClientRect();
+        const th = (deg(nb) + (parseFloat(im.style.rotate) || 0)) * Math.PI / 180;
+        const cx = r.left + r.width / 2 - g.left, cy = r.top + r.height / 2 - g.top;
+        const hw = im.offsetWidth / 2, low = im.offsetHeight * 0.18; // a little under the middle: the writing line
+        const nx = -Math.sin(th) * low, ny = Math.cos(th) * low;
+        const start = { x: cx - hw * Math.cos(th) + nx, y: cy - hw * Math.sin(th) + ny };
+        const end = { x: cx + hw * Math.cos(th) + nx, y: cy + hw * Math.sin(th) + ny };
+        const dur = Math.max(0.28, 1.7 * widths[i] / total);
+        tl.to(pen, { ...to(start), "--s": 1.08, duration: i ? 0.2 : 0.3, ease: "power2.inOut" }) // travel, lifted
+          .to(pen, { "--s": 1, duration: 0.06 })                                                  // nib down
+          .to(im, { clipPath: "inset(-40% -5% -40% -5%)", duration: dur, ease: "none" }, "<")
+          .to(pen, { ...to(end), duration: dur, ease: "none" }, "<");
+      });
+      tl.to(pen, { "--dx": "0px", "--dy": "0px", "--s": 1, duration: 0.45, ease: "power2.inOut" }); // back to rest
+    }, "+=0.15");
   }
 
   // --- cup click: a curl of steam rises (restarts the CSS animation) ---
@@ -887,13 +945,7 @@ function reveal(els) {
 // paint; with none, CSS follows prefers-color-scheme. Switching cross-fades (View Transitions,
 // opacity only) where supported; reduced motion switches instantly.
 // ------------------------------------------------------------------
-function themeSwitch() {
-  const btns = $$("[data-theme-set]");
-  const sync = (t) => btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeSet === t)));
-  btns.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.themeSet, true)));
-  themeListeners.push(sync);
-  sync(root.dataset.theme);
-
+function themeSwitch() { // the lamp on the desk is the only switch now (passKit)
   // time of day in Paris, checked every 30s: morning shadows on the desk, evening = lamp on + warm
   // tint. Only changes the theme by itself when the visitor hasn't picked one.
   const tick = () => {

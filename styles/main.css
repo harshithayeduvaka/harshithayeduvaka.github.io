@@ -256,20 +256,6 @@ section { position: relative; }
 .brand img { width: 100%; height: auto; filter: var(--brand-filter); }
 .brand:hover { transform: rotate(-4deg) scale(1.05); }
 
-/* Iced Latte / Espresso switch: top right, scrolls away with the page like the HY mark */
-.theme-switch {
-  position: absolute; top: clamp(14px, 1.8vw, 26px); right: var(--gutter); z-index: 60;
-  display: flex; padding: 3px; gap: 2px; border-radius: var(--radius-pill);
-  border: 1px solid var(--border); background: var(--glass-bg);
-  -webkit-backdrop-filter: blur(var(--blur-glass)); backdrop-filter: blur(var(--blur-glass));
-}
-.theme-switch__btn {
-  min-height: 32px; padding: 4px 12px; border-radius: var(--radius-pill);
-  font: 600 var(--fs-11)/1 var(--font); letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted);
-}
-.theme-switch__btn:hover { color: var(--text); }
-.theme-switch__btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-
 /* the desk itself: as large as fits the screen, same proportions everywhere */
 .kit__grid {
   position: relative; /* no overflow clipping: objects can be dragged off the desk, anywhere on the page */
@@ -330,6 +316,11 @@ section { position: relative; }
 /* the clock lifts as one piece on hover (photo + live face) */
 .kit__item--alarm .kit__img { transition: transform .35s var(--ease); }
 .kit__item--alarm:hover .kit__img { transform: translateY(-5px); }
+
+/* desk intro (app.js): an object in the air has no shadow; it fades in as the object lands */
+.kit__grid.is-intro { pointer-events: none; } /* no drags/clicks while the desk is being set */
+.kit__grid.is-intro .kit__item img { transition: filter .35s ease-out; }
+.kit__item.is-airborne img { filter: none !important; }
 
 /* morning in Paris: soft window shadows fall across the desk (static, blurred, multiplied) */
 .kit__grid::after {
