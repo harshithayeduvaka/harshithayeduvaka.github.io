@@ -1,11 +1,12 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261119a";
-import { initMusic } from "./music.js?v=20261119a";
-import { initBookshelf } from "./bookshelf.js?v=20261119a";
-import { initCup } from "./cup.js?v=20261119a";
+import { play, playFile } from "./sound.js?v=20261119d";
+import { initMusic } from "./music.js?v=20261119d";
+import { initBookshelf } from "./bookshelf.js?v=20261119d";
+import { doodles } from "./doodles.js?v=20261119d";
+import { initCup } from "./cup.js?v=20261119d";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261119a";
+} from "./content.js?v=20261119d";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +20,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261119a";
+const ASSET_V = "20261119d";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -639,76 +640,92 @@ function passToolkit() {
 }
 
 // ------------------------------------------------------------------
-// The Story So Far: one bag of coffee per role (content.js `experience[].bag`), standing on a
-// counter. Everything is on the label: blend, role (the headline), tasting notes (the results),
-// origin (ohmyATS links from there). Scroll in: the bags are set down one by one. Hover / keyboard focus: the bag
-// tilts and lifts (CSS) and a few beans tumble out of the top (once per hover).
-// Reduced motion: none of that, the bags are simply there.
+// The Story So Far: a flip-book notebook (content.js `experience[].book`), one spread per role,
+// newest first. Left page = the role's photo (taped, slightly tilted); right page = the text.
+//
+// One set of HTML for every layout (CSS decides):
+//   photo 1 (left page) | leaf 1 = [role 1 text | back: photo 2] | leaf 2 = [role 2 | back: photo 3] | role 3
+// Desktop (>= 900px, motion OK): the leaves lie on the right page, leaf 1 on top. The section pins
+// and the scroll turns leaf 1, then leaf 2, around the spine (rotateY 0 -> -180deg), so each turn
+// shows the next photo on the left and the next text on the right. A shade sweeps over the turning
+// page. Phones / reduced motion: the leaves "dissolve" (display: contents) and the six faces stack
+// as three single pages (photo, then text). Text is real HTML; tape, rules and doodles are aria-hidden.
 // ------------------------------------------------------------------
 function pass03() {
-  const list = $("#bags");
-  const roles = experience.filter((e) => e.type === "work" && e.bag);
-  const bean = `<svg viewBox="0 0 12 16" aria-hidden="true" focusable="false"><ellipse cx="6" cy="8" rx="5" ry="7"/><path d="M6.4 1.6c-2.6 4.2 1.4 8.2-.8 12.8"/></svg>`;
-  const linkIcon = `<svg class="bag__link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>`;
+  const root3 = $("#flip");
+  const roles = experience.filter((e) => e.type === "work" && e.book);
+  if (!root3 || roles.length !== 3) return;
 
-  // origin line; where the role has a link (ohmyATS), the company name in it is that link
-  const origin = (e) => !e.link ? e.bag.origin : e.bag.origin.replace(e.org,
-    `<a class="bag__link" href="${e.link}" target="_blank" rel="noopener">${e.org}${linkIcon}<span class="visually-hidden"> (opens in a new tab)</span></a>`);
+  const photo = (e, n, cls = "") => `
+    <figure class="flip__face flip__photo ${cls}" data-n="${n}"><div class="flip__in">
+      <span class="flip__print" style="--tilt:${e.book.tilt}deg">
+        <span class="flip__tape" aria-hidden="true"></span>
+        <img src="${e.book.photo.src}?v=${ASSET_V}" alt="${e.book.photo.alt}" width="960" height="720" loading="lazy" decoding="async" draggable="false" />
+      </span>
+    </div></figure>`;
+  const text = (e, n, cls = "") => `
+    <article class="flip__face flip__text ${cls}" data-n="${n}" aria-labelledby="flip-role-${n}"><div class="flip__in">
+      <p class="flip__kicker mono">${e.book.kicker}</p>
+      <h3 class="flip__role" id="flip-role-${n}">${e.role}</h3>
+      <p class="flip__result">${e.book.result}</p>
+      <p class="flip__line">${e.book.line}</p>
+      ${e.link ? `<a class="flip__link" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org}<span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
+      <span class="flip__doodle-wrap" aria-hidden="true">${doodles[e.book.doodle] || ""}</span>
+    </div></article>`;
+  const [a, b, c] = roles;
+  root3.innerHTML = `
+    <div class="flip__book">
+      <span class="flip__cover" aria-hidden="true"></span>
+      <div class="flip__spread">
+        ${photo(a, 1, "flip__left")}
+        <div class="flip__leaf flip__leaf--1">${text(a, 1, "flip__front")}${photo(b, 2, "flip__back")}<span class="flip__shade" aria-hidden="true"></span></div>
+        <div class="flip__leaf flip__leaf--2">${text(b, 2, "flip__front")}${photo(c, 3, "flip__back")}<span class="flip__shade" aria-hidden="true"></span></div>
+        ${text(c, 3, "flip__right")}
+      </div>
+    </div>
+    <div class="flip__dots" role="group" aria-label="Notebook pages">
+      ${roles.map((e, i) => `<button type="button" class="flip__dot" data-i="${i}" aria-label="Page ${i + 1}: ${e.role}">${i + 1}</button>`).join("")}
+    </div>`;
 
-  list.innerHTML = roles.map((e, i) => {
-    const b = e.bag, id = `bag-${i}`;
-    return `
-    <li class="bag-slot">
-      <article class="bag" tabindex="0" aria-labelledby="${id}" style="--kraft:${b.kraft}">
-        <div class="bag__body">
-          <span class="bag__fold" aria-hidden="true"></span>
-          <span class="bag__tie" aria-hidden="true"></span>
-          <span class="bag__valve" aria-hidden="true"></span>
-          <div class="bag__label">
-            <p class="bag__blend mono">${b.blend}</p>
-            <h3 class="bag__role" id="${id}">${e.role}</h3>
-            <hr class="bag__rule" />
-            <p class="bag__notes-h mono">Tasting notes</p>
-            <p class="bag__notes">${b.notes.join('<span class="bag__dot" aria-hidden="true"> · </span>')}</p>
-            <dl class="bag__facts mono">
-              <div><dt>Origin</dt><dd>${origin(e)}</dd></div>
-            </dl>
-          </div>
-        </div>
-        <span class="bag__beans" aria-hidden="true">${bean.repeat(5)}</span>
-      </article>
-      <span class="bag-slot__counter" aria-hidden="true"></span>
-    </li>`;
-  }).join("");
-
-  if (reduced) return;
-  const bags = $$(".bag", list);
-
-  // set down on the counter one by one (once)
-  gsap.set(bags, { y: -24, opacity: 0 });
-  ScrollTrigger.create({ trigger: list, start: "top 80%", once: true, onEnter: () =>
-    gsap.to(bags, { y: 0, opacity: 1, duration: 0.4, stagger: 0.12, ease: "power2.out", clearProps: "transform,opacity" }) });
-
-  // beans tumble out of the top: at most once per hover / focus
-  bags.forEach((bag) => {
-    const beans = $$(".bag__beans svg", bag);
-    let spilled = false;
-    const spill = () => {
-      if (spilled) return;
-      spilled = true;
-      beans.forEach((bn, k) => {
-        const side = k % 2 ? 1 : -1;
-        gsap.fromTo(bn,
-          { x: (k - 2) * 7, y: 0, rotation: gsap.utils.random(-40, 40), opacity: 1 },
-          { x: (k - 2) * 7 + side * gsap.utils.random(14, 34), y: gsap.utils.random(34, 46), rotation: `+=${gsap.utils.random(90, 200) * side}`,
-            opacity: 0, duration: 0.7, delay: k * 0.04, ease: "power1.in" });
-      });
+  // page turning: desktop with motion only (the CSS uses the same condition for the 3D layout)
+  const mm = gsap.matchMedia();
+  mm.add("(min-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
+    const leaves = $$(".flip__leaf", root3);
+    const shades = leaves.map((l) => $(".flip__shade", l));
+    const dots = $$(".flip__dot", root3);
+    // timeline in "turns": leaf 1 turns over 0..1, a short rest, leaf 2 over 1.25..2.25, rest
+    gsap.set(leaves, { transformPerspective: 1600, transformOrigin: "0% 50%" }); // perspective ~1600px, hinged on the spine
+    const sync = () => {
+      const turned = leaves.map((l) => (gsap.getProperty(l, "rotationY") || 0) < -90);
+      // a turned leaf lies on the left, above the earlier ones
+      leaves.forEach((l, i) => { l.style.zIndex = turned[i] ? 10 + i : 3 - i; });
+      // only the visible text can be reached with the keyboard
+      $$(".flip__front", root3).forEach((f, i) => { f.inert = turned[i] || (i > 0 && !turned[i - 1]); });
+      const at = turned[1] ? 2 : turned[0] ? 1 : 0;
+      dots.forEach((d, i) => d.setAttribute("aria-current", i === at ? "true" : "false"));
     };
-    const reset = () => { spilled = false; };
-    bag.addEventListener("pointerenter", (ev) => { if (ev.pointerType === "mouse") spill(); });
-    bag.addEventListener("pointerleave", reset);
-    bag.addEventListener("focus", () => { if (bag.matches(":focus-visible")) spill(); });
-    bag.addEventListener("blur", reset);
+    const tl = gsap.timeline({ defaults: { ease: "none" }, onUpdate: sync });
+    leaves.forEach((leaf, i) => {
+      const t0 = i * 1.25;
+      tl.fromTo(leaf, { rotationY: 0 }, { rotationY: -180, duration: 1, ease: "power1.inOut" }, t0)
+        // the shade darkens the page as it lifts toward the reader, then clears as it lands
+        .fromTo(shades[i], { opacity: 0 }, { opacity: 0.32, duration: 0.5, ease: "power1.in" }, t0)
+        .to(shades[i], { opacity: 0, duration: 0.5, ease: "power1.out" }, t0 + 0.5);
+    });
+    tl.to({}, { duration: 0.2 }); // a beat on the last spread before the page scrolls on
+    const total = tl.duration();
+    const stops = [0, 1.1 / total, 2.35 / total]; // progress at which each spread is fully open
+
+    const st = ScrollTrigger.create({
+      trigger: "#p03", start: "top top", end: "+=" + Math.round(innerHeight * 2.5), pin: true, scrub: 0.6,
+      animation: tl,
+    });
+    sync();
+    dots.forEach((d, i) => d.addEventListener("click", () => {
+      const y = st.start + (st.end - st.start) * stops[i] + 2;
+      if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else scrollTo(0, y);
+    }));
+    return () => { leaves.forEach((l) => { l.style.zIndex = ""; }); $$(".flip__front", root3).forEach((f) => { f.inert = false; }); };
   });
 }
 

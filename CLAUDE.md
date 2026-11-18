@@ -12,12 +12,15 @@ iFrame embed (loaded on first play; 30s previews unless logged in). Vinyl record
 Below it: "The Story So Far" badges, case studies, About (a letter on recycled ruled paper, plain tone with no specks: text from content.js `about`, no photo (removed at her request), signature.png, her wooden knight photo cut out as assets/objects/knight.avif; the ruled lines follow `--lh`, so keep paragraph spacing at one line), "On My Shelf" (scripts/bookshelf.js: books from content.js `books`, covers in assets/covers/<slug>.jpg; click a spine = tip, neighbours lean, slide out + turn to the cover in a <dialog>; tunables at the top of bookshelf.js), contact. (ohmyATS demo removed: its badge
 links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
-no "PASS" rail labels. Experience = "The Story So Far ✦" (2026-11-18, replaced the instant photos): three bags of coffee on a counter, one per WORK
-role (content.js `experience[].bag`: blend, kraft colour, notes with <b> results, origin; SKEMA not shown). Pure HTML/CSS
-(kraft paper, folded top, espresso tin-tie, valve, cream label sized in cqi); subtitle "Three blends, roasted over three years".
-No dates on the labels and no "Visit" CTA, at her request: "ohmyATS" in the Origin line is the link (chain icon).
-Scroll in: bags set down one by one (GSAP). Hover/focus: tilt 3deg + lift 6px (CSS), 5 beans spill once per hover (GSAP).
-Phones (<720px): one bag per row, max 360px. Reduced motion: static. Old photos (assets/work/) deleted.
+no "PASS" rail labels. Experience = "The Story So Far ✦" (2026-11-19, replaced the coffee bags): a flip-book notebook, one spread per WORK role,
+newest first (content.js `experience[].book`: kicker, result, line, doodle, tilt, photo; photos in assets/work/, doodles inlined
+from her ~/Downloads/doodles in scripts/doodles.js so they take the ink colour). Left page = taped, tilted photo; right page =
+kicker (small caps), role (h3), result (Fraunces italic, dark caramel; one-font rule, so no Caveat), one line, doodle; ohmyATS
+has a plain underlined "Visit ohmyATS" link (no icon, her choice). DOM: photo1 | leaf1[text1|photo2] | leaf2[text2|photo3] | text3.
+Desktop >=900px + motion: open notebook (espresso cover edge, ruled cream pages, fold shadow); #p03 pins for 2.5 screens and the
+scroll (scrub) turns leaf 1 then leaf 2 (rotateY 0..-180, transformPerspective 1600, shade sweep); dots 1-3 are buttons that
+scroll to each spread; z-index/inert/aria-current follow the timeline. Phones / reduced motion: the leaves are display:contents
+and the six faces stack as three single pages (CSS order). Pages stay cream in both themes.
 Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/

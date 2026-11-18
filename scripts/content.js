@@ -183,10 +183,10 @@ export const experience = [
     city: "Paris",
     accent: "cherry",
     result: "Built a CV-screening tool from scratch, solo.",
-    // "The Story So Far" coffee bag (role = the headline; <b> = a result, bold in caramel)
-    bag: { blend: "Founder’s Espresso", kraft: "#C9A27A",
-      notes: ["Built solo", "English, French & German", "Tuned on <b>100+</b> real CVs"],
-      origin: "ohmyATS · Paris" },
+    // "The Story So Far" notebook spread: photo on the left page, text on the right
+    book: { kicker: "ohmyATS · Mar 2026 – Present · Paris", result: "built it solo, in 3 languages",
+      line: "Tuned on 100+ real CVs, in English, French and German.", doodle: "laptop", tilt: -1.6,
+      photo: { src: "assets/work/ohmyats.avif", alt: "The ohmyATS home page" } },
     detail: "It scores graduate CVs against ATS filters in English, French and German, tuned on 100+ real profiles.",
   },
   {
@@ -199,9 +199,9 @@ export const experience = [
     city: "Berlin",
     accent: "nomadx",
     result: "Lifted email open rates 15% by A/B testing.",
-    bag: { blend: "Marketing Blend", kraft: "#BE9367",
-      notes: ["A/B-tested emails", "<b>+15%</b> open rates", "<b>+12%</b> followers", "<b>+17%</b> engagement"],
-      origin: "Nomad X Collective · Berlin" },
+    book: { kicker: "Nomad X Collective · Aug 2025 – Jan 2026 · Berlin", result: "A/B tests lifted email opens +15%",
+      line: "Followers +12%, engagement +17%, Meta Ads tracked for ROI.", doodle: "envelope-ab", tilt: 1.4,
+      photo: { src: "assets/work/nomadx.avif", alt: "Two envelopes marked A and B, with a +15% note on B" } },
     detail: "Found the message that drove sign-ups. Grew followers 12% and engagement 17%, and ran Meta Ads.",
   },
   {
@@ -214,9 +214,9 @@ export const experience = [
     city: "Hyderabad",
     accent: "keka",
     result: "Cut client churn 15% in one quarter.",
-    bag: { blend: "Implementation Roast", kraft: "#D0AD84",
-      notes: ["<b>65+</b> enterprise accounts onboarded", "Churn <b>−15%</b> in one quarter", "Clients trained to run it alone"],
-      origin: "Keka HR Technologies · Hyderabad" },
+    book: { kicker: "Keka HR · Jan 2023 – Jul 2024 · Hyderabad", result: "cut client churn 15% in one quarter",
+      line: "65+ enterprise accounts onboarded and trained to run it alone.", doodle: "clipboard", tilt: -1.1,
+      photo: { src: "assets/work/keka.avif", alt: "A client onboarding checklist, every step ticked" } },
     detail: "Across 25+ SME accounts. Also onboarded 65+ enterprise clients, including Zivame and Future Group.",
   },
   {

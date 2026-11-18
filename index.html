@@ -33,11 +33,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,50;1,9..144,400..800,50&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261119a" />
+<link rel="stylesheet" href="styles/main.css?v=20261119d" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261119a" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261119a" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261119d" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261119d" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -102,14 +102,14 @@
     </div>
   </header>
 
-  <!-- The Story So Far: three bags of coffee on a counter, one per role (the role is the label's
-       headline, results are the tasting notes). Built from content.js `experience[].bag` (app.js pass03). -->
+  <!-- The Story So Far: a flip-book notebook, one spread per role (photo left, text right). Desktop:
+       the section pins and scrolling turns the pages. Phones / reduced motion: the spreads stacked as
+       single pages. Built from content.js `experience[].book` (app.js pass03). -->
   <section class="pass" id="p03" aria-labelledby="p03-h">
     <div class="pass__grid">
       <div class="content">
         <h2 id="p03-h" class="pass__title display">The Story So Far <span class="about-me__cmd" aria-hidden="true">✦</span></h2>
-        <p class="pass__sub mono">Three blends, roasted over three years</p>
-        <ul class="bags" id="bags" aria-label="Work experience"></ul>
+        <div class="flip" id="flip"></div>
       </div>
     </div>
   </section>
@@ -219,6 +219,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261119a"></script>
+<script type="module" src="scripts/app.js?v=20261119d"></script>
 </body>
 </html>
