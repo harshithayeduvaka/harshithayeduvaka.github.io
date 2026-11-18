@@ -313,7 +313,7 @@ export const projects = [
 // The slow ribbon under the "Off the Menu" heading. Reading + music are hers; the other lines come
 // from her own About text, bookshelf and footer. Add, remove or reorder freely.
 export const marquee = [
-  { label: "Currently Reading", value: "The Housemaid" },
+  { label: "Currently Reading", value: "To Kill a Mockingbird" },
   { label: "On Repeat", value: "Taylor Swift" },
   { label: "Next on the Shelf", value: "How Brands Grow" },
   { label: "Off the Clock", value: "losing at chess online" },
