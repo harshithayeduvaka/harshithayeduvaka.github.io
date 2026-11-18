@@ -983,8 +983,8 @@ section { position: relative; }
 footer { padding: 48px var(--gutter) 104px; /* extra room at the bottom: the coffee-cup progress sits in the corner */ color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px 40px;
   max-width: calc(var(--content-w) + 2 * var(--gutter)); margin-inline: auto; line-height: 1.7; }
 footer.mono { text-transform: none; letter-spacing: .01em; font-size: var(--fs-13); } /* the line reads exactly as written */
-.footer__hi { color: var(--link); border-bottom: 1px solid currentColor; }
-.footer__hi:hover { border-bottom-width: 2px; }
+.footer__hi { color: var(--link); font-weight: 600; } /* no underline, at her request; caramel + bolder marks it as the link */
+.footer__hi:hover { color: var(--text); }
 
 /* ============================================================
    Case-study deck viewer (native <dialog>, opened from a case-study row)
