@@ -48,7 +48,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 ## Desk intro (animations brief, Phase 1, 2026-11-18)
 - First visit of the browser session only (sessionStorage "hy-booted"; `firstVisit` in app.js). After the loader: the desk is empty, objects arrive one by one (notebook, pen, cup, camera, lamp, headphones, alarm, clip, then the folder), each 0.4s, 0.13s apart; shadows fade in as each lands (.is-airborne). Then the pen lifts and writes her handwriting images (signature, title, tagline 1+2) left to right, its tip on the reveal edge, then returns to rest. Positions are measured at write time (works at any desk size). Reduced motion or a repeat visit: final desk at once.
 - The intro line is also real text: a visually-hidden <p> under the hidden <h1> in the hero.
-- Phase 2 done (lamp, see above). Remaining (each needs her OK first): 3 fixed coffee-cup reading progress (bottom left); 4 wax-sealed envelope after a successful contact form send.
+- Phase 2 done (lamp, see above). Phase 3 done: scripts/cup.js = fixed coffee cup bottom left (SVG; liquid group translateY 0..36 = scroll progress; slosh once ~0.5s when scrolling stops; steam loop 3.6s; appears after 35% of the hero; "Refill?" button above it when empty, focusable only then, scrolls to top and focuses .brand). Footer has 104px bottom padding so its text clears the cup. Remaining (needs her OK): 4 wax-sealed envelope after a successful contact form send.
 
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.

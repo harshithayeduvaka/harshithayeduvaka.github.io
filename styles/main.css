@@ -980,7 +980,7 @@ section { position: relative; }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-footer { padding: 48px var(--gutter); color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px 40px;
+footer { padding: 48px var(--gutter) 104px; /* extra room at the bottom: the coffee-cup progress sits in the corner */ color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px 40px;
   max-width: calc(var(--content-w) + 2 * var(--gutter)); margin-inline: auto; line-height: 1.7; }
 footer.mono { text-transform: none; letter-spacing: .01em; font-size: var(--fs-13); } /* the line reads exactly as written */
 .footer__hi { color: var(--link); border-bottom: 1px solid currentColor; }
@@ -1074,6 +1074,48 @@ html.deck-open { overflow: hidden; }
   .kit__item { cursor: pointer; touch-action: manipulation; } /* tap only: no drag, so the page scrolls */
 }
   
+/* ============================================================
+   Reading progress: a cup of coffee, fixed bottom left (scripts/cup.js).
+   Full at the top, empty at the bottom; "Refill?" scrolls back up.
+   Fixed colours (it's an object): paper cup, espresso, caramel crema.
+   ============================================================ */
+.cup-progress {
+  position: fixed; z-index: 70; left: 18px; bottom: 18px;
+  display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 6px; pointer-events: none; /* Refill? sits above the cup */
+  opacity: 0; transform: translateY(8px); transition: opacity var(--dur-med) var(--ease), transform var(--dur-med) var(--ease);
+}
+.cup-progress.is-on { opacity: 1; transform: none; }
+.cup-progress__cup { width: 56px; height: 56px; overflow: visible; filter: drop-shadow(0 6px 8px rgba(43, 29, 22, .28)); }
+.cup-progress__body, .cup-progress__saucer { fill: #fffdf8; stroke: var(--espresso); stroke-width: 1.4; }
+.cup-progress__rim { stroke: var(--espresso); stroke-width: 1.4; fill: none; }
+.cup-progress__handle { fill: none; stroke: var(--espresso); stroke-width: 3; stroke-linecap: round; }
+.cup-progress__coffee { fill: var(--espresso); }
+.cup-progress__crema { fill: var(--caramel); }
+.cup-progress__level { transition: transform .12s linear; }
+/* steam: a slow curl, low opacity, on a 3.6s loop */
+.cup-progress__steam path { fill: none; stroke: var(--text-muted); stroke-width: 1.6; stroke-linecap: round; opacity: 0; animation: cup-steam 3.6s ease-in-out infinite; }
+.cup-progress__steam path + path { animation-delay: 1.8s; }
+@keyframes cup-steam { 0% { opacity: 0; transform: translateY(4px); } 35% { opacity: .38; } 100% { opacity: 0; transform: translateY(-5px); } }
+.cup-progress.is-empty .cup-progress__steam { display: none; } /* nothing left to steam */
+/* "Refill?": only there (and focusable) when the cup is empty */
+.cup-progress__refill {
+  pointer-events: auto; min-height: 44px; min-width: 44px; padding: 8px 16px; border-radius: var(--radius-pill);
+  background: var(--accent); color: var(--on-accent); font: 600 var(--fs-13)/1 var(--font); letter-spacing: .02em;
+  box-shadow: var(--shadow-soft);
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease), visibility 0s linear var(--dur-fast);
+}
+.cup-progress.is-empty .cup-progress__refill { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+@media (max-width: 860px) {
+  /* phones: smaller, tucked in the corner, level with the music player on the right */
+  .cup-progress { left: 10px; bottom: 16px; }
+  .cup-progress__cup { width: 40px; height: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cup-progress__steam { display: none; }
+  .cup-progress, .cup-progress__level, .cup-progress__refill { transition: none; }
+}
+
 /* scroll reveal (app.js reveal(): IntersectionObserver adds .is-in). --i staggers the cards. */
 .reveal { opacity: 0; transform: translate3d(0, var(--rise), 0); }
 .reveal.is-in {
