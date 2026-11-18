@@ -1,11 +1,11 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118s";
-import { initMusic } from "./music.js?v=20261118s";
-import { initBookshelf } from "./bookshelf.js?v=20261118s";
-import { initCup } from "./cup.js?v=20261118s";
+import { play, playFile } from "./sound.js?v=20261118v";
+import { initMusic } from "./music.js?v=20261118v";
+import { initBookshelf } from "./bookshelf.js?v=20261118v";
+import { initCup } from "./cup.js?v=20261118v";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118s";
+} from "./content.js?v=20261118v";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +19,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118s";
+const ASSET_V = "20261118v";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -648,72 +648,77 @@ function passToolkit() {
 }
 
 // ------------------------------------------------------------------
-// The Story So Far: instant photos, one per role (content.js `experience`, type "work").
-// As the section scrolls in, the desk camera slides in and ejects the photos one by one;
-// each develops from blank in about a second, then drops onto the page under washi tape.
-// The role and the result are printed on the photo (never behind a click).
-// Phones: photos stack; each one drops in and develops as it scrolls into view.
-// Reduced motion: finished photos, no camera move.
+// The Story So Far: one bag of coffee per role (content.js `experience[].bag`), standing on a
+// counter. Everything is on the label: blend, role (the headline), tasting notes (the results),
+// origin (ohmyATS links from there). Scroll in: the bags are set down one by one. Hover / keyboard focus: the bag
+// tilts and lifts (CSS) and a few beans tumble out of the top (once per hover).
+// Reduced motion: none of that, the bags are simply there.
 // ------------------------------------------------------------------
 function pass03() {
-  const list = $("#snaps");
-  const camera = $(".snaps__camera");
-  const TILT = [-2, 2.5, -1.5, 2]; // degrees; small so the row still reads as a row
-  const roles = experience.filter((e) => e.type === "work" && e.photo);
+  const list = $("#bags");
+  const roles = experience.filter((e) => e.type === "work" && e.bag);
+  const bean = `<svg viewBox="0 0 12 16" aria-hidden="true" focusable="false"><ellipse cx="6" cy="8" rx="5" ry="7"/><path d="M6.4 1.6c-2.6 4.2 1.4 8.2-.8 12.8"/></svg>`;
+  const linkIcon = `<svg class="bag__link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>`;
 
-  list.innerHTML = roles.map((e, i) => `
-    <li class="snap" style="--tilt:${TILT[i % TILT.length]}deg">
-      <figure class="snap__print">
-        <span class="snap__tape" aria-hidden="true"></span>
-        <span class="snap__window"><img src="${e.photo.src}?v=${ASSET_V}" alt="${e.photo.alt}" width="960" height="720" loading="lazy" decoding="async" draggable="false" /></span>
-        <figcaption class="snap__caption">
-          <h3 class="snap__role">${e.role}</h3>
-          <p class="snap__note">${e.note || e.result}</p>
-        </figcaption>
-      </figure>
-      <p class="snap__meta mono"><span>${e.org}</span> <span aria-hidden="true">·</span> <span>${e.dates}</span></p>
-      ${e.link ? `<a class="snap__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} <svg class="snap__link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
-    </li>`).join("");
+  // origin line; where the role has a link (ohmyATS), the company name in it is that link
+  const origin = (e) => !e.link ? e.bag.origin : e.bag.origin.replace(e.org,
+    `<a class="bag__link" href="${e.link}" target="_blank" rel="noopener">${e.org}${linkIcon}<span class="visually-hidden"> (opens in a new tab)</span></a>`);
+
+  list.innerHTML = roles.map((e, i) => {
+    const b = e.bag, id = `bag-${i}`;
+    return `
+    <li class="bag-slot">
+      <article class="bag" tabindex="0" aria-labelledby="${id}" style="--kraft:${b.kraft}">
+        <div class="bag__body">
+          <span class="bag__fold" aria-hidden="true"></span>
+          <span class="bag__tie" aria-hidden="true"></span>
+          <span class="bag__valve" aria-hidden="true"></span>
+          <div class="bag__label">
+            <p class="bag__blend mono">${b.blend}</p>
+            <h3 class="bag__role" id="${id}">${e.role}</h3>
+            <hr class="bag__rule" />
+            <p class="bag__notes-h mono">Tasting notes</p>
+            <p class="bag__notes">${b.notes.join('<span class="bag__dot" aria-hidden="true"> · </span>')}</p>
+            <dl class="bag__facts mono">
+              <div><dt>Origin</dt><dd>${origin(e)}</dd></div>
+            </dl>
+          </div>
+        </div>
+        <span class="bag__beans" aria-hidden="true">${bean.repeat(5)}</span>
+      </article>
+      <span class="bag-slot__counter" aria-hidden="true"></span>
+    </li>`;
+  }).join("");
 
   if (reduced) return;
-  const snaps = $$(".snap", list);
-  const prints = snaps.map((li) => $(".snap__print", li));
-  const develop = (el) => el.classList.add("is-developing");
-  const tape = (li) => gsap.fromTo($(".snap__tape", li), { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" });
+  const bags = $$(".bag", list);
 
-  if (isMobile) { // stacked: each photo drops in and develops when it reaches the screen
-    snaps.forEach((li, i) => {
-      gsap.set(prints[i], { opacity: 0, y: -50, rotation: 0 });
-      gsap.set($(".snap__tape", li), { opacity: 0 });
-      ScrollTrigger.create({ trigger: li, start: "top 85%", once: true, onEnter: () => {
-        develop(prints[i]);
-        gsap.to(prints[i], { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", onComplete: () => { tape(li); gsap.set(prints[i], { clearProps: "transform,opacity" }); } });
-      } });
-    });
-    return;
-  }
+  // set down on the counter one by one (once)
+  gsap.set(bags, { y: -24, opacity: 0 });
+  ScrollTrigger.create({ trigger: list, start: "top 80%", once: true, onEnter: () =>
+    gsap.to(bags, { y: 0, opacity: 1, duration: 0.4, stagger: 0.12, ease: "power2.out", clearProps: "transform,opacity" }) });
 
-  // laptop: camera in, then each photo is ejected from the top of the camera, develops while it
-  // rises, and flies down to its place in the row
-  gsap.set(camera, { opacity: 0, x: -120 });
-  gsap.set(prints, { opacity: 0 });
-  gsap.set($$(".snap__tape", list), { opacity: 0 });
-  ScrollTrigger.create({ trigger: list, start: "top 78%", once: true, onEnter: () => {
-    const tl = gsap.timeline();
-    tl.to(camera, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" });
-    const cam = camera.getBoundingClientRect();
-    prints.forEach((pr, i) => {
-      const r = pr.getBoundingClientRect(); // final spot (transform is only opacity so far)
-      const dx = cam.left + cam.width / 2 - (r.left + r.width / 2);
-      const dy = cam.top + cam.height * 0.1 - (r.top + r.height / 2);
-      const at = 0.6 + i * 0.55;
-      tl.set(pr, { x: dx, y: dy, scale: 0.32, rotation: 0, opacity: 0 }, at)
-        .call(() => { develop(pr); play("shutter"); }, null, at)
-        .to(pr, { opacity: 1, y: dy - cam.height * 0.55, duration: 0.35, ease: "power2.out" }, at) // out of the slot
-        .to(pr, { x: 0, y: 0, scale: 1, rotation: 0, duration: 0.8, ease: "power3.inOut",
-          onComplete: () => { gsap.set(pr, { clearProps: "transform,opacity" }); tape(snaps[i]); } }, at + 0.35);
-    });
-  } });
+  // beans tumble out of the top: at most once per hover / focus
+  bags.forEach((bag) => {
+    const beans = $$(".bag__beans svg", bag);
+    let spilled = false;
+    const spill = () => {
+      if (spilled) return;
+      spilled = true;
+      beans.forEach((bn, k) => {
+        const side = k % 2 ? 1 : -1;
+        gsap.fromTo(bn,
+          { x: (k - 2) * 7, y: 0, rotation: gsap.utils.random(-40, 40), opacity: 1 },
+          { x: (k - 2) * 7 + side * gsap.utils.random(14, 34), y: gsap.utils.random(34, 46), rotation: `+=${gsap.utils.random(90, 200) * side}`,
+            opacity: 0, duration: 0.7, delay: k * 0.04, ease: "power1.in" });
+      });
+    };
+    const reset = () => { spilled = false; };
+    bag.addEventListener("pointerenter", (ev) => { if (ev.pointerType === "mouse") spill(); });
+    bag.addEventListener("pointerleave", reset);
+    bag.addEventListener("focus", () => { if (bag.matches(":focus-visible")) spill(); });
+    bag.addEventListener("blur", reset);
+  });
 }
 
 // ------------------------------------------------------------------

@@ -12,12 +12,12 @@ iFrame embed (loaded on first play; 30s previews unless logged in). Vinyl record
 Below it: "The Story So Far" badges, case studies, About (a letter on recycled ruled paper, plain tone with no specks: text from content.js `about`, no photo (removed at her request), signature.png, her wooden knight photo cut out as assets/objects/knight.avif; the ruled lines follow `--lh`, so keep paragraph spacing at one line), "On My Shelf" (scripts/bookshelf.js: books from content.js `books`, covers in assets/covers/<slug>.jpg; click a spine = tip, neighbours lean, slide out + turn to the cover in a <dialog>; tunables at the top of bookshelf.js), contact. (ohmyATS demo removed: its badge
 links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
-no "PASS" rail labels. Experience = "The Story So Far ✦" (2026-11-18, replaced the ID badges): the desk camera (assets/objects/camera.avif) slides in and
-ejects one instant photo per WORK role (content.js `experience`, type "work"; SKEMA/education is not shown here). Each develops
-from blank in ~1.1s (plays once), then flies to its spot in the row and gets washi tape. Photo = `photo` {src, alt} in
-assets/work/ (ohmyats.avif = screenshot of the live product; nomadx.avif + keka.avif = her mock-ups), caption = role (serif)
-+ `note` handwritten in Caveat; company · dates under it; ohmyATS also has a Visit link. Tilts TILT in pass03() (±2.5° max).
-Phones: stacked, each photo drops in + develops as it scrolls into view. Reduced motion: finished photos, no camera move.
+no "PASS" rail labels. Experience = "The Story So Far ✦" (2026-11-18, replaced the instant photos): three bags of coffee on a counter, one per WORK
+role (content.js `experience[].bag`: blend, kraft colour, notes with <b> results, origin; SKEMA not shown). Pure HTML/CSS
+(kraft paper, folded top, espresso tin-tie, valve, cream label sized in cqi); subtitle "Three blends, roasted over three years".
+No dates on the labels and no "Visit" CTA, at her request: "ohmyATS" in the Origin line is the link (chain icon).
+Scroll in: bags set down one by one (GSAP). Hover/focus: tilt 3deg + lift 6px (CSS), 5 beans spill once per hover (GSAP).
+Phones (<720px): one bag per row, max 360px. Reduced motion: static. Old photos (assets/work/) deleted.
 Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
