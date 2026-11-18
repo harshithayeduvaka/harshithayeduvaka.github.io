@@ -1,11 +1,11 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118w";
-import { initMusic } from "./music.js?v=20261118w";
-import { initBookshelf } from "./bookshelf.js?v=20261118w";
-import { initCup } from "./cup.js?v=20261118w";
+import { play, playFile } from "./sound.js?v=20261119a";
+import { initMusic } from "./music.js?v=20261119a";
+import { initBookshelf } from "./bookshelf.js?v=20261119a";
+import { initCup } from "./cup.js?v=20261119a";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118w";
+} from "./content.js?v=20261119a";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +19,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118w";
+const ASSET_V = "20261119a";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -192,16 +192,6 @@ function passKit() {
       themeListeners.push(syncLamp); syncLamp(root.dataset.theme);
     }
     if (k.id === "alarm") clockFace(b);
-    if (k.id === "pen") { // the photo shows the pen retracted: a drawn metal nib + ball point, out when clicked
-      $(".kit__img", b).insertAdjacentHTML("beforeend", `<svg class="pen-nib" viewBox="0 0 10 22" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="nibRefill" x1="0" x2="1"><stop offset="0" stop-color="#6f8496"/><stop offset=".4" stop-color="#b9c7d2"/><stop offset="1" stop-color="#7d93a6"/></linearGradient>
-          <linearGradient id="nibMetal" x1="0" x2="1"><stop offset="0" stop-color="#8f8b84"/><stop offset=".45" stop-color="#ece9e3"/><stop offset="1" stop-color="#a29e97"/></linearGradient>
-        </defs>
-        <path d="M1.4 0h7.2l-1.1 13h-5z" fill="url(#nibRefill)" opacity=".9"/>
-        <path d="M2.6 13h4.8l-1.6 6.6h-1.6z" fill="url(#nibMetal)"/>
-        <circle cx="5" cy="19.9" r=".75" fill="#3a3633"/></svg>`);
-    }
     if (k.sound === "music") { b.setAttribute("aria-label", "Headphones: open my playlist"); b.setAttribute("aria-expanded", "false"); }
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
@@ -408,8 +398,9 @@ function passKit() {
     order.forEach((el) => el.classList.add("is-airborne"));
     if (folderEl) gsap.set(folderEl, { opacity: 0, y: 12 });
     gsap.set(lines, { clipPath: "inset(-40% 100% -40% -5%)" });
-    const nibEl = pen && $(".pen-nib", pen);
-    if (nibEl) gsap.set(nibEl, { scaleY: 0, transformOrigin: "50% 0%" }); // nib retracted until the pen is clicked
+    // the pen photo shows the nib out: hide its metal tip (the last 3.6% of the pen) until the click
+    const penPic = pen && $("img", pen);
+    if (penPic) gsap.set(penPic, { clipPath: "inset(0% 0% 3.6% 0%)" });
 
     deskIntro = gsap.timeline({ paused: true, onStart: () => grid.classList.add("is-intro") });
     order.forEach((el, i) => {
@@ -429,11 +420,11 @@ function passKit() {
       const deg = (el) => parseFloat(getComputedStyle(el).getPropertyValue("--r")) || 0;
       const rp = deg(pen) * Math.PI / 180;
       const pr = pen.getBoundingClientRect(), penImg = $("img", pen);
-      const nib = $(".pen-nib", pen);
-      // the writing point = the nib's ball point: in the upright pen image it hangs from the tapered
-      // end (66% across, 98.5% down, see .pen-nib), then everything turns with the pen's tilt
-      const ox = penImg.offsetWidth * (0.66 - 0.5);
-      const oy = penImg.offsetHeight * (0.985 - 0.5) + (nib ? penImg.offsetWidth * 0.26 * 2.2 : 0); // nib: 26% of the pen's width, 10:22 (SVG has no offsetHeight)
+      // the writing point = the tip of the nib: in the upright pen photo it's 34.9% across (the clip on
+      // the right makes the picture wider than the barrel) and at the very bottom (measured from
+      // pen.avif); then everything turns with the pen's tilt
+      const ox = penImg.offsetWidth * (0.349 - 0.5);
+      const oy = penImg.offsetHeight * (0.999 - 0.5);
       const tip0 = { x: pr.left + pr.width / 2 - g.left + ox * Math.cos(rp) - oy * Math.sin(rp),
                      y: pr.top + pr.height / 2 - g.top + ox * Math.sin(rp) + oy * Math.cos(rp) };
       const to = (pt) => ({ "--dx": pt.x - tip0.x + "px", "--dy": pt.y - tip0.y + "px" });
@@ -450,7 +441,7 @@ function passKit() {
         const tlc = gsap.timeline();
         tlc.to(penBody, { scaleY: 0.955, transformOrigin: "50% 100%", duration: 0.06, ease: "power2.in" })
           .call(() => { if (navigator.userActivation?.hasBeenActive) play("click"); })
-          .to(nib || {}, { scaleY: 1, duration: 0.1, ease: "power2.out" })
+          .to(penImg, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.1, ease: "power2.out", onComplete: () => gsap.set(penImg, { clearProps: "clipPath" }) })
           .to(penBody, { scaleY: 1, duration: 0.14, ease: "back.out(3)", clearProps: "transform" }, "<");
         return tlc;
       };

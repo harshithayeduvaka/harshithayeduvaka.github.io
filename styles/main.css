@@ -283,9 +283,7 @@ section { position: relative; }
 
 /* transparent cut-outs: no multiply, a soft warm shadow instead */
 .kit__item--pen { padding: 2px; } /* thin object: barely any padding */
-/* the pen's nib (drawn; the photo is of a retracted pen): out of the tip end, tilts with the pen */
 .kit__item--pen .kit__img { position: relative; display: block; }
-.pen-nib { position: absolute; left: 66%; top: 98.5%; width: 26%; /* the photo's tapered end is right of centre (measured from pen.avif) */ filter: drop-shadow(0 1px .5px rgba(43, 29, 22, .25)); height: auto; translate: -50% 0; pointer-events: none; overflow: visible; }
 /* the pen lifts as one piece on hover (body + nib) */
 .kit__item--pen .kit__img { transition: transform .35s var(--ease); }
 .kit__item--pen:hover .kit__img { transform: translateY(-5px); }

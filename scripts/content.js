@@ -87,10 +87,10 @@ export const kit = [
     chaos: { x: 26, y: 3, w: 9, r: 26 },
     note: "" },
   { id: "pen", label: "PEN", name: "Gel pen", sound: "click",
-    img: "assets/objects/pen.avif", w: 46, h: 373, // transparent cut-out (clear plastic)
+    img: "assets/objects/pen.avif", w: 86, h: 788, // transparent cut-out of her clear gel pen (with clip); nib out
     alt: "Clear retractable gel pen with black ink",
-    desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
-    chaos: { x: 42.5, y: 61, w: 2.2, r: 0 },
+    desk: { x: 67.1, y: 35.5, w: 1.95, r: 18 }, // on the right page, just past the tagline (same length as before)
+    chaos: { x: 42.5, y: 61, w: 1.95, r: 0 },
     note: "" },
   // A little twin-bell alarm clock where the vinyl card used to sit. Shows the real time in Paris
   // (a live face drawn over the photo's dial, app.js clockFace). Click: a short ring + a shake.
