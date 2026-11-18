@@ -171,19 +171,8 @@ export const playlist = {
 //            shows a monogram tile using `mark`
 //   accent = lanyard + badge colour: "espresso" | "caramel" | "cherry" | "roast"
 // Order here = order on the page, left to right.
+// Order: strongest first (newest job), education last.
 export const experience = [
-  {
-    dates: "2024 – 2027",
-    type: "education",
-    org: "SKEMA Business School",
-    logo: "assets/logos/skema.png",
-    mark: "S",
-    role: "MSc International Marketing & Business Development",
-    city: "Paris",
-    accent: "skema",
-    result: "Coursework in brand strategy, GTM strategy and market research.",
-    detail: "Plus design-led marketing and ROI analysis.",
-  },
   {
     dates: "Mar 2026 – Present",
     type: "work",
@@ -220,6 +209,18 @@ export const experience = [
     accent: "keka",
     result: "Cut client churn 15% in one quarter.",
     detail: "Across 25+ SME accounts. Also onboarded 65+ enterprise clients, including Zivame and Future Group.",
+  },
+  {
+    dates: "2024 – 2027",
+    type: "education",
+    org: "SKEMA Business School",
+    logo: "assets/logos/skema.png",
+    mark: "S",
+    role: "MSc International Marketing & Business Development",
+    city: "Paris",
+    accent: "skema",
+    result: "Coursework in brand strategy, GTM strategy and market research.",
+    detail: "Plus design-led marketing and ROI analysis.",
   },
 ];
 

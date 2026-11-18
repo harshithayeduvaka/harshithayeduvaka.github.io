@@ -669,6 +669,11 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 .badge__logo--mark { display: grid; place-items: center; color: var(--band); font-weight: 800; font-size: 6.5cqi; letter-spacing: -.02em; text-transform: none; }
 .badge__org-band { font-weight: 700; font-size: 7cqi; line-height: 1.08; }
 .badge__main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 6cqi 7cqi; min-height: 0; }
+.badge__back .badge__detail { margin-top: 4cqi; font-size: 5.8cqi; }
+.badge__headline { font-weight: 700; font-size: 9.6cqi; line-height: 1.12; letter-spacing: -.01em; color: var(--espresso); font-variation-settings: "opsz" 96, "SOFT" 50; margin-top: 4cqi; text-wrap: balance; }
+.badge__role { color: var(--roast); line-height: 1.35; }
+.badge__meta { display: flex; flex-wrap: wrap; gap: 0 4cqi; margin-top: 5cqi; color: var(--espresso); }
+.badge__meta span + span { opacity: .7; }
 .badge__name { font-weight: 700; font-size: 10cqi; line-height: 1; letter-spacing: -.02em; color: var(--espresso); font-variation-settings: "opsz" 96, "SOFT" 50; }
 .badge__role-big { font-weight: 500; font-size: 6.5cqi; line-height: 1.2; margin-top: 3.5cqi; color: var(--roast); }
 .badge .mono { font-size: 4.4cqi; }
@@ -688,21 +693,18 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 /* student card (SKEMA): photo, name, programme, validity */
 /* student card: logo on the left, school name beside it (like the work badges) */
 .badge--student .badge__band .badge__logo { width: 12cqi; height: 12cqi; }
-.badge--student .badge__main {
-  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "org" "name" "role"; /* no photo, at her request */
-  align-content: center; gap: 4cqi; position: relative;
-}
+.badge--student .badge__main { position: relative; }
 .badge__org { grid-area: org; font-size: 4.6cqi; letter-spacing: .14em; text-transform: uppercase; color: var(--espresso); } /* "Student card" label */
 .badge__photo { grid-area: photo; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2cqi; box-shadow: 0 0 0 1px rgba(43, 29, 22, .12); }
 .badge--student .badge__name { grid-area: name; align-self: end; font-size: 8.5cqi; }
 .badge--student .badge__role { grid-area: role; line-height: 1.35; color: var(--roast); }
 /* hologram sticker: top-right of the card body, level with the "Student card" label */
 .badge--student .badge__main::after {
-  content: ""; grid-area: org; align-self: center; justify-self: end; width: 12cqi; height: 12cqi; border-radius: 50%; opacity: .55;
+  content: ""; position: absolute; top: 5cqi; right: 6cqi; width: 10cqi; height: 10cqi; border-radius: 50%; opacity: .55;
   background: conic-gradient(from 30deg, #f5c4a1, #d8e6c2, #b9d4ea, #e3c3e8, #f5c4a1);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6);
 }
-.badge--student .badge__foot { display: grid; gap: 1cqi; color: var(--espresso); padding-right: 30cqi; }
+.badge--student .badge__role { padding-right: 12cqi; } /* clear of the hologram */
 
 /* back: the result */
 .badge__back { padding: 15cqi 8cqi 16cqi; border-top: 8cqi solid var(--acc); }
@@ -719,7 +721,9 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
 @media (max-width: 860px) {
   /* phones: the same rail and badges, two to a row (four across would be too small to read);
      each row gets its own stretch of rail */
-  .badges { --gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px var(--gap); padding: 0 4px 24px; background: none; }
+  /* phones: one badge per row (two across was too narrow for the headline); each hangs from its own stretch of rail */
+  .badges { --gap: 18px; grid-template-columns: minmax(0, 1fr); gap: 34px; padding: 0 4px 24px; background: none; }
+  .badge-slot .hanger { max-width: min(76vw, 280px); }
   .badge-slot::after {
     content: ""; position: absolute; z-index: 0; top: 0; left: calc(var(--gap) / -2 - 4px); right: calc(var(--gap) / -2 - 4px); height: var(--rail-h);
     background:
@@ -727,8 +731,7 @@ img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background:
       linear-gradient(180deg, #c99662 0, #a8713f 50%, #8a5a33 100%);
     box-shadow: 0 10px 12px -8px rgba(43, 29, 22, .35);
   }
-  .badge-slot:nth-child(odd)::after { left: -4px; }
-  .badge-slot:nth-child(even)::after { right: -4px; }
+  .badge-slot::after { left: -4px; right: -4px; }
   .hanger { z-index: 1; padding-top: calc(var(--len, 130px) * .5); }
   .hanger__strap { height: calc(var(--len, 130px) * .5 - 8px); }
   .hanger__clip { top: calc(var(--len, 130px) * .5 - 20px); }

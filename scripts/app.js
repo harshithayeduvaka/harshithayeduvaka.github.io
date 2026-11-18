@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118a";
-import { initMusic } from "./music.js?v=20261118a";
-import { initBookshelf } from "./bookshelf.js?v=20261118a";
+import { play, playFile } from "./sound.js?v=20261118c";
+import { initMusic } from "./music.js?v=20261118c";
+import { initBookshelf } from "./bookshelf.js?v=20261118c";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118a";
+} from "./content.js?v=20261118c";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118a";
+const ASSET_V = "20261118c";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -510,29 +510,23 @@ function passToolkit() {
 // ------------------------------------------------------------------
 function pass03() {
   const list = $("#badges");
-  // strap lengths + resting tilts, so the row hangs a bit unevenly like real lanyards
-  const LEN = [118, 150, 128, 160];
-  const TILT = [-1.1, 0.7, -0.5, 1.2];
+  // same strap length for every badge so the cards line up as a row; a small resting tilt
+  // (under 1°, fanning gently from left to right, so the gaps between cards stay equal) keeps them feeling hung by hand, and the swing still plays on hover
+  const LEN = [130];
+  const TILT = [-0.6, -0.2, 0.2, 0.6];
   const logo = (e) => e.logo
     ? `<img class="badge__logo" src="${e.logo}" alt="" width="64" height="64" loading="lazy" decoding="async" />`
     : `<span class="badge__logo badge__logo--mark" aria-hidden="true">${e.mark || e.org[0]}</span>`;
 
   list.innerHTML = experience.map((e, i) => {
     const student = e.type === "education";
-    const front = student
-      ? `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
+    // front = what a skimming recruiter needs: role, the headline result, then dates + city.
+    // Same layout for the student card, so the four read as one set.
+    const front = `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
          <div class="badge__main">
-           <h3 class="badge__org mono">Student card</h3>
-           <p class="badge__name">${meta.name}</p>
-           <p class="badge__role mono">${e.role}</p>
-         </div>
-         <p class="badge__foot mono"><span>${e.dates}</span><span>${e.city}</span></p>`
-      : `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
-         <div class="badge__main">
-           <p class="badge__name">${meta.name}</p>
-           <h3 class="badge__role-big">${e.role}</h3>
-           <p class="badge__when mono">${e.dates}</p>
-           <p class="badge__city mono">${e.city}</p>
+           <h3 class="badge__role mono">${e.role}</h3>
+           <p class="badge__headline">${e.result}</p>
+           <p class="badge__meta mono"><span>${e.dates}</span><span>${e.city}</span></p>
          </div>
          <p class="badge__foot" aria-hidden="true"></p>`; // empty: keeps room for the flip chip
     const kind = student ? "card" : "badge";
@@ -546,12 +540,11 @@ function pass03() {
               <div class="badge__face badge__front">
                 <span class="badge__slot" aria-hidden="true"></span>
                 ${front}
-                <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} to see the result">↻ Flip</button>
+                <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} for more detail">↻ More</button>
               </div>
               <div class="badge__face badge__back" inert>
                 <span class="badge__slot" aria-hidden="true"></span>
-                <p class="badge__label mono">${e.org}</p>
-                <p class="badge__result">${e.result}</p>
+                <p class="badge__label mono">${e.org} · ${e.role}</p>
                 ${e.detail ? `<p class="badge__detail">${e.detail}</p>` : ""}
                 ${e.link ? `<a class="badge__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} ↗<span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
                 <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} back">↻ Back</button>

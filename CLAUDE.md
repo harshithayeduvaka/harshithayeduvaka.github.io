@@ -14,11 +14,11 @@ links to the real product instead.) She asked for: no CV-copy intro, no object l
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
 no "PASS" rail labels. Experience = "The Story So Far ✦" (heading styled like Featured Work / On My Shelf):
 one ID badge per role hanging from a lanyard on a wooden peg rail (same wood as the bookshelf); SKEMA is a
-student card (no photo, at her request; dates shown without "Valid"). Hover = the badge swings on its hook; click/tap (or the ↻ chip, for keyboards)
-= flips to the back: `result` (one line) + `detail` + optional `link`. Data: content.js `experience`
+student card (no photo, at her request; dates shown without "Valid"). Front = role, `result` as the headline, dates + city (same layout for the student card). Order: ohmyATS, Nomad X, Keka, SKEMA last. Hover = the badge swings on its hook; click/tap (or the ↻ More chip)
+= flips to the back: `detail` + optional `link`. Data: content.js `experience`
 (`mark` = monogram, optional `logo` image, `accent` = espresso|caramel|cherry|roast). Card text is sized
-in cqi (container query units) so badges scale as a unit. Phones: same rail, two badges per row (each row has its own stretch of rail); colours = each organisation's brand (accent skema/nomadx/keka; ohmyATS keeps the site cherry, her choice in main.css); reduced motion: no
-swing, flip = cross-fade. Strap lengths/tilts: LEN/TILT at the top of pass03() in app.js.
+in cqi (container query units) so badges scale as a unit. Phones: one badge per row (two across was too narrow for the headline), each with its own stretch of rail; colours = each organisation's brand (accent skema/nomadx/keka; ohmyATS keeps the site cherry, her choice in main.css); reduced motion: no
+swing, flip = cross-fade. Strap lengths/tilts: LEN/TILT at the top of pass03() in app.js (one length for all; tilt fans -0.6..0.6° so gaps stay equal and bottoms line up).
 Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
