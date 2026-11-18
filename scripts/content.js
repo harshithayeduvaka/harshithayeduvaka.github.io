@@ -184,6 +184,8 @@ export const experience = [
     city: "Paris",
     accent: "cherry",
     result: "Built a CV-screening tool from scratch, solo.",
+    note: "built it solo, in 3 languages", // handwritten on the instant photo
+    photo: { src: "assets/work/ohmyats.avif", alt: "The ohmyATS home page: “Match your resume to any job description in seconds.”" },
     detail: "It scores graduate CVs against ATS filters in English, French and German, tuned on 100+ real profiles.",
   },
   {
@@ -196,6 +198,8 @@ export const experience = [
     city: "Berlin",
     accent: "nomadx",
     result: "Lifted email open rates 15% by A/B testing.",
+    note: "A/B tests lifted email opens 15%",
+    photo: { src: "assets/work/nomadx.avif", alt: "Two cream envelopes marked A and B on a desk; a sticky note on B reads +15%." },
     detail: "Found the message that drove sign-ups. Grew followers 12% and engagement 17%, and ran Meta Ads.",
   },
   {
@@ -208,6 +212,8 @@ export const experience = [
     city: "Hyderabad",
     accent: "keka",
     result: "Cut client churn 15% in one quarter.",
+    note: "cut client churn 15% in one quarter",
+    photo: { src: "assets/work/keka.avif", alt: "A client onboarding checklist with every step ticked: intro call, configure policies, run payroll, train the client." },
     detail: "Across 25+ SME accounts. Also onboarded 65+ enterprise clients, including Zivame and Future Group.",
   },
   {

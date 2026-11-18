@@ -2,7 +2,7 @@
    Harshitha Yeduvaka portfolio
    Design system: "Iced Coffee & Glass". Two themes, Iced Latte (light) and Espresso (dark),
    on top of a fixed material palette (paper, wood, ink, brand colours) for the physical
-   objects: desk items, badges, the letter, the bookshelf, the deck viewer.
+   objects: desk items, instant photos, the letter, the bookshelf, the deck viewer.
    ============================================================ */
 
 /* ---- Tokens ------------------------------------------------ */
@@ -13,7 +13,7 @@
   --roast:    #2B1D16;  /* body ink on paper, dark panels */
   --caramel:  #A8692E;  /* metrics, highlights */
   --latte:    #DCC9B4;  /* rules, borders on paper */
-  --cherry:   #B4432F;  /* used sparingly: errors, ohmyATS badge */
+  --cherry:   #B4432F;  /* used sparingly: errors */
 
   /* fonts */
   --font-serif: "Fraunces", Georgia, serif;
@@ -158,8 +158,8 @@ h1, h2, .display {
 }
 /* physical objects keep the serif they were designed and measured with
    (the letter's ruled lines are tuned to Fraunces' baseline) */
-.kit, .badges, .letter, .shelves, .bookview, .deck, .np, .mini { font-family: var(--font-serif); }
-.kit .mono, .badges .mono, .deck .mono { font-family: var(--font-serif); }
+.kit, .snaps, .letter, .shelves, .bookview, .deck, .np, .mini { font-family: var(--font-serif); }
+.kit .mono, .snaps .mono, .deck .mono { font-family: var(--font-serif); }
 .body-lg { font-size: var(--fs-18); max-width: var(--measure); }
 .eyebrow { color: var(--text-muted); }
 
@@ -544,206 +544,58 @@ section { position: relative; }
 
 
 /* ============================================================
-   The Story So Far: ID badges on lanyards (student card for SKEMA)
-   A wooden peg rail (same wood as the bookshelf) with a brass hook per badge.
-   .badge-slot  one hook + everything hanging from it
-   .hanger      strap + clip + card; rotates around the hook (swing)
-   .badge       the card; flips (rotateY) to show the result on the back
-   Card text is sized in cqi (% of the card's width), so a badge looks the same
-   at any size: phone, laptop or big screen.
+   The Story So Far: instant photos ejected by the desk camera (app.js pass03)
+   .snap        one role: the print + company/dates under it
+   .snap__print the instant photo (fixed paper white in both themes), tilted by --tilt
    ============================================================ */
-.badges {
-  --bw: 240px;      /* max card width */
-  --rail-h: 20px;
-  list-style: none; position: relative;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 3vw, 48px);
-  padding: 0 clamp(8px, 2vw, 28px) 40px;
-  /* rail (wood + faint grain) and its soft shadow on the wall; "local" = it scrolls with the
-     badges in the phone swipe row */
-  background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 3px, transparent 3px 11px, rgba(60, 30, 10, .07) 11px 13px, transparent 13px 29px) 0 0 / 100% var(--rail-h) no-repeat local,
-    linear-gradient(180deg, #c99662 0, #a8713f 50%, #8a5a33 100%) 0 0 / 100% var(--rail-h) no-repeat local,
-    linear-gradient(180deg, rgba(43, 29, 22, .2), rgba(43, 29, 22, 0)) 0 var(--rail-h) / 100% 16px no-repeat local;
+.snaps { --cam-w: clamp(110px, 10vw, 150px); display: grid; justify-items: center; gap: clamp(20px, 3vw, 36px); }
+.snaps__camera { width: var(--cam-w); height: auto; filter: drop-shadow(0 12px 16px rgba(43, 29, 22, .25)) drop-shadow(0 1px 2px rgba(43, 29, 22, .2)); }
+.snaps__row {
+  list-style: none; width: 100%;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 64px); align-items: start;
 }
-.badge-slot { position: relative; padding-top: calc(var(--rail-h) / 2); display: flex; justify-content: center; min-width: 0; }
-/* the brass hook on the rail */
-.badge-slot::before {
-  content: ""; position: absolute; z-index: 3; top: calc(var(--rail-h) / 2 - 8px); left: 50%; translate: -50% 0;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #f6dfa8, #bd8c40 55%, #74501f);
-  box-shadow: 0 2px 3px rgba(43, 29, 22, .45);
+.snap { display: grid; justify-items: center; gap: 14px; min-width: 0; }
+.snap__print {
+  position: relative; margin: 0; width: 100%; max-width: 380px;
+  padding: 5.5% 5.5% 0; border-radius: 3px; background: #fffdf8; color: var(--roast);
+  box-shadow: 0 18px 30px -16px rgba(43, 29, 22, .42), 0 1px 2px rgba(43, 29, 22, .18);
+  rotate: var(--tilt, 0deg);
+  transition: transform var(--dur-med) var(--ease);
 }
-
-/* accent colour per badge (content.js `accent`); --band is darkened where cream text needs more contrast */
-.hanger { --acc: var(--espresso); --band: var(--acc); }
-.hanger[data-accent="caramel"] { --acc: var(--caramel); --band: color-mix(in srgb, var(--caramel) 78%, var(--roast)); }
-.hanger[data-accent="cherry"]  { --acc: var(--cherry); }
-.hanger[data-accent="roast"]   { --acc: var(--roast); }
-/* each organisation's own brand colour (lanyard, top band, back edge) */
-.hanger[data-accent="skema"]   { --acc: #7A1A20; }   /* SKEMA red (their brand palette) */
-.hanger[data-accent="nomadx"]  { --acc: #111111; }   /* NOMAD X black */
-.hanger[data-accent="keka"]    { --acc: #5010A8; }   /* Keka purple */
-
-.hanger {
-  position: relative; width: 100%; max-width: var(--bw);
-  padding-top: var(--len, 130px); /* strap length */
-  rotate: var(--tilt, 0deg); transform-origin: 50% 0; /* pivots on the hook */
+.snap:hover .snap__print { transform: translateY(-4px); }
+.snap__window { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 1px; background: #f3ede2; }
+.snap__window img { width: 100%; height: 100%; object-fit: cover; }
+/* developing: milky blank -> the picture, about a second (plays once) */
+.snap__window::after { content: ""; position: absolute; inset: 0; background: #f3ede2; opacity: 0; pointer-events: none; }
+.snap__print.is-developing .snap__window::after { animation: snap-develop 1.1s ease-out forwards; }
+.snap__print.is-developing img { animation: snap-tone 1.1s ease-out; }
+@keyframes snap-develop { 0% { opacity: 1; } 40% { opacity: .85; } 100% { opacity: 0; } }
+@keyframes snap-tone { 0% { filter: saturate(0) sepia(.4) brightness(1.25); } 100% { filter: none; } }
+/* caption strip: the role in the big serif, the result handwritten underneath */
+.snap__caption { padding: 7% 2% 9%; text-align: center; }
+.snap__role { font: 700 clamp(1.1rem, 1.6vw, 1.5rem)/1.15 var(--font-serif); color: var(--roast); letter-spacing: -.01em; font-variation-settings: "opsz" 96, "SOFT" 50; }
+.snap__note { margin-top: 6px; font: 600 clamp(1.15rem, 1.5vw, 1.45rem)/1.2 "Caveat", "Segoe Print", cursive; color: #8B5A2B; }
+/* washi tape holding the photo to the page */
+.snap__tape {
+  position: absolute; z-index: 2; top: -12px; left: 50%; width: 38%; height: 24px; translate: -50% 0; rotate: calc(var(--tilt, 0deg) * -1.5);
+  background: repeating-linear-gradient(-45deg, rgba(168, 105, 46, .34) 0 5px, rgba(205, 180, 152, .62) 5px 10px);
+  box-shadow: 0 1px 2px rgba(43, 29, 22, .12); opacity: .92;
+  clip-path: polygon(3% 0, 97% 0, 100% 22%, 96% 48%, 100% 74%, 97% 100%, 3% 100%, 0 76%, 4% 50%, 0 24%);
 }
-/* one damped swing; --dir (+1/-1) = which way it was pushed (set by app.js) */
-@keyframes badge-swing {
-  0%   { rotate: var(--tilt); }
-  16%  { rotate: calc(var(--tilt) + 6deg * var(--dir, 1)); }
-  38%  { rotate: calc(var(--tilt) - 4deg * var(--dir, 1)); }
-  58%  { rotate: calc(var(--tilt) + 2.2deg * var(--dir, 1)); }
-  78%  { rotate: calc(var(--tilt) - 1deg * var(--dir, 1)); }
-  100% { rotate: var(--tilt); }
-}
-.hanger.is-swinging { animation: badge-swing 1.7s ease-in-out; }
-
-/* the lanyard: a loop over the hook, two woven strips side by side */
-.hanger__strap {
-  position: absolute; top: 0; left: 50%; translate: -50% 0;
-  width: 26px; height: calc(var(--len, 130px) - 8px);
-}
-.hanger__strap::before, .hanger__strap::after {
-  content: ""; position: absolute; top: 0; bottom: 0; width: 12px; border-radius: 1px;
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, .07) 0 2px, rgba(0, 0, 0, .09) 2px 4px),
-    linear-gradient(90deg, rgba(0, 0, 0, .28), transparent 35%, transparent 65%, rgba(0, 0, 0, .22)),
-    var(--acc);
-  box-shadow: 2px 4px 6px -2px rgba(43, 29, 22, .35);
-}
-.hanger__strap::before { left: 0; }
-/* the right strip carries the organisation's name, printed like a branded lanyard */
-.hanger__strap::after {
-  right: 0; content: attr(data-label); overflow: hidden;
-  writing-mode: vertical-rl; padding-top: 22px; line-height: 12px; white-space: nowrap;
-  font-size: 7.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--strap-ink, rgba(246, 239, 230, .78));
-}
-/* metal swivel clip: ring + tongue going into the card's slot */
-.hanger__clip {
-  position: absolute; z-index: 2; left: 50%; translate: -50% 0; top: calc(var(--len, 130px) - 20px);
-  width: 22px; height: 34px;
-}
-.hanger__clip::before { /* ring */
-  content: ""; position: absolute; left: 50%; top: 0; translate: -50% 0; width: 18px; height: 14px; border-radius: 50%;
-  border: 3px solid #b9b5ae; box-shadow: inset 0 1px 1px rgba(255, 255, 255, .7), 0 1px 2px rgba(43, 29, 22, .4);
-}
-.hanger__clip::after { /* tongue */
-  content: ""; position: absolute; left: 50%; top: 11px; translate: -50% 0; width: 14px; height: 23px; border-radius: 3px 3px 5px 5px;
-  background: linear-gradient(90deg, #8f8b84, #ece9e3 40%, #a29e97 62%, #d9d5ce);
-  box-shadow: 0 2px 3px rgba(43, 29, 22, .4);
-}
-
-/* ---- the card ---- */
-.badge { position: relative; width: 100%; aspect-ratio: 54 / 86; perspective: 1100px; cursor: pointer; container-type: inline-size; }
-.badge__inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .75s var(--ease-parse); }
-.badge.is-flipped .badge__inner { transform: rotateY(180deg); }
-.badge__face {
-  position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden;
-  -webkit-backface-visibility: hidden; backface-visibility: hidden;
-  border-radius: 5cqi; background: #FCF8F2; color: var(--roast);
-  box-shadow: 0 24px 30px -18px rgba(43, 29, 22, .55), 0 2px 4px rgba(43, 29, 22, .16), inset 0 0 0 1px rgba(43, 29, 22, .08);
-}
-.badge__back { transform: rotateY(180deg); }
-/* the hidden side never catches clicks */
-.badge:not(.is-flipped) .badge__back, .badge.is-flipped .badge__front { pointer-events: none; }
-/* plastic sleeve: a soft glare that slides across on hover */
-.badge__face::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
-  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .42) 48%, transparent 58%) 100% 0 / 260% 100% no-repeat;
-  opacity: 0; transition: background-position .9s var(--ease-parse), opacity .3s;
-}
-@media (hover: hover) { .badge:hover .badge__face::after { background-position: 0 0; opacity: 1; } }
-/* punched slot the clip goes through */
-.badge__slot {
-  position: absolute; z-index: 1; top: 4cqi; left: 50%; translate: -50% 0; width: 22cqi; height: 4.5cqi; border-radius: 3cqi;
-  background: rgba(43, 29, 22, .28); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .45), 0 1px 0 rgba(255, 255, 255, .25);
-}
-
-/* front: colour band with logo + organisation */
-.badge__band { display: flex; align-items: center; gap: 4cqi; padding: 13cqi 7cqi 6cqi; background: var(--band); color: var(--band-ink, var(--cream)); }
-.badge__logo { flex: none; width: 15cqi; height: 15cqi; border-radius: 3cqi; object-fit: contain; background: var(--cream); }
-/* real logos keep their own shape (ohmyATS is wide); white behind ones with transparent edges */
-img.badge__logo { width: auto; max-width: 34cqi; aspect-ratio: auto; background: #fff; }
-.badge__logo--mark { display: grid; place-items: center; color: var(--band); font-weight: 800; font-size: 6.5cqi; letter-spacing: -.02em; text-transform: none; }
-.badge__org-band { font-weight: 700; font-size: 7cqi; line-height: 1.08; }
-.badge__main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 6cqi 7cqi; min-height: 0; }
-.badge__back .badge__detail { margin-top: 4cqi; font-size: 5.8cqi; }
-.badge__headline { font-weight: 700; font-size: 9.6cqi; line-height: 1.12; letter-spacing: -.01em; color: var(--espresso); font-variation-settings: "opsz" 96, "SOFT" 50; margin-top: 4cqi; text-wrap: balance; }
-.badge__role { color: var(--roast); line-height: 1.35; }
-.badge__meta { display: flex; flex-wrap: wrap; gap: 0 4cqi; margin-top: 5cqi; color: var(--espresso); }
-.badge__meta span + span { opacity: .7; }
-.badge__name { font-weight: 700; font-size: 10cqi; line-height: 1; letter-spacing: -.02em; color: var(--espresso); font-variation-settings: "opsz" 96, "SOFT" 50; }
-.badge__role-big { font-weight: 500; font-size: 6.5cqi; line-height: 1.2; margin-top: 3.5cqi; color: var(--roast); }
-.badge .mono { font-size: 4.4cqi; }
-.badge__when { margin-top: 5cqi; color: var(--espresso); }
-.badge__city { margin-top: 1cqi; color: var(--roast); opacity: .7; }
-.badge__foot { padding: 0 7cqi 7cqi; }
-.badge__foot:empty { height: 16cqi; } /* work badges: no barcode, just room for the flip chip */
-/* small "flip" chip; the whole card is clickable too, this is the keyboard way in */
-.badge__flip {
-  position: absolute; z-index: 2; right: 5cqi; bottom: 5cqi;
-  padding: 1.8cqi 3.4cqi; border-radius: 99px; font-size: 4.4cqi !important;
-  background: color-mix(in srgb, var(--latte) 60%, transparent); color: var(--espresso);
-  transition: background .2s;
-}
-.badge__flip:hover { background: var(--latte); }
-
-/* student card (SKEMA): photo, name, programme, validity */
-/* student card: logo on the left, school name beside it (like the work badges) */
-.badge--student .badge__band .badge__logo { width: 12cqi; height: 12cqi; }
-.badge--student .badge__main { position: relative; }
-.badge__org { grid-area: org; font-size: 4.6cqi; letter-spacing: .14em; text-transform: uppercase; color: var(--espresso); } /* "Student card" label */
-.badge__photo { grid-area: photo; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2cqi; box-shadow: 0 0 0 1px rgba(43, 29, 22, .12); }
-.badge--student .badge__name { grid-area: name; align-self: end; font-size: 8.5cqi; }
-.badge--student .badge__role { grid-area: role; line-height: 1.35; color: var(--roast); }
-/* hologram sticker: top-right of the card body, level with the "Student card" label */
-.badge--student .badge__main::after {
-  content: ""; position: absolute; top: 5cqi; right: 6cqi; width: 10cqi; height: 10cqi; border-radius: 50%; opacity: .55;
-  background: conic-gradient(from 30deg, #f5c4a1, #d8e6c2, #b9d4ea, #e3c3e8, #f5c4a1);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6);
-}
-.badge--student .badge__role { padding-right: 12cqi; } /* clear of the hologram */
-
-/* back: the result */
-.badge__back { padding: 15cqi 8cqi 16cqi; border-top: 8cqi solid var(--acc); }
-.badge__back .badge__slot { top: -4cqi; }
-.badge__label { color: var(--espresso); }
-.badge__result {
-  margin: 4cqi 0 5cqi; font-weight: 700; font-size: 9cqi; line-height: 1.08; letter-spacing: -.01em;
-  color: var(--espresso); font-variation-settings: "opsz" 96, "SOFT" 50;
-}
-.badge__detail { font-size: 5.2cqi; line-height: 1.42; color: var(--roast); }
-.badge__link { margin-top: auto; width: max-content; color: var(--espresso); border-bottom: 2px solid var(--caramel); padding-bottom: 1cqi; }
-.badge__link:hover { color: var(--caramel); }
-
+.snap__meta { color: var(--text-muted); text-align: center; }
+.snap__meta span:first-child { color: var(--text); }
+.snap__link { color: var(--link); border-bottom: 1px solid currentColor; }
 @media (max-width: 860px) {
-  /* phones: the same rail and badges, two to a row (four across would be too small to read);
-     each row gets its own stretch of rail */
-  /* phones: one badge per row (two across was too narrow for the headline); each hangs from its own stretch of rail */
-  .badges { --gap: 18px; grid-template-columns: minmax(0, 1fr); gap: 34px; padding: 0 4px 24px; background: none; }
-  .badge-slot .hanger { max-width: min(76vw, 280px); }
-  .badge-slot::after {
-    content: ""; position: absolute; z-index: 0; top: 0; left: calc(var(--gap) / -2 - 4px); right: calc(var(--gap) / -2 - 4px); height: var(--rail-h);
-    background:
-      repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 3px, transparent 3px 11px, rgba(60, 30, 10, .07) 11px 13px, transparent 13px 29px),
-      linear-gradient(180deg, #c99662 0, #a8713f 50%, #8a5a33 100%);
-    box-shadow: 0 10px 12px -8px rgba(43, 29, 22, .35);
-  }
-  .badge-slot::after { left: -4px; right: -4px; }
-  .hanger { z-index: 1; padding-top: calc(var(--len, 130px) * .5); }
-  .hanger__strap { height: calc(var(--len, 130px) * .5 - 8px); }
-  .hanger__clip { top: calc(var(--len, 130px) * .5 - 20px); }
+  /* phones: stacked, one photo per screen width */
+  .snaps__row { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+  .snap__print { max-width: min(88vw, 400px); }
+  .snap__role { font-size: 1.3rem; }
+  .snap__note { font-size: 1.35rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  /* no swing; the flip becomes a quick cross-fade instead of a turn */
-  .hanger.is-swinging { animation: none; }
-  .badge.is-flipped .badge__inner { transform: none; }
-  .badge__back { transform: none; opacity: 0; }
-  .badge.is-flipped .badge__back { opacity: 1; }
-  .badge.is-flipped .badge__front { opacity: 0; }
-  .badge__face::after { display: none; }
+  .snap__print { transition: none; }
+  .snap:hover .snap__print { transform: none; }
+  .snap__print.is-developing .snap__window::after, .snap__print.is-developing img { animation: none; }
 }
 
 /* ============================================================

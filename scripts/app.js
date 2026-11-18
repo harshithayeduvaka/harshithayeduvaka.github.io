@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118c";
-import { initMusic } from "./music.js?v=20261118c";
-import { initBookshelf } from "./bookshelf.js?v=20261118c";
+import { play, playFile } from "./sound.js?v=20261118d";
+import { initMusic } from "./music.js?v=20261118d";
+import { initBookshelf } from "./bookshelf.js?v=20261118d";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118c";
+} from "./content.js?v=20261118d";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118c";
+const ASSET_V = "20261118d";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -504,98 +504,72 @@ function passToolkit() {
 }
 
 // ------------------------------------------------------------------
-// The Story So Far: ID badges hanging from lanyards (a student card for education).
-// Hover = the badge swings on its hook. Click/tap (or the ↻ button) = it flips to the
-// one-line result on the back. Content: content.js `experience`.
+// The Story So Far: instant photos, one per role (content.js `experience`, type "work").
+// As the section scrolls in, the desk camera slides in and ejects the photos one by one;
+// each develops from blank in about a second, then drops onto the page under washi tape.
+// The role and the result are printed on the photo (never behind a click).
+// Phones: photos stack; each one drops in and develops as it scrolls into view.
+// Reduced motion: finished photos, no camera move.
 // ------------------------------------------------------------------
 function pass03() {
-  const list = $("#badges");
-  // same strap length for every badge so the cards line up as a row; a small resting tilt
-  // (under 1°, fanning gently from left to right, so the gaps between cards stay equal) keeps them feeling hung by hand, and the swing still plays on hover
-  const LEN = [130];
-  const TILT = [-0.6, -0.2, 0.2, 0.6];
-  const logo = (e) => e.logo
-    ? `<img class="badge__logo" src="${e.logo}" alt="" width="64" height="64" loading="lazy" decoding="async" />`
-    : `<span class="badge__logo badge__logo--mark" aria-hidden="true">${e.mark || e.org[0]}</span>`;
+  const list = $("#snaps");
+  const camera = $(".snaps__camera");
+  const TILT = [-2, 2.5, -1.5, 2]; // degrees; small so the row still reads as a row
+  const roles = experience.filter((e) => e.type === "work" && e.photo);
 
-  list.innerHTML = experience.map((e, i) => {
-    const student = e.type === "education";
-    // front = what a skimming recruiter needs: role, the headline result, then dates + city.
-    // Same layout for the student card, so the four read as one set.
-    const front = `<p class="badge__band">${logo(e)}<span class="badge__org-band">${e.org}</span></p>
-         <div class="badge__main">
-           <h3 class="badge__role mono">${e.role}</h3>
-           <p class="badge__headline">${e.result}</p>
-           <p class="badge__meta mono"><span>${e.dates}</span><span>${e.city}</span></p>
-         </div>
-         <p class="badge__foot" aria-hidden="true"></p>`; // empty: keeps room for the flip chip
-    const kind = student ? "card" : "badge";
-    return `
-      <li class="badge-slot" style="--len:${LEN[i % LEN.length]}px; --tilt:${TILT[i % TILT.length]}deg">
-        <div class="hanger" data-accent="${e.accent || "espresso"}">
-          <span class="hanger__strap" data-label="${e.org}" aria-hidden="true"></span>
-          <span class="hanger__clip" aria-hidden="true"></span>
-          <article class="badge${student ? " badge--student" : ""}" aria-label="${e.org}">
-            <div class="badge__inner">
-              <div class="badge__face badge__front">
-                <span class="badge__slot" aria-hidden="true"></span>
-                ${front}
-                <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} for more detail">↻ More</button>
-              </div>
-              <div class="badge__face badge__back" inert>
-                <span class="badge__slot" aria-hidden="true"></span>
-                <p class="badge__label mono">${e.org} · ${e.role}</p>
-                ${e.detail ? `<p class="badge__detail">${e.detail}</p>` : ""}
-                ${e.link ? `<a class="badge__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} ↗<span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
-                <button type="button" class="badge__flip mono" aria-label="Flip the ${e.org} ${kind} back">↻ Back</button>
-              </div>
-            </div>
-          </article>
-        </div>
-      </li>`;
-  }).join("");
-
-  // swing once on its hook; dir = which way it was pushed (+1 / -1)
-  const swing = (hanger, dir = 1) => {
-    if (reduced) return;
-    hanger.style.setProperty("--dir", dir);
-    hanger.classList.remove("is-swinging");
-    void hanger.offsetWidth; // restart the animation if it's already swinging
-    hanger.classList.add("is-swinging");
-  };
-
-  const flip = (badge, viaKeyboard) => {
-    const on = badge.classList.toggle("is-flipped");
-    const [front, back] = $$(".badge__face", badge);
-    front.inert = on; back.inert = !on; // only the visible side can be focused / read
-    if (viaKeyboard) (on ? back : front).querySelector(".badge__flip").focus();
-    swing(badge.closest(".hanger"), on ? 1 : -1);
-    play("page");
-  };
-
-  $$(".hanger", list).forEach((hanger) => {
-    hanger.addEventListener("animationend", () => hanger.classList.remove("is-swinging"));
-    // mouse only: pushed from the left swings right, and the other way round
-    hanger.addEventListener("pointerenter", (e) => {
-      if (e.pointerType !== "mouse") return;
-      const r = hanger.getBoundingClientRect();
-      swing(hanger, e.clientX < r.left + r.width / 2 ? -1 : 1);
-    });
-    const badge = $(".badge", hanger);
-    badge.addEventListener("click", (e) => {
-      if (e.target.closest("a")) return; // the link on the back just opens
-      flip(badge, !!e.target.closest(".badge__flip") && e.detail === 0);
-    });
-  });
+  list.innerHTML = roles.map((e, i) => `
+    <li class="snap" style="--tilt:${TILT[i % TILT.length]}deg">
+      <figure class="snap__print">
+        <span class="snap__tape" aria-hidden="true"></span>
+        <span class="snap__window"><img src="${e.photo.src}?v=${ASSET_V}" alt="${e.photo.alt}" width="960" height="720" loading="lazy" decoding="async" draggable="false" /></span>
+        <figcaption class="snap__caption">
+          <h3 class="snap__role">${e.role}</h3>
+          <p class="snap__note">${e.note || e.result}</p>
+        </figcaption>
+      </figure>
+      <p class="snap__meta mono"><span>${e.org}</span> <span aria-hidden="true">·</span> <span>${e.dates}</span></p>
+      ${e.link ? `<a class="snap__link mono" href="${e.link}" target="_blank" rel="noopener">Visit ${e.org} ↗<span class="visually-hidden"> (opens in a new tab)</span></a>` : ""}
+    </li>`).join("");
 
   if (reduced) return;
-  // the badges drop onto their hooks as the section scrolls in, then settle with a swing
-  const slots = $$(".badge-slot", list);
-  gsap.from(slots, {
-    y: -70, opacity: 0, duration: 0.8, ease: "back.out(1.4)", stagger: 0.12,
-    scrollTrigger: { trigger: list, start: "top 80%" },
-    onComplete: () => slots.forEach((s, i) => setTimeout(() => swing($(".hanger", s), i % 2 ? -1 : 1), i * 90)),
-  });
+  const snaps = $$(".snap", list);
+  const prints = snaps.map((li) => $(".snap__print", li));
+  const develop = (el) => el.classList.add("is-developing");
+  const tape = (li) => gsap.fromTo($(".snap__tape", li), { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" });
+
+  if (isMobile) { // stacked: each photo drops in and develops when it reaches the screen
+    snaps.forEach((li, i) => {
+      gsap.set(prints[i], { opacity: 0, y: -50, rotation: 0 });
+      gsap.set($(".snap__tape", li), { opacity: 0 });
+      ScrollTrigger.create({ trigger: li, start: "top 85%", once: true, onEnter: () => {
+        develop(prints[i]);
+        gsap.to(prints[i], { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", onComplete: () => { tape(li); gsap.set(prints[i], { clearProps: "transform,opacity" }); } });
+      } });
+    });
+    return;
+  }
+
+  // laptop: camera in, then each photo is ejected from the top of the camera, develops while it
+  // rises, and flies down to its place in the row
+  gsap.set(camera, { opacity: 0, x: -120 });
+  gsap.set(prints, { opacity: 0 });
+  gsap.set($$(".snap__tape", list), { opacity: 0 });
+  ScrollTrigger.create({ trigger: list, start: "top 78%", once: true, onEnter: () => {
+    const tl = gsap.timeline();
+    tl.to(camera, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" });
+    const cam = camera.getBoundingClientRect();
+    prints.forEach((pr, i) => {
+      const r = pr.getBoundingClientRect(); // final spot (transform is only opacity so far)
+      const dx = cam.left + cam.width / 2 - (r.left + r.width / 2);
+      const dy = cam.top + cam.height * 0.1 - (r.top + r.height / 2);
+      const at = 0.6 + i * 0.55;
+      tl.set(pr, { x: dx, y: dy, scale: 0.32, rotation: 0, opacity: 0 }, at)
+        .call(() => { develop(pr); play("shutter"); }, null, at)
+        .to(pr, { opacity: 1, y: dy - cam.height * 0.55, duration: 0.35, ease: "power2.out" }, at) // out of the slot
+        .to(pr, { x: 0, y: 0, scale: 1, rotation: 0, duration: 0.8, ease: "power3.inOut",
+          onComplete: () => { gsap.set(pr, { clearProps: "transform,opacity" }); tape(snaps[i]); } }, at + 0.35);
+    });
+  } });
 }
 
 // ------------------------------------------------------------------
