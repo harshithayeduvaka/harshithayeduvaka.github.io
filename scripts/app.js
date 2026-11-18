@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261116a";
-import { initMusic } from "./music.js?v=20261116a";
-import { initBookshelf } from "./bookshelf.js?v=20261116a";
+import { play, playFile } from "./sound.js?v=20261118a";
+import { initMusic } from "./music.js?v=20261118a";
+import { initBookshelf } from "./bookshelf.js?v=20261118a";
 import {
-  meta, about, kit, tools, experience, projects, playlist, books,
-} from "./content.js?v=20261116a";
+  meta, about, kit, tools, experience, projects, playlist, books, marquee,
+} from "./content.js?v=20261118a";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261116a";
+const ASSET_V = "20261118a";
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -685,54 +685,29 @@ function pass05() {
     if (Math.abs(dx) > 50) go(at + (dx < 0 ? 1 : -1));
   });
 
-  // Split view: names on the left, one preview panel on the right (desktop). Hovering
-  // or focusing a name swaps the panel to that project's deck cover (slide one), metric
-  // and "Open deck"; clicking opens the deck. On phones the panel is hidden and each row
-  // becomes a swipeable card with its own cover (CSS, same markup).
-  const cover = (p, cls) => p.slides && p.slides.length
-    ? `<img class="${cls}" src="${p.slides[0]}" alt="" width="1600" height="900" loading="lazy" decoding="async" draggable="false" />`
-    : `<span class="${cls} work__cover--text" aria-hidden="true">${p.client}</span>`;
+  // Glass cards, one per project: deck cover, title, The Stack, The Impact, Open deck.
+  // The whole card is clickable (the button's ::after covers it), and the button is the one
+  // keyboard stop per card.
+  const cover = (p) => p.slides && p.slides.length
+    ? `<img class="work-card__img" src="${p.slides[0]}" alt="" width="1600" height="900" loading="lazy" decoding="async" draggable="false" />`
+    : `<span class="work-card__img work-card__img--text" aria-hidden="true">${p.client}</span>`;
   const sub = (p) => [p.kind, p.when].filter(Boolean).join(" · ");
-
-  const ul = document.createElement("div"); ul.className = "work__list";
-  const panel = document.createElement("div"); panel.className = "work__panel"; panel.setAttribute("aria-hidden", "true");
-  panel.innerHTML = `
-    <button type="button" class="work__stage" tabindex="-1">${projects.map((p, i) => cover(p, `work__shot${i ? "" : " is-on"}`)).join("")}</button>
-    <div class="work__meta">
-      <span class="work__score"><b></b><small></small></span>
-      <button type="button" class="work__open mono" tabindex="-1">Open deck →</button>
-    </div>`;
-  const shots = $$(".work__shot", panel), scoreB = $(".work__score b", panel), scoreS = $(".work__score small", panel);
-  let sel = 0;
-  const rows = projects.map((p, i) => {
-    const row = document.createElement("button");
-    row.type = "button";
-    row.className = "work__row" + (i ? "" : " is-on");
-    row.setAttribute("aria-haspopup", "dialog");
-    row.setAttribute("aria-label", `${p.client}, ${sub(p)}. ${p.score} ${p.scoreLabel.toLowerCase()}. Open deck`);
-    row.innerHTML = `
-      ${cover(p, "work__cover")}
-      <span class="work__idx mono">${String(i + 1).padStart(2, "0")}</span>
-      <span class="work__client">${p.client}<small>${sub(p)}</small></span>
-      <span class="work__score work__score--card">${p.score}<small>${p.scoreLabel}</small></span>
-      <span class="work__go mono">Open deck →</span>`;
-    row.addEventListener("click", () => open(p, row));
-    row.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") pick(i); });
-    row.addEventListener("focus", () => pick(i));
-    ul.appendChild(row);
-    return row;
-  });
-  const pick = (i) => {
-    sel = i;
-    rows.forEach((r, k) => r.classList.toggle("is-on", k === i));
-    shots.forEach((s, k) => s.classList.toggle("is-on", k === i));
-    scoreB.textContent = projects[i].score; scoreS.textContent = projects[i].scoreLabel;
-  };
-  pick(0);
-  const openSel = () => open(projects[sel], rows[sel]);
-  $(".work__stage", panel).addEventListener("click", openSel);
-  $(".work__open", panel).addEventListener("click", openSel);
-  list.append(ul, panel);
+  list.classList.add("work-grid");
+  list.innerHTML = projects.map((p, i) => `
+    <article class="work-card" style="--i:${i}" aria-labelledby="work-${p.id}">
+      <div class="work-card__thumb">${cover(p)}</div>
+      <div class="work-card__body">
+        <h3 class="work-card__title" id="work-${p.id}">${p.client}</h3>
+        <p class="work-card__kind">${sub(p)}</p>
+        <ul class="work-card__facts">
+          <li><b>The Stack:</b> ${(p.stack || ["[TOOLS]"]).join(", ")}</li>
+          <li><b>The Impact:</b> ${p.impact || "[METRIC]"}</li>
+        </ul>
+        <button type="button" class="work-card__open" data-i="${i}" aria-haspopup="dialog">Open deck <span aria-hidden="true">→</span><span class="visually-hidden">: ${p.client}</span></button>
+      </div>
+    </article>`).join("");
+  $$(".work-card__open", list).forEach((b) => b.addEventListener("click", () => open(projects[+b.dataset.i], b)));
+  reveal($$(".work-card", list));
 }
 
 // ------------------------------------------------------------------
@@ -749,11 +724,27 @@ function passAboutMe() {
   body.insertAdjacentHTML("afterend",
     `<img class="letter__sign" src="assets/signature.png?v=${ASSET_V}" alt="Signed, Harshitha Yeduvaka" width="959" height="131" loading="lazy" decoding="async" draggable="false" />`);
 
-  // scroll in: the sheet fades in and settles into its tilt, then the knight lands
+  // scroll in: the sheet fades in and settles into its tilt
   if (!reduced) {
-    const tl = gsap.timeline({ scrollTrigger: { trigger: letter, start: "top 82%" } });
-    tl.from(letter, { opacity: 0, y: 40, rotation: 1.5, duration: 1, ease: "power3.out", clearProps: "transform,opacity" })
-      .from(".letter__knight", { opacity: 0, x: -24, duration: 0.6, ease: "power2.out", clearProps: "transform,opacity" }, "-=0.45");
+    gsap.from(letter, { opacity: 0, y: 40, rotation: 1.5, duration: 1, ease: "power3.out", clearProps: "transform,opacity",
+      scrollTrigger: { trigger: letter, start: "top 82%" } });
+  }
+
+  // desk photo beside the letter (content.js about.deskPhoto). Empty src = a warm frame of the
+  // same size, so nothing shifts when the real photo is added.
+  const fig = $("#deskPhoto");
+  if (fig) {
+    const d = about.deskPhoto || {};
+    if (d.src) fig.innerHTML = `<img src="${d.src}?v=${ASSET_V}" alt="${d.alt || ""}" width="400" height="600" loading="lazy" decoding="async" />`;
+    else fig.setAttribute("aria-hidden", "true");
+    reveal([fig]);
+  }
+
+  // marquee: one list for everyone, plus an identical copy (aria-hidden) so the loop is seamless
+  const mq = $("#marquee");
+  if (mq && marquee && marquee.length) {
+    const items = marquee.map((m) => `<li><span class="marquee__label">${m.label}:</span> ${m.value}<span class="marquee__sep" aria-hidden="true">✦</span></li>`).join("");
+    mq.innerHTML = `<div class="marquee__track"><ul class="marquee__list">${items}</ul><ul class="marquee__list" aria-hidden="true">${items}</ul></div>`;
   }
 
   // in-page links in the text (e.g. "reading fiction" -> On My Shelf): glide there with
@@ -885,11 +876,52 @@ function contactForm() {
 }
 
 // ------------------------------------------------------------------
+// Scroll reveal: soft fade + 12px rise as elements enter, staggered by --i (CSS).
+// Plain IntersectionObserver; reduced motion = nothing is hidden in the first place.
+// ------------------------------------------------------------------
+let revealIO;
+function reveal(els) {
+  if (reduced || !("IntersectionObserver" in window)) return;
+  revealIO ||= new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("is-in");
+    revealIO.unobserve(e.target);
+  }), { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+  els.forEach((el) => { el.classList.add("reveal"); revealIO.observe(el); });
+}
+
+// ------------------------------------------------------------------
+// Theme: Iced Latte (light) / Espresso (dark). The <head> script applies a saved choice before
+// paint; with none, CSS follows prefers-color-scheme. Switching cross-fades (View Transitions,
+// opacity only) where supported; reduced motion switches instantly.
+// ------------------------------------------------------------------
+function themeSwitch() {
+  const root = document.documentElement;
+  const btns = $$("[data-theme-set]");
+  const dark = matchMedia("(prefers-color-scheme: dark)");
+  const current = () => root.dataset.theme || (dark.matches ? "espresso" : "iced-latte");
+  const sync = () => btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeSet === current())));
+  const apply = (t) => {
+    root.dataset.theme = t;
+    try { localStorage.setItem("theme", t); } catch {}
+    sync();
+  };
+  btns.forEach((b) => b.addEventListener("click", () => {
+    const t = b.dataset.themeSet;
+    if (t === current()) return;
+    if (!reduced && document.startViewTransition) document.startViewTransition(() => apply(t));
+    else apply(t);
+  }));
+  dark.addEventListener("change", sync); // OS switch while no choice is saved
+  sync();
+}
+
+// ------------------------------------------------------------------
 // Boot everything
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { passKit, passToolkit, pass03, pass05, passAboutMe, passBookshelf, revealTitles, contact, contactForm };
+  const passes = { themeSwitch, passKit, passToolkit, pass03, pass05, passAboutMe, passBookshelf, revealTitles, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }

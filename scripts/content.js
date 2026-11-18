@@ -28,6 +28,9 @@ export const about = {
   // Her photo taped to the About letter, and the one on the SKEMA student card
   // The "About ⌘" section near the bottom of the page (her words).
   title: "About",
+  // Moody desk photo beside the letter (replaced the chess knight). Until `src` is set, a warm
+  // empty frame of the same size holds the space. Example: { src: "assets/desk.avif", alt: "My desk: ..." }
+  deskPhoto: { src: "", alt: "" },
   paragraphs: [
     "I’m a marketing and business development professional based in Paris, and I do my best work when something doesn’t add up yet.",
     "It might be a campaign that should have worked and didn’t, or a market nobody has cracked. That’s where I get curious. I like taking the problem apart and asking the slightly annoying questions until it fits back together as something a team can act on. My favourite part is the moment everyone finally sees the problem clearly and knows what to do next.",
@@ -233,6 +236,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/comintelli/01..24.jpg)
     slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Comintelli",
+    stack: ["Value chain", "Porter’s Diamond", "CAGE distance"], // Featured Work card: "The Stack" (from this project's own text)
     kind: "International Business Development Strategy",
     when: "", // no date shown
     score: "12 mo",
@@ -248,6 +252,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/dior/01..16.jpg)
     slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Dior",
+    stack: ["CRM segmentation", "Omnichannel audit (retail, e-commerce, mobile)"], // Featured Work card: "The Stack" (from this project's own text)
     kind: "Omnichannel Analysis",
     when: "", // no date shown
     score: "15%",
@@ -261,6 +266,7 @@ export const projects = [
   {
     id: "coop",
     client: "Coop Atlantique",
+    stack: ["Porter’s Five Forces", "VRIN", "ROS / ROA / asset turnover", "SEO/SEM"], // Featured Work card: "The Stack" (from this project's own text)
     kind: "Business Simulation",
     when: "", // no date shown
     score: "10%",
@@ -279,6 +285,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/maya/01..10.jpg)
     slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Eco-Packaging",
+    stack: ["MAYA principle", "Comparative positioning analysis"], // Featured Work card: "The Stack" (from this project's own text)
     kind: "Strategic Branding",
     when: "", // no date shown
     score: "GTM",
@@ -293,7 +300,18 @@ export const projects = [
 
 
 
-// "On My Shelf" (scripts/bookshelf.js), between About and Contact.
+// The slow ribbon under the "Off the Menu" heading. Reading + music are hers; the other lines come
+// from her own About text, bookshelf and footer. Add, remove or reorder freely.
+export const marquee = [
+  { label: "Currently Reading", value: "The Housemaid" },
+  { label: "On Repeat", value: "Taylor Swift" },
+  { label: "Next on the Shelf", value: "How Brands Grow" },
+  { label: "Off the Clock", value: "losing at chess online" },
+  { label: "Fueled by", value: "iced americanos" },
+  { label: "Based in", value: "Paris" },
+];
+
+// "On My Shelf" (scripts/bookshelf.js), inside the "Off the Menu" section.
 // shelf: "read" | "tbr". Order here = order on the shelf (left to right).
 // spineColor / textColor: the spine. spineAuthor (optional): shorter author line for the spine. height: 0.85–1 of the shelf height. thickness: spine width (px on desktop).
 // cover: assets/covers/<slug>.jpg (add/replace the file to change it). If a file is missing, the site tries

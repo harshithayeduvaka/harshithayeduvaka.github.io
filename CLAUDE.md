@@ -34,6 +34,13 @@ never hops or lifts; she found that weird).
 Testing note: reduced-motion CSS gives every element a 0.15s transition, which headless Chrome
 never advances; inject `*{transition:none!important}` in test harnesses to see final states.
 
+## Iced Coffee & Glass refactor (2026-11-18)
+- Themes: Iced Latte (light, default) / Espresso (dark). Tokens at the top of main.css: theme tokens (--bg, --text, --accent, --link, --border, --glass-*) vs a fixed material palette (--espresso, --cream, --roast... for paper, wood, badges, deck). Saved in localStorage "theme" ("iced-latte"/"espresso"; legacy "light"/"dark" migrated by the inline <head> script, which also prevents a flash). No saved choice = prefers-color-scheme. Switch = .theme-switch top right; cross-fade via View Transitions.
+- Fonts: Fraunces (headings + physical objects: desk, badges, letter, shelf, deck) + Inter (body/UI).
+- Featured Work = glass card grid (pass05): thumb, title, kind, The Stack (content.js projects[].stack, pulled from each project's text), The Impact (projects[].impact), Open deck. Blurred caramel blobs drift behind (#p05::before/::after).
+- "What makes me, me?" + "On My Shelf" merged into "Off the Menu" (#about): marquee (content.js `marquee`), letter, desk photo (about.deskPhoto, empty = warm placeholder frame; replaced the knight), shelf (#books kept for the in-text link).
+- Reveals for new elements: IntersectionObserver reveal() in app.js (existing GSAP reveals kept). Footer text is exact; "Say hi." = mailto.
+
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.
 - Vendored libraries in `vendor/` (no CDN): GSAP 3.13 + ScrollTrigger, Lenis 1.1.13. (Three.js removed

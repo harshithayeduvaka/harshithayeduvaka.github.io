@@ -6,16 +6,29 @@
 <title>Harshitha Yeduvaka · Marketing & Growth · Paris</title>
 <meta name="description" content="Harshitha Yeduvaka, Marketing &amp; Growth in Paris. Helping businesses turn marketing efforts into measurable growth." />
 <link rel="canonical" href="/" />
+<meta name="color-scheme" content="light dark" />
+<!-- Theme, before any CSS paints (no flash of the wrong theme). Saved choice wins; otherwise the CSS
+     follows prefers-color-scheme. Old/foreign values ("light"/"dark") are migrated to the new names. -->
+<script>
+  (function () {
+    try {
+      var k = "theme", v = localStorage.getItem(k), legacy = { light: "iced-latte", dark: "espresso" };
+      if (legacy[v]) { v = legacy[v]; localStorage.setItem(k, v); }
+      if (v === "iced-latte" || v === "espresso") document.documentElement.dataset.theme = v;
+      else if (v !== null) localStorage.removeItem(k);
+    } catch (e) {}
+  })();
+</script>
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,50;1,9..144,400..800,50&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles/main.css?v=20261116a" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..800,50;1,9..144,400..800,50&family=Inter:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles/main.css?v=20261118a" />
 <link rel="icon" type="image/png" href="assets/logo-hy.png" />
 <!-- first-screen images: start downloading immediately (keep ?v in sync with ASSET_V in app.js) -->
-<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261116a" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/signature.png?v=20261116a" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/objects/notebook.avif?v=20261118a" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/signature.png?v=20261118a" fetchpriority="high" />
 
 <!-- JSON-LD -->
 <script type="application/ld+json">
@@ -40,6 +53,11 @@
   <a class="brand" href="#top" aria-label="Harshitha Yeduvaka, back to top">
     <img src="assets/logo-hy.avif" alt="" width="200" height="140" fetchpriority="high" />
   </a>
+  <!-- Theme switch: Iced Latte (light) / Espresso (dark). app.js wires it up; the choice is saved. -->
+  <div class="theme-switch" role="group" aria-label="Colour theme">
+    <button type="button" class="theme-switch__btn" data-theme-set="iced-latte" aria-pressed="false">Iced Latte</button>
+    <button type="button" class="theme-switch__btn" data-theme-set="espresso" aria-pressed="false">Espresso</button>
+  </div>
 
   <header class="hero desk" id="top">
     <h1 class="visually-hidden">Harshitha Yeduvaka, Marketing &amp; Growth</h1>
@@ -89,7 +107,7 @@
   </section>
 
   <!-- PASS 05 — Projects -->
-  <section class="pass" id="p05" aria-labelledby="p05-h">
+  <section class="pass work-sec" id="p05" aria-labelledby="p05-h">
     <div class="pass__grid">
       <div class="content">
         <h2 id="p05-h" class="pass__title display">Featured Work <span class="about-me__cmd" aria-hidden="true">⌘</span></h2>
@@ -98,28 +116,27 @@
     </div>
   </section>
 
-  <!-- About ⌘ — text from content.js `about` -->
+  <!-- Off the Menu: "What makes me, me?" + "On My Shelf" merged into one section.
+       Marquee + desk photo from content.js (`marquee`, `about.deskPhoto`); letter text from `about`;
+       books from `books` (scripts/bookshelf.js). #books stays on the shelf so in-text links still land there. -->
   <section class="pass about-me" id="about" aria-labelledby="about-h">
     <div class="pass__grid">
       <div class="content">
-        <h2 id="about-h" class="pass__title display">What makes me, me? <span class="about-me__cmd" aria-hidden="true">☺︎</span></h2>
-        <!-- a letter lying on the desk: photo taped on, text on ruled paper, signed, chess knight beside it -->
-        <div class="letter-wrap">
-          <div class="letter" id="letter">
-            <div class="about-me__body" id="aboutBody"></div>
+        <h2 id="about-h" class="pass__title display">Off the Menu <span class="about-me__cmd" aria-hidden="true">☺︎</span></h2>
+        <div class="marquee" id="marquee" tabindex="0" role="region" aria-label="Currently, at a glance (hover or focus to pause)"></div>
+        <div class="about-me__row">
+          <!-- a letter lying on the desk: text on ruled paper, signed -->
+          <div class="letter-wrap">
+            <div class="letter" id="letter">
+              <div class="about-me__body" id="aboutBody"></div>
+            </div>
           </div>
-          <img class="letter__knight" src="assets/objects/knight.avif?v=20261116a" alt="" aria-hidden="true" width="260" height="480" loading="lazy" decoding="async" draggable="false" />
+          <figure class="desk-photo" id="deskPhoto"></figure>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- On My Shelf: books from content.js `books` (scripts/bookshelf.js) -->
-  <section class="pass shelf-sec" id="books" aria-labelledby="books-h">
-    <div class="pass__grid">
-      <div class="content">
-        <h2 id="books-h" class="pass__title display">On My Shelf <span class="about-me__cmd" aria-hidden="true">⟡</span></h2>
-        <div class="shelves" id="shelves"></div>
+        <div class="shelf-block" id="books" aria-labelledby="books-h">
+          <h3 id="books-h" class="visually-hidden">On my shelf</h3>
+          <div class="shelves" id="shelves"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -183,7 +200,7 @@
 </dialog>
 
 <footer class="mono">
-  <span>Designed &amp; built by Harshitha in Paris. Say hi</span>
+  <p>Designed &amp; built by Harshitha in Paris. Fueled by iced americanos and growth data. <a class="footer__hi" href="mailto:yeduvakaharshitha@gmail.com">Say hi.</a></p>
 </footer>
 
 <div id="toast" class="mono" role="status" aria-live="polite">Copied</div>
@@ -193,6 +210,6 @@
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 
-<script type="module" src="scripts/app.js?v=20261116a"></script>
+<script type="module" src="scripts/app.js?v=20261118a"></script>
 </body>
 </html>
