@@ -1,11 +1,11 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118m";
-import { initMusic } from "./music.js?v=20261118m";
-import { initBookshelf } from "./bookshelf.js?v=20261118m";
-import { initCup } from "./cup.js?v=20261118m";
+import { play, playFile } from "./sound.js?v=20261118n";
+import { initMusic } from "./music.js?v=20261118n";
+import { initBookshelf } from "./bookshelf.js?v=20261118n";
+import { initCup } from "./cup.js?v=20261118n";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118m";
+} from "./content.js?v=20261118n";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +19,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118m";
+const ASSET_V = "20261118n";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -426,7 +426,17 @@ function passKit() {
         grid.classList.remove("is-intro");
       } });
       const widths = lines.map((im) => im.offsetWidth), total = widths.reduce((x, y) => x + y, 0);
-      tl.to(pen, { "--s": 1.08, duration: 0.15, ease: "power1.out" }); // lifts
+      // a retractable pen: click it before writing and again when it's put down. The plunger end
+      // dips toward the nib and springs back. The click sound only plays if the visitor has already
+      // interacted with the page (never autoplayed; a blocked sound would otherwise play late).
+      const clickPen = () => {
+        const tlc = gsap.timeline();
+        tlc.to(penImg, { scaleY: 0.955, transformOrigin: "50% 100%", duration: 0.06, ease: "power2.in" })
+          .call(() => { if (navigator.userActivation?.hasBeenActive) play("click"); })
+          .to(penImg, { scaleY: 1, duration: 0.14, ease: "back.out(3)", clearProps: "transform" });
+        return tlc;
+      };
+      tl.add(clickPen()).to(pen, { "--s": 1.08, duration: 0.15, ease: "power1.out" }, "+=0.08"); // click, then lift
       lines.forEach((im, i) => {
         const r = im.getBoundingClientRect();
         const th = (deg(nb) + (parseFloat(im.style.rotate) || 0)) * Math.PI / 180;
@@ -441,7 +451,8 @@ function passKit() {
           .to(im, { clipPath: "inset(-40% -5% -40% -5%)", duration: dur, ease: "none" }, "<")
           .to(pen, { ...to(end), duration: dur, ease: "none" }, "<");
       });
-      tl.to(pen, { "--dx": "0px", "--dy": "0px", "--s": 1, duration: 0.45, ease: "power2.inOut" }); // back to rest
+      tl.to(pen, { "--dx": "0px", "--dy": "0px", "--s": 1, duration: 0.45, ease: "power2.inOut" }) // back to rest
+        .add(clickPen(), "+=0.1"); // click: nib retracted
     }, "+=0.15");
   }
 
