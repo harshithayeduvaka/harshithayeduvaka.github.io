@@ -1,11 +1,11 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118p";
-import { initMusic } from "./music.js?v=20261118p";
-import { initBookshelf } from "./bookshelf.js?v=20261118p";
-import { initCup } from "./cup.js?v=20261118p";
+import { play, playFile } from "./sound.js?v=20261118q";
+import { initMusic } from "./music.js?v=20261118q";
+import { initBookshelf } from "./bookshelf.js?v=20261118q";
+import { initCup } from "./cup.js?v=20261118q";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118p";
+} from "./content.js?v=20261118q";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +19,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118p";
+const ASSET_V = "20261118q";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -193,9 +193,14 @@ function passKit() {
     }
     if (k.id === "alarm") clockFace(b);
     if (k.id === "pen") { // the photo shows the pen retracted: a drawn metal nib + ball point, out when clicked
-      $(".kit__img", b).insertAdjacentHTML("beforeend", `<svg class="pen-nib" viewBox="0 0 10 16" aria-hidden="true" focusable="false">
-        <defs><linearGradient id="nibMetal" x1="0" x2="1"><stop offset="0" stop-color="#8f8b84"/><stop offset=".45" stop-color="#ece9e3"/><stop offset="1" stop-color="#a29e97"/></linearGradient></defs>
-        <path d="M1.6 0h6.8l-2.3 13.2h-2.2z" fill="url(#nibMetal)" stroke="rgba(43,29,22,.6)" stroke-width=".6" stroke-linejoin="round"/><circle cx="5" cy="14" r="1.25" fill="#2a2623"/></svg>`);
+      $(".kit__img", b).insertAdjacentHTML("beforeend", `<svg class="pen-nib" viewBox="0 0 10 22" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="nibRefill" x1="0" x2="1"><stop offset="0" stop-color="#6f8496"/><stop offset=".4" stop-color="#b9c7d2"/><stop offset="1" stop-color="#7d93a6"/></linearGradient>
+          <linearGradient id="nibMetal" x1="0" x2="1"><stop offset="0" stop-color="#8f8b84"/><stop offset=".45" stop-color="#ece9e3"/><stop offset="1" stop-color="#a29e97"/></linearGradient>
+        </defs>
+        <path d="M1.4 0h7.2l-1.1 13h-5z" fill="url(#nibRefill)" opacity=".9"/>
+        <path d="M2.6 13h4.8l-1.6 6.6h-1.6z" fill="url(#nibMetal)"/>
+        <circle cx="5" cy="19.9" r=".75" fill="#3a3633"/></svg>`);
     }
     if (k.sound === "music") { b.setAttribute("aria-label", "Headphones: open my playlist"); b.setAttribute("aria-expanded", "false"); }
     b.style.setProperty("--r", `${k.desk.r}deg`);
