@@ -48,7 +48,8 @@ export const about = {
 // note: optional line in your words, shown under the desk on click. Leave "" to show nothing.
 export const kit = [
   // A stained-glass table lamp, a little behind the notebook (listed first so it sits under it).
-  // Click: it lights up for 1 second with a switch click (assets/sounds/lamp.mp3 if present).
+  // It's the dark-mode switch: lit = Espresso theme. Click = switch click + theme toggles (saved).
+  // It also switches itself on in the evening (Paris time) if the visitor hasn't chosen.
   { id: "lamp", label: "LAMP", name: "Table lamp", sound: "lamp",
     img: "assets/objects/lamp.avif", w: 418, h: 640, // cut out of her photo
     alt: "Stained-glass table lamp with blue and yellow flowers",
@@ -94,7 +95,8 @@ export const kit = [
     desk: { x: 67.1, y: 35.5, w: 2.2, r: 18 }, // on the right page, just past the tagline
     chaos: { x: 42.5, y: 61, w: 2.2, r: 0 },
     note: "" },
-  // A little twin-bell alarm clock where the vinyl card used to sit. Click: a short ring + a shake.
+  // A little twin-bell alarm clock where the vinyl card used to sit. Shows the real time in Paris
+  // (a live face drawn over the photo's dial, app.js clockFace). Click: a short ring + a shake.
   { id: "alarm", label: "ALARM", name: "Alarm clock", sound: "ring",
     img: "assets/objects/alarm.avif", w: 306, h: 420, // transparent cut-out
     alt: "Black twin-bell alarm clock",

@@ -40,6 +40,11 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 - "What makes me, me?" + "On My Shelf" merged into "Off the Menu" (#about): marquee (content.js `marquee`), letter, desk photo (about.deskPhoto, empty = warm placeholder frame; replaced the knight), shelf (#books kept for the in-text link).
 - Reveals for new elements: IntersectionObserver reveal() in app.js (existing GSAP reveals kept). Footer text is exact; "Say hi." = mailto.
 
+## Time of day + lamp (2026-11-18)
+- Alarm clock = real Paris time: app.js clockFace() draws an SVG face (Fraunces numerals) over the photo's dial (.clock-face: left 11.76% / top 30.24% / width 78.43% of the image); hands set every second; aria-label says the time. Reduced motion: no second hand.
+- Lamp = the dark-mode switch: lit (shade glow + .lamp-glow pool) whenever data-theme="espresso"; click toggles + saves. The Iced Latte/Espresso pill stays in sync (shared setTheme/themeListeners in app.js).
+- data-daylight on <html> (Paris time: morning 6-11, day 11-18, evening 18-22, night 22-6), set by the <head> script and re-checked every 30s. Morning + Iced Latte: soft blurred window shadows on the desk (.kit__grid::after). Evening/night: warm tint over the page (.ambient) and, if the visitor hasn't chosen a theme, the lamp switches on (Espresso). Saved choice always wins.
+
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.
 - Vendored libraries in `vendor/` (no CDN): GSAP 3.13 + ScrollTrigger, Lenis 1.1.13. (Three.js removed

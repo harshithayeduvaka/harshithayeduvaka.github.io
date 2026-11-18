@@ -1,10 +1,10 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261118f";
-import { initMusic } from "./music.js?v=20261118f";
-import { initBookshelf } from "./bookshelf.js?v=20261118f";
+import { play, playFile } from "./sound.js?v=20261118g";
+import { initMusic } from "./music.js?v=20261118g";
+import { initBookshelf } from "./bookshelf.js?v=20261118g";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261118f";
+} from "./content.js?v=20261118g";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -15,7 +15,32 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261118f";
+const ASSET_V = "20261118g";
+
+// ------------------------------------------------------------------
+// Paris time + theme (Iced Latte / Espresso). The lamp on the desk and the pill top right both
+// switch it; with no saved choice it follows the time of day in Paris (evening = lamp on).
+// The <head> script applies the same rules before paint.
+// ------------------------------------------------------------------
+const root = document.documentElement;
+const darkOS = matchMedia("(prefers-color-scheme: dark)");
+function parisNow() {
+  try {
+    const p = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+    const g = (t) => +p.find((x) => x.type === t).value;
+    return { h: g("hour"), m: g("minute"), s: g("second") };
+  } catch { const d = new Date(); return { h: d.getHours(), m: d.getMinutes(), s: d.getSeconds() }; }
+}
+const phaseOf = (h) => (h >= 6 && h < 11 ? "morning" : h >= 11 && h < 18 ? "day" : h >= 18 && h < 22 ? "evening" : "night");
+const savedTheme = () => { try { const v = localStorage.getItem("theme"); return v === "iced-latte" || v === "espresso" ? v : null; } catch { return null; } };
+const autoTheme = (h) => (h >= 18 || h < 6 ? "espresso" : darkOS.matches ? "espresso" : "iced-latte");
+const themeListeners = [];
+function setTheme(t, save) {
+  if (save) { try { localStorage.setItem("theme", t); } catch {} }
+  if (root.dataset.theme === t) { themeListeners.forEach((f) => f(t)); return; }
+  const go = () => { root.dataset.theme = t; themeListeners.forEach((f) => f(t)); };
+  if (!reduced && document.startViewTransition) document.startViewTransition(go); else go();
+}
 
 // ------------------------------------------------------------------
 // Single shared RAF: Lenis + GSAP ticker
@@ -95,20 +120,9 @@ function passKit() {
   // --- sound toggle --------------------------------------------------
   // (sound on/off now lives in the fixed mini player, scripts/music.js)
 
-  // Lamp: lights up for 1 second. The shade glows, and a warm pool of light (.lamp-light)
-  // spreads over the desk around it, above the other objects (blend mode, no clicks blocked).
-  let lampTimer;
-  const lightLamp = (b) => {
-    let glow = grid.querySelector(".lamp-light");
-    if (!glow) { glow = document.createElement("div"); glow.className = "lamp-light"; glow.setAttribute("aria-hidden", "true"); grid.appendChild(glow); }
-    const g = grid.getBoundingClientRect(), r = b.getBoundingClientRect();
-    glow.style.left = r.left - g.left + r.width / 2 + "px";
-    glow.style.top = r.top - g.top + r.height * 0.36 + "px";
-    glow.style.setProperty("--size", r.width * 3.2 + "px");
-    b.classList.add("is-lit"); glow.classList.add("is-on");
-    clearTimeout(lampTimer);
-    lampTimer = setTimeout(() => { b.classList.remove("is-lit"); glow.classList.remove("is-on"); }, 1000);
-  };
+  // Lamp = the dark-mode switch. Lit whenever the theme is Espresso (CSS: the shade glows and a
+  // warm pool of light (.lamp-glow, inside the lamp, so it follows drags) spreads over the desk).
+  const toggleLamp = () => setTheme(root.dataset.theme === "espresso" ? "iced-latte" : "espresso", true);
 
   // her handwriting (content.js kit.ink.hand): one <img> per written line
   const handImgs = (lines) => (lines || []).map((h) =>
@@ -144,6 +158,17 @@ function passKit() {
       }</span>`;
     }
     if (k.id === "camera") b.setAttribute("aria-label", "Camera: take a photo");
+    if (k.id === "lamp") {
+      $(".kit__img", b).insertAdjacentHTML("afterbegin", '<span class="lamp-glow" aria-hidden="true"></span>');
+      const syncLamp = (t) => {
+        const on = t === "espresso";
+        b.setAttribute("aria-pressed", String(on));
+        b.setAttribute("aria-label", "Lamp: dark mode (Espresso)");
+        b.title = on ? "Switch the lamp off (Iced Latte)" : "Switch the lamp on (Espresso)";
+      };
+      themeListeners.push(syncLamp); syncLamp(root.dataset.theme);
+    }
+    if (k.id === "alarm") clockFace(b);
     if (k.sound === "music") { b.setAttribute("aria-label", "Headphones: open my playlist"); b.setAttribute("aria-expanded", "false"); }
     b.style.setProperty("--r", `${k.desk.r}deg`);
     if (desk) {
@@ -170,14 +195,14 @@ function passKit() {
         if (k.cup) playFile("assets/sounds/sip.mp3", "sip", 0.75, 0.09);
         // alarm / clip: a recorded effect if saved as assets/sounds/<ring|snap>.mp3, else the 2s synth
         else if (k.sound === "ring" || k.sound === "snap") playFile(`assets/sounds/${k.sound}.mp3`, k.sound, 2);
-        else if (k.sound === "lamp") { playFile("assets/sounds/lamp.mp3", "lamp", 1); lightLamp(b); }
+        else if (k.sound === "lamp") { playFile("assets/sounds/lamp.mp3", "lamp", 1); toggleLamp(); }
         else play(k.sound);
         if (k.sound === "shutter") ejectPrint();
         if (k.cup) steam(b);
       }
       note.textContent = k.note || "";
       if (!reduced && k.id === "alarm") { // the alarm clock rattles while it rings
-        gsap.fromTo(b.querySelector("img"), { rotate: 0, x: 0 },
+        gsap.fromTo(b.querySelector(".kit__img"), { rotate: 0, x: 0 }, // whole clock, live face included
           { keyframes: [...Array(32)].map((_, i) => ({ rotate: i % 2 ? -5 : 5, x: i % 2 ? -1.5 : 1.5, duration: 0.056 }))
               .concat({ rotate: 0, x: 0, duration: 0.25, ease: "elastic.out(1,0.5)" }) });
       } else if (!reduced && !k.cup && k.sound !== "lamp") { // the cup only steams; everything else does a little hop
@@ -863,24 +888,58 @@ function reveal(els) {
 // opacity only) where supported; reduced motion switches instantly.
 // ------------------------------------------------------------------
 function themeSwitch() {
-  const root = document.documentElement;
   const btns = $$("[data-theme-set]");
-  const dark = matchMedia("(prefers-color-scheme: dark)");
-  const current = () => root.dataset.theme || (dark.matches ? "espresso" : "iced-latte");
-  const sync = () => btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeSet === current())));
-  const apply = (t) => {
-    root.dataset.theme = t;
-    try { localStorage.setItem("theme", t); } catch {}
-    sync();
+  const sync = (t) => btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeSet === t)));
+  btns.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.themeSet, true)));
+  themeListeners.push(sync);
+  sync(root.dataset.theme);
+
+  // time of day in Paris, checked every 30s: morning shadows on the desk, evening = lamp on + warm
+  // tint. Only changes the theme by itself when the visitor hasn't picked one.
+  const tick = () => {
+    const { h } = parisNow();
+    root.dataset.daylight = phaseOf(h);
+    if (!savedTheme()) setTheme(autoTheme(h), false);
   };
-  btns.forEach((b) => b.addEventListener("click", () => {
-    const t = b.dataset.themeSet;
-    if (t === current()) return;
-    if (!reduced && document.startViewTransition) document.startViewTransition(() => apply(t));
-    else apply(t);
-  }));
-  dark.addEventListener("change", sync); // OS switch while no choice is saved
-  sync();
+  darkOS.addEventListener("change", tick);
+  setInterval(tick, 30000);
+  tick();
+}
+
+// The alarm clock tells the real time in Paris: a face drawn over the photo's dial
+// (same size and spot), hands set every second. Reduced motion: no second hand.
+function clockFace(btn) {
+  const box = $(".kit__img", btn);
+  const nums = Array.from({ length: 12 }, (_, i) => {
+    const n = i + 1, a = (n * 30 - 90) * Math.PI / 180;
+    return `<text x="${(120 + 86 * Math.cos(a)).toFixed(1)}" y="${(120 + 86 * Math.sin(a)).toFixed(1)}">${n}</text>`;
+  }).join("");
+  const ticks = Array.from({ length: 60 }, (_, i) =>
+    `<line x1="120" y1="${i % 5 ? 9 : 7}" x2="120" y2="${i % 5 ? 14 : 18}" transform="rotate(${i * 6} 120 120)"${i % 5 ? "" : ' class="hr"'} />`).join("");
+  box.insertAdjacentHTML("beforeend", `
+    <svg class="clock-face" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+      <defs><radialGradient id="dialPaper" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#F3EBDD"/><stop offset="1" stop-color="#E4D7C2"/></radialGradient></defs>
+      <circle cx="120" cy="120" r="117" fill="url(#dialPaper)" stroke="#1f1d1b" stroke-width="5"/>
+      <g class="clock-face__ticks">${ticks}</g>
+      <g class="clock-face__nums">${nums}</g>
+      <g class="clock-face__h"><path d="M116.5 128 L118 66 Q120 60 122 66 L123.5 128 Z"/></g>
+      <g class="clock-face__m"><path d="M117.8 130 L119 34 Q120 30 121 34 L122.2 130 Z"/></g>
+      <g class="clock-face__s"><line x1="120" y1="138" x2="120" y2="26"/></g>
+      <circle cx="120" cy="120" r="6.5" fill="#1f1d1b"/><circle cx="120" cy="120" r="2.2" fill="#b9b5ae"/>
+    </svg>`);
+  const svg = $(".clock-face", box);
+  const [hH, hM, hS] = [".clock-face__h", ".clock-face__m", ".clock-face__s"].map((s) => $(s, svg));
+  const say = (h, m) => btn.setAttribute("aria-label", `Alarm clock: it's ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")} in Paris. Plays a sound.`);
+  let lastMin = -1;
+  const set = () => {
+    const { h, m, s } = parisNow();
+    hH.setAttribute("transform", `rotate(${(h % 12) * 30 + m * 0.5} 120 120)`);
+    hM.setAttribute("transform", `rotate(${m * 6 + s * 0.1} 120 120)`);
+    hS.setAttribute("transform", `rotate(${s * 6} 120 120)`);
+    if (m !== lastMin) { lastMin = m; say(h, m); }
+  };
+  set();
+  setInterval(set, 1000);
 }
 
 // ------------------------------------------------------------------
