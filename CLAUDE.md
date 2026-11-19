@@ -64,6 +64,9 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 - Active state = hover or :focus-visible only (focus returning to a card's button after closing its deck no longer lifts it).
   .reveal only hides until .is-in (it used to set transform:none and cancel the cards' hover lift).
 
+## Background doodles (2026-11-19)
+- app.js bgDoodles(): 7 of her doodles (scripts/doodles.js) placed in the side margins of #p05, #about, #close (not the pinned #p03), opacity .13 in var(--text), slight tilt; shown only at >= 1200px where the margins are empty; aria-hidden.
+
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.
 - Vendored libraries in `vendor/` (no CDN): GSAP 3.13 + ScrollTrigger, Lenis 1.1.13. (Three.js removed

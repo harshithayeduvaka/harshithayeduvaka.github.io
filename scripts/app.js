@@ -1,12 +1,12 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261119l";
-import { initMusic } from "./music.js?v=20261119l";
-import { initBookshelf } from "./bookshelf.js?v=20261119l";
-import { doodles } from "./doodles.js?v=20261119l";
-import { initCup } from "./cup.js?v=20261119l";
+import { play, playFile } from "./sound.js?v=20261119m";
+import { initMusic } from "./music.js?v=20261119m";
+import { initBookshelf } from "./bookshelf.js?v=20261119m";
+import { doodles } from "./doodles.js?v=20261119m";
+import { initCup } from "./cup.js?v=20261119m";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261119l";
+} from "./content.js?v=20261119m";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261119l";
+const ASSET_V = "20261119m";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -1014,6 +1014,27 @@ function reveal(els) {
 }
 
 // ------------------------------------------------------------------
+// A few doodles, faint, in the empty side margins (CSS shows them on wide screens only).
+// Not in the pinned notebook section, so nothing hangs still while the pages turn.
+// ------------------------------------------------------------------
+function bgDoodles() {
+  const spots = [
+    ["#p05", "coffee-cup", "top:6%; left:1.6vw", -8],
+    ["#p05", "paper-plane", "top:62%; right:1.8vw", 10],
+    ["#about", "croissant", "top:4%; right:1.8vw", 12],
+    ["#about", "open-book", "top:38%; left:1.4vw", -6],
+    ["#about", "chess-knight", "top:74%; right:2vw", 6],
+    ["#close", "eiffel-tower", "top:12%; left:1.8vw", -4],
+    ["#close", "coffee-beans", "top:58%; right:1.6vw", 14],
+  ];
+  spots.forEach(([sel, name, pos, r]) => {
+    const host = $(sel);
+    if (!host || !doodles[name]) return;
+    host.insertAdjacentHTML("beforeend", `<span class="bg-doodle" aria-hidden="true" style="${pos}; --r:${r}deg">${doodles[name]}</span>`);
+  });
+}
+
+// ------------------------------------------------------------------
 // Theme: Iced Latte (light) / Espresso (dark). The <head> script applies a saved choice before
 // paint; with none, CSS follows prefers-color-scheme. Switching cross-fades (View Transitions,
 // opacity only) where supported; reduced motion switches instantly.
@@ -1072,7 +1093,7 @@ function clockFace(btn) {
 // ------------------------------------------------------------------
 async function init() {
   // Build all passes defensively — one failure must not freeze the page.
-  const passes = { themeSwitch, coffeeProgress: () => initCup({ gsap, reduced, getLenis: () => lenis }), passKit, passToolkit, pass03, pass05, passAboutMe, passBookshelf, revealTitles, contact, contactForm };
+  const passes = { themeSwitch, bgDoodles, coffeeProgress: () => initCup({ gsap, reduced, getLenis: () => lenis }), passKit, passToolkit, pass03, pass05, passAboutMe, passBookshelf, revealTitles, contact, contactForm };
   for (const [name, fn] of Object.entries(passes)) {
     try { fn(); } catch (e) { console.error(`[${name}] failed:`, e); }
   }
