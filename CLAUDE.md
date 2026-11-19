@@ -13,14 +13,15 @@ Below it: "The Story So Far" badges, case studies, About (a letter on recycled r
 links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
 no "PASS" rail labels. Experience = "The Story So Far ✦" (2026-11-19, replaced the coffee bags): a flip-book notebook, one spread per WORK role,
-newest first (content.js `experience[].book`: kicker, result, line, doodle, tilt, photo; photos in assets/work/, doodles inlined
-from her ~/Downloads/doodles in scripts/doodles.js so they take the ink colour). Left page = taped, tilted photo; right page =
-kicker (small caps), role (h3), result (Fraunces italic, dark caramel; one-font rule, so no Caveat), one line, doodle; ohmyATS
-has a plain underlined "Visit ohmyATS" link (no icon, her choice). DOM: photo1 | leaf1[text1|photo2] | leaf2[text2|photo3] | text3.
-Desktop >=900px + motion: open notebook (espresso cover edge, ruled cream pages, fold shadow); #p03 pins for 2.5 screens and the
-scroll (scrub) turns leaf 1 then leaf 2 (rotateY 0..-180, transformPerspective 1600, shade sweep); dots 1-3 are buttons that
-scroll to each spread; z-index/inert/aria-current follow the timeline. Phones / reduced motion: the leaves are display:contents
-and the six faces stack as three single pages (CSS order). Pages stay cream in both themes.
+newest first (content.js `experience[].book`: company, meta "dates · city", logo, result, line, doodle, tilt).
+Left page = the company's logo tile (assets/logos/*-tile.avif, her files; ohmyATS converted from Display P3 to sRGB), taped
+and tilted, alt="" because the company name is written under it, then dates · city in small caps. Right page = role (h3),
+result (Fraunces italic, dark caramel; one-font rule, so no Caveat), one line, doodle (scripts/doodles.js, inlined from her
+~/Downloads/doodles); ohmyATS has a plain underlined "Visit ohmyATS" link (no icon). Screenshots/photos removed at her request.
+DOM: page1 | leaf1[text1|page2] | leaf2[text2|page3] | text3. Desktop >=900px + motion: open notebook; #p03 pins for 2.5
+screens and the scroll (scrub) turns leaf 1 then leaf 2 (rotateY 0..-180, transformPerspective 1600, shade sweep); dots 1-3
+scroll to each spread; z-index/inert/aria-current follow the timeline. Phones / reduced motion: leaves are display:contents and
+the six faces stack as three single pages (CSS order). Pages stay cream in both themes.
 Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/

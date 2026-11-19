@@ -1,12 +1,12 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261119d";
-import { initMusic } from "./music.js?v=20261119d";
-import { initBookshelf } from "./bookshelf.js?v=20261119d";
-import { doodles } from "./doodles.js?v=20261119d";
-import { initCup } from "./cup.js?v=20261119d";
+import { play, playFile } from "./sound.js?v=20261119f";
+import { initMusic } from "./music.js?v=20261119f";
+import { initBookshelf } from "./bookshelf.js?v=20261119f";
+import { doodles } from "./doodles.js?v=20261119f";
+import { initCup } from "./cup.js?v=20261119f";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261119d";
+} from "./content.js?v=20261119f";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261119d";
+const ASSET_V = "20261119f";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -641,7 +641,7 @@ function passToolkit() {
 
 // ------------------------------------------------------------------
 // The Story So Far: a flip-book notebook (content.js `experience[].book`), one spread per role,
-// newest first. Left page = the role's photo (taped, slightly tilted); right page = the text.
+// newest first. Left page = company logo (taped, slightly tilted) + name + city/dates; right page = what she did.
 //
 // One set of HTML for every layout (CSS decides):
 //   photo 1 (left page) | leaf 1 = [role 1 text | back: photo 2] | leaf 2 = [role 2 | back: photo 3] | role 3
@@ -656,16 +656,19 @@ function pass03() {
   const roles = experience.filter((e) => e.type === "work" && e.book);
   if (!root3 || roles.length !== 3) return;
 
+  // left page: the company's logo (a square tile, taped on, slightly tilted), its name, city + dates.
+  // The name is written out, so the logo itself is decorative (alt="").
   const photo = (e, n, cls = "") => `
-    <figure class="flip__face flip__photo ${cls}" data-n="${n}"><div class="flip__in">
-      <span class="flip__print" style="--tilt:${e.book.tilt}deg">
+    <div class="flip__face flip__photo ${cls}" data-n="${n}"><div class="flip__in">
+      <span class="flip__logo" style="--tilt:${e.book.tilt}deg">
         <span class="flip__tape" aria-hidden="true"></span>
-        <img src="${e.book.photo.src}?v=${ASSET_V}" alt="${e.book.photo.alt}" width="960" height="720" loading="lazy" decoding="async" draggable="false" />
+        <img src="${e.book.logo}?v=${ASSET_V}" alt="" width="480" height="480" loading="lazy" decoding="async" draggable="false" />
       </span>
-    </div></figure>`;
+      <p class="flip__company">${e.book.company}</p>
+      <p class="flip__meta mono">${e.book.meta}</p>
+    </div></div>`;
   const text = (e, n, cls = "") => `
     <article class="flip__face flip__text ${cls}" data-n="${n}" aria-labelledby="flip-role-${n}"><div class="flip__in">
-      <p class="flip__kicker mono">${e.book.kicker}</p>
       <h3 class="flip__role" id="flip-role-${n}">${e.role}</h3>
       <p class="flip__result">${e.book.result}</p>
       <p class="flip__line">${e.book.line}</p>
