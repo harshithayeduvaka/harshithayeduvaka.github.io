@@ -1,12 +1,12 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261119g";
-import { initMusic } from "./music.js?v=20261119g";
-import { initBookshelf } from "./bookshelf.js?v=20261119g";
-import { doodles } from "./doodles.js?v=20261119g";
-import { initCup } from "./cup.js?v=20261119g";
+import { play, playFile } from "./sound.js?v=20261119i";
+import { initMusic } from "./music.js?v=20261119i";
+import { initBookshelf } from "./bookshelf.js?v=20261119i";
+import { doodles } from "./doodles.js?v=20261119i";
+import { initCup } from "./cup.js?v=20261119i";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261119g";
+} from "./content.js?v=20261119i";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261119g";
+const ASSET_V = "20261119i";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).
@@ -812,12 +812,18 @@ function pass05() {
     if (Math.abs(dx) > 50) go(at + (dx < 0 ? 1 : -1));
   });
 
-  // Glass cards, one per project: deck cover, title, The Stack, The Impact, Open deck.
+  // Glass cards, one per project: cover, title, tag, the question, The Stack, The Impact, Open deck.
+  // Every cover uses the same template (cream paper, the brand name in the serif, one ink colour),
+  // so the four read as a set; the brands' own logos and colours stay inside the decks.
   // The whole card is clickable (the button's ::after covers it), and the button is the one
   // keyboard stop per card.
-  const cover = (p) => p.slides && p.slides.length
-    ? `<img class="work-card__img" src="${p.slides[0]}" alt="" width="1600" height="900" loading="lazy" decoding="async" draggable="false" />`
-    : `<span class="work-card__img work-card__img--text" aria-hidden="true">${p.client}</span>`;
+  const cover = (p) => `
+    <span class="work-card__cover" aria-hidden="true">
+      <span class="work-card__cover-tag">Case study</span>
+      <span class="work-card__cover-name">${p.client}</span>
+      <span class="work-card__cover-rule"></span>
+      <span class="work-card__cover-kind">${p.kind}</span>
+    </span>`;
   const sub = (p) => [p.kind, p.when].filter(Boolean).join(" · ");
   list.classList.add("work-grid");
   list.innerHTML = projects.map((p, i) => `
@@ -825,7 +831,8 @@ function pass05() {
       <div class="work-card__thumb">${cover(p)}</div>
       <div class="work-card__body">
         <h3 class="work-card__title" id="work-${p.id}">${p.client}</h3>
-        <p class="work-card__kind">${sub(p)}</p>
+        <p class="work-card__kind">${[p.tag, sub(p)].filter(Boolean).join(" · ")}</p>
+        ${p.question ? `<p class="work-card__question">${p.question}</p>` : ""}
         <ul class="work-card__facts">
           <li><b>The Stack:</b> ${(p.stack || ["[TOOLS]"]).join(", ")}</li>
           <li><b>The Impact:</b> ${p.impact || "[METRIC]"}</li>

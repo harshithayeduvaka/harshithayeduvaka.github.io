@@ -750,15 +750,30 @@ section { position: relative; }
   border: 1px solid var(--glass-border-hover); box-shadow: var(--glass-bloom);
   opacity: 0; transition: opacity var(--dur-med) var(--ease);
 }
-.work-card:hover, .work-card:focus-within { transform: translateY(-4px); }
-.work-card:hover::after, .work-card:focus-within::after { opacity: 1; }
+/* only one card looks active: hover, or keyboard focus. (:focus-within also matched the card whose
+   deck was just closed, since focus returns to its button, so two cards looked selected.) */
+.work-card:hover, .work-card:has(:focus-visible) { transform: translateY(-4px); }
+.work-card:hover::after, .work-card:has(:focus-visible)::after { opacity: 1; }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .work-card { background: var(--glass-fallback); }
 }
 .work-card__thumb { margin: 10px 10px 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-md); background: color-mix(in srgb, var(--accent) 22%, var(--bg)); }
-.work-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease); }
-.work-card:hover .work-card__img { transform: scale(1.03); }
-.work-card__img--text { display: grid; place-items: center; font: 800 var(--fs-34)/1 var(--font); color: var(--text); }
+/* one cover template for every case: cream paper, the brand in the serif, one ink colour */
+.work-card__cover {
+  position: relative; display: grid; place-content: center; justify-items: center; gap: 10px; height: 100%; padding: 6%;
+  container-type: inline-size; text-align: center; color: var(--roast);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 23px, rgba(90, 56, 37, .07) 23px 24px),
+    #FBF6EC;
+  transition: transform var(--dur-slow) var(--ease);
+}
+.work-card:hover .work-card__cover { transform: scale(1.03); }
+.work-card__cover-tag { font: 600 clamp(10px, 2.6cqi, 13px)/1 var(--font); letter-spacing: .18em; text-transform: uppercase; color: #8B5A2B; }
+.work-card__cover-name { font: 700 clamp(30px, 11cqi, 64px)/1 var(--font); letter-spacing: -.02em; font-variation-settings: "opsz" 96, "SOFT" 50; }
+.work-card__cover-rule { width: 44px; height: 1px; background: rgba(43, 29, 22, .3); }
+.work-card__cover-kind { font: italic 400 clamp(13px, 3.4cqi, 17px)/1.3 var(--font); color: var(--espresso); }
+/* the question the deck answers, one line under the cover */
+.work-card__question { font: italic 400 var(--fs-16)/1.45 var(--font); color: var(--text); }
 .work-card__body { display: flex; flex-direction: column; gap: 10px; flex: 1; padding: clamp(16px, 2vw, 24px); }
 .work-card__title { font: 700 var(--fs-24)/1.15 var(--font); color: var(--text); letter-spacing: -.01em; }
 .work-card__kind { font-size: var(--fs-13); color: var(--text-muted); margin-top: -4px; }
@@ -1161,9 +1176,10 @@ html.deck-open { overflow: hidden; }
 }
 
 /* scroll reveal (app.js reveal(): IntersectionObserver adds .is-in). --i staggers the cards. */
-.reveal { opacity: 0; transform: translate3d(0, var(--rise), 0); }
+/* hidden only until revealed; after that the element's own transform rules (e.g. the cards' hover
+   lift) apply again (setting transform: none here used to cancel the lift) */
+.reveal:not(.is-in) { opacity: 0; transform: translate3d(0, var(--rise), 0); }
 .reveal.is-in {
-  opacity: 1; transform: none;
   transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
   transition-delay: calc(var(--i, 0) * 90ms);
 }
@@ -1179,7 +1195,7 @@ html.deck-open { overflow: hidden; }
   .marquee__list[aria-hidden="true"] { display: none; }
   .work-sec::before, .work-sec::after { animation: none !important; }
   .reveal { opacity: 1; transform: none; }
-  .work-card:hover, .work-card:focus-within, .work-card:hover .work-card__img { transform: none; }
+  .work-card:hover, .work-card:has(:focus-visible), .work-card:hover .work-card__cover { transform: none; }
   ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
   * { animation: none !important; transition-duration: 0.15s !important; }
   .kit__item:hover img, .kit__item.is-dragging img { transform: none; }

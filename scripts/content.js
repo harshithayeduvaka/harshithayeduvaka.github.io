@@ -246,6 +246,9 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/comintelli/01..24.jpg)
     slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Comintelli",
+    tag: "SKEMA case study", // shown under the name, so nobody thinks she worked for the brand
+    // the question, one line under the cover (from her deck's cover slide)
+    question: "Half its customers are in America. Every decision is made in Kista.",
     stack: ["Value chain", "Porter’s Diamond", "CAGE distance"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "International Business Development Strategy",
     when: "", // no date shown
@@ -255,13 +258,16 @@ export const projects = [
     audited: "Value chain, Porter's Diamond, CAGE distance, decision rights and the Sweden–US culture gap.",
     found: "A method rivals can't copy, run entirely from one office: nobody in America can approve a price or sign a partner, and missing SOC 2 / ISO 27001 stalls US deals.",
     recommended: "Keep the method in Kista, let certified partners sell and serve, and give a Head of the Americas written decision rights.",
-    impact: "A 12-month plan with month-12 KPIs: 2–3 certified US partners, certification readiness, and under 30% of decisions sent back to Kista.",
+    // her CV (2026-11-19) + deck slides 11, 12, 16: a partner-led plan instead of a sales hire costing 92% of cash
+    impact: "A partner-led US entry that avoided a sales hire costing 92% of cash reserves.",
   },
   {
     id: "dior",
     // the real deck (PDF exported to images, assets/decks/dior/01..16.jpg)
     slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Dior",
+    tag: "SKEMA case study",
+    question: "Retail, e-commerce and mobile: does Dior see one customer, or three?",
     stack: ["CRM segmentation", "Omnichannel audit (retail, e-commerce, mobile)"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "Omnichannel Analysis",
     when: "", // no date shown
@@ -271,11 +277,13 @@ export const projects = [
     audited: "Cross-platform personalisation across three channels and the CRM layer underneath.",
     found: "3 critical gaps in CRM segmentation limiting cross-platform personalisation.",
     recommended: "A digital optimisation roadmap, presented to a faculty panel.",
-    impact: "Projected to lift B2C engagement 15% (projection, not measured).",
+    impact: "Found 3 critical gaps in Dior’s CRM segmentation.", // her CV: "Identified 3 critical gaps in CRM segmentation"
   },
   {
     id: "coop",
     client: "Coop Atlantique",
+    tag: "SKEMA case study",
+    question: "185 stores, revenue stalled near €1.04B: is the cooperative model still an advantage?",
     stack: ["Porter’s Five Forces", "VRIN", "ROS / ROA / asset turnover", "SEO/SEM"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "Business Simulation",
     when: "", // no date shown
@@ -295,6 +303,8 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/maya/01..10.jpg)
     slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Eco-Packaging",
+    tag: "SKEMA case study",
+    question: "Sustainable packaging that looks too new to trust: how do you make it feel familiar?",
     stack: ["MAYA principle", "Comparative positioning analysis"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "Strategic Branding",
     when: "", // no date shown

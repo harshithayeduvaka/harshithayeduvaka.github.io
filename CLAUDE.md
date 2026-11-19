@@ -54,6 +54,16 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 - The intro line is also real text: a visually-hidden <p> under the hidden <h1> in the hero.
 - Phase 2 done (lamp, see above). Phase 3 done: scripts/cup.js = fixed coffee cup bottom left (SVG; liquid group translateY 0..36 = scroll progress; slosh once ~0.5s when scrolling stops; steam loop 3.6s; appears after 35% of the hero; "Refill?" button above it when empty, focusable only then, scrolls to top and focuses .brand). Footer has 104px bottom padding so its text clears the cup. Remaining (needs her OK): 4 wax-sealed envelope after a successful contact form send.
 
+## Case Studies cards (2026-11-19, reviewer feedback)
+- Every card: one cover template (cream ruled paper, "Case study", brand name in the serif, kind in italic; no deck images, the
+  brands' logos/colours stay inside the decks), then title, "SKEMA case study · kind" (projects[].tag), the question
+  (projects[].question, one italic line), The Stack, The Impact, Open deck.
+- Impacts from her CV (2026-11-19 version): Comintelli = partner-led US entry avoiding a sales hire costing 92% of cash reserves
+  (also deck slides 11/12/16); Dior = 3 critical gaps in CRM segmentation. Coop + Eco-Packaging impacts unchanged, waiting for her
+  (they're not on her newest CV). No years on the tags (newest CV has no project dates).
+- Active state = hover or :focus-visible only (focus returning to a card's button after closing its deck no longer lifts it).
+  .reveal only hides until .is-in (it used to set transform:none and cancel the cards' hover lift).
+
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.
 - Vendored libraries in `vendor/` (no CDN): GSAP 3.13 + ScrollTrigger, Lenis 1.1.13. (Three.js removed
