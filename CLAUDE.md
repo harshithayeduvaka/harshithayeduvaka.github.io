@@ -22,7 +22,7 @@ DOM: page1 | leaf1[text1|page2] | leaf2[text2|page3] | text3. Desktop >=900px + 
 screens and the scroll (scrub) turns leaf 1 then leaf 2 (rotateY 0..-180, transformPerspective 1600, shade sweep); dots 1-3
 scroll to each spread; z-index/inert/aria-current follow the timeline. Phones / reduced motion: leaves are display:contents and
 the six faces stack as three single pages (CSS order). Pages stay cream in both themes.
-Featured Work = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
+Case Studies (was "Featured Work") = split view: names list left, one preview panel right (slide one of the deck, metric, Open deck) swapped on hover/focus; phones keep the same split view with smaller type. Case studies open in an on-page deck viewer (<dialog>); real decks = `slides` image list
 per project in content.js, otherwise slides are built from the project's text.
 Desk modes: notebook (default, pencil icon) vs "tidy" (internally chaos; broom icon; icons under the desk; kit[].chaos positions; name/title/
 tagline move from the notebook pages to #chaosInk on the desk). Desktop only.
@@ -40,7 +40,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 ## Iced Coffee & Glass refactor (2026-11-18)
 - Themes: Iced Latte (light, default) / Espresso (dark). Tokens at the top of main.css: theme tokens (--bg, --text, --accent, --link, --border, --glass-*) vs a fixed material palette (--espresso, --cream, --roast... for paper, wood, badges, deck). Saved in localStorage "theme" ("iced-latte"/"espresso"; legacy "light"/"dark" migrated by the inline <head> script, which also prevents a flash). No saved choice = prefers-color-scheme. Switch = .theme-switch top right; cross-fade via View Transitions.
 - Fonts: Fraunces only, everywhere (her request, 2026-11-18). Her handwriting on the notebook is an image. Token: --font.
-- Featured Work = glass card grid (pass05): thumb, title, kind, The Stack (content.js projects[].stack, pulled from each project's text), The Impact (projects[].impact), Open deck. Blurred caramel blobs drift behind (#p05::before/::after).
+- Case Studies (was "Featured Work") = glass card grid (pass05): thumb, title, kind, The Stack (content.js projects[].stack, pulled from each project's text), The Impact (projects[].impact), Open deck. Blurred caramel blobs drift behind (#p05::before/::after).
 - "What makes me, me?" + "On My Shelf" merged into "Off the Menu" (#about): marquee (content.js `marquee`), letter (the knight and the desk photo slot were both removed at her request), shelf (#books kept for the in-text link).
 - Reveals for new elements: IntersectionObserver reveal() in app.js (existing GSAP reveals kept). Footer text is exact; "Say hi." = mailto.
 

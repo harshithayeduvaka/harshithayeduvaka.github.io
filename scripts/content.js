@@ -246,7 +246,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/comintelli/01..24.jpg)
     slides: Array.from({ length: 24 }, (_, i) => `assets/decks/comintelli/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Comintelli",
-    stack: ["Value chain", "Porter’s Diamond", "CAGE distance"], // Featured Work card: "The Stack" (from this project's own text)
+    stack: ["Value chain", "Porter’s Diamond", "CAGE distance"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "International Business Development Strategy",
     when: "", // no date shown
     score: "12 mo",
@@ -262,7 +262,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/dior/01..16.jpg)
     slides: Array.from({ length: 16 }, (_, i) => `assets/decks/dior/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Dior",
-    stack: ["CRM segmentation", "Omnichannel audit (retail, e-commerce, mobile)"], // Featured Work card: "The Stack" (from this project's own text)
+    stack: ["CRM segmentation", "Omnichannel audit (retail, e-commerce, mobile)"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "Omnichannel Analysis",
     when: "", // no date shown
     score: "15%",
@@ -276,7 +276,7 @@ export const projects = [
   {
     id: "coop",
     client: "Coop Atlantique",
-    stack: ["Porter’s Five Forces", "VRIN", "ROS / ROA / asset turnover", "SEO/SEM"], // Featured Work card: "The Stack" (from this project's own text)
+    stack: ["Porter’s Five Forces", "VRIN", "ROS / ROA / asset turnover", "SEO/SEM"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "Business Simulation",
     when: "", // no date shown
     score: "10%",
@@ -295,7 +295,7 @@ export const projects = [
     // the real deck (PDF exported to images, assets/decks/maya/01..10.jpg)
     slides: Array.from({ length: 10 }, (_, i) => `assets/decks/maya/${String(i + 1).padStart(2, "0")}.jpg`),
     client: "Eco-Packaging",
-    stack: ["MAYA principle", "Comparative positioning analysis"], // Featured Work card: "The Stack" (from this project's own text)
+    stack: ["MAYA principle", "Comparative positioning analysis"], // Case Studies card: "The Stack" (from this project's own text)
     kind: "Strategic Branding",
     when: "", // no date shown
     score: "GTM",
