@@ -52,7 +52,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 ## Desk intro (animations brief, Phase 1, 2026-11-18)
 - First visit of the browser session only (sessionStorage "hy-booted"; `firstVisit` in app.js). After the loader: the desk is empty, objects arrive one by one (notebook, pen, cup, camera, lamp, headphones, alarm, clip, then the folder), each 0.4s, 0.13s apart; shadows fade in as each lands (.is-airborne). Then the pen is clicked (plunger dips + springs back; click sound only if the visitor has already interacted, navigator.userActivation), lifts and writes her handwriting images (signature, title, tagline 1+2) left to right, its tip on the reveal edge, returns to rest. Pen = her photo of a clear MUJI-style gel pen with clip (assets/objects/pen.avif, 86x788, nib out; the point is 34.9% across, at the very bottom). During the intro its metal tip (last 3.6%) is clipped off and revealed on the click; it stays out. Positions are measured at write time (works at any desk size). Reduced motion or a repeat visit: final desk at once.
 - The intro line is also real text: a visually-hidden <p> under the hidden <h1> in the hero.
-- Phase 2 done (lamp, see above). Phase 3 done: scripts/cup.js = fixed coffee cup bottom left (SVG; liquid group translateY 0..36 = scroll progress; slosh once ~0.5s when scrolling stops; steam loop 3.6s; appears after 35% of the hero; "Refill?" button above it when empty, focusable only then, scrolls to top and focuses .brand). Footer has 104px bottom padding so its text clears the cup. Remaining (needs her OK): 4 wax-sealed envelope after a successful contact form send.
+- Phase 2 done (lamp, see above). Phase 3 done: scripts/cup.js = fixed coffee cup bottom left (SVG; liquid group translateY 0..36 = scroll progress; slosh once ~0.5s when scrolling stops; steam loop 3.6s; appears after 35% of the hero; "Refill?" button above it when empty, focusable only then, scrolls to top and focuses .brand). Footer has 150px bottom padding so its text clears the cup. Remaining (needs her OK): 4 wax-sealed envelope after a successful contact form send.
 
 ## Case Studies cards (2026-11-19, reviewer feedback)
 - Every card: one cover template (cream ruled paper, brand name in the serif, kind in italic; no deck images, the
@@ -65,7 +65,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
   .reveal only hides until .is-in (it used to set transform:none and cancel the cards' hover lift).
 
 ## Background doodles (2026-11-19)
-- app.js bgDoodles(): 7 of her doodles (scripts/doodles.js) placed in the side margins of #p05, #about, #close (not the pinned #p03), opacity .13 in var(--text), slight tilt; shown only at >= 1200px where the margins are empty; aria-hidden.
+- app.js bgDoodles(): 7 of her doodles (scripts/doodles.js) placed in the side margins of #p05, #about, #close (not the pinned #p03), opacity .24 in var(--text), slight tilt, z-index -1 (behind content); shown from 900px; aria-hidden.
 
 ## Stack
 - Plain HTML + CSS + ES modules. No build step, no framework.

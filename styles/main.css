@@ -1038,7 +1038,7 @@ section { position: relative; }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-footer { padding: 48px var(--gutter) 104px; /* extra room at the bottom: the coffee-cup progress sits in the corner */ color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px 40px;
+footer { padding: 48px var(--gutter) 150px; /* extra room at the bottom: the coffee-cup progress sits in the corner */ color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px 40px;
   max-width: calc(var(--content-w) + 2 * var(--gutter)); margin-inline: auto; line-height: 1.7; }
 footer.mono { text-transform: none; letter-spacing: .01em; font-size: var(--fs-13); } /* the line reads exactly as written */
 .footer__hi { color: var(--link); font-weight: 600; } /* no underline, at her request; caramel + bolder marks it as the link */
@@ -1174,13 +1174,14 @@ html.deck-open { overflow: hidden; }
   .cup-progress, .cup-progress__level, .cup-progress__refill { transition: none; }
 }
 
-/* a few of her doodles, faint, in the page margins (app.js bgDoodles). Wide screens only, where the
-   margins are empty; pencil-light in the page's own ink colour, so they never compete with content. */
+/* a few of her doodles in the page margins (app.js bgDoodles), pencil-light in the page's own ink colour.
+   From 900px wide; they sit behind the content (z-index -1), so where a margin is narrow they tuck
+   under the edge of the content instead of over the text. */
 .bg-doodle { display: none; }
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .bg-doodle {
-    display: block; position: absolute; z-index: 0; width: clamp(64px, 5.6vw, 92px); pointer-events: none;
-    color: var(--text); opacity: .13; rotate: var(--r, 0deg);
+    display: block; position: absolute; z-index: -1; width: clamp(60px, 6vw, 100px); pointer-events: none;
+    color: var(--text); opacity: .24; rotate: var(--r, 0deg);
   }
   .bg-doodle .doodle { display: block; width: 100%; height: auto; }
 }
