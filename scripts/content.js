@@ -327,7 +327,6 @@ export const marquee = [
   { label: "On Repeat", value: "Taylor Swift" },
   { label: "Next on the Shelf", value: "How Brands Grow" },
   { label: "Off the Clock", value: "losing at chess online" },
-  { label: "Fueled by", value: "iced americanos" },
   { label: "Based in", value: "Paris" },
 ];
 
