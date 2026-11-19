@@ -768,7 +768,6 @@ section { position: relative; }
   transition: transform var(--dur-slow) var(--ease);
 }
 .work-card:hover .work-card__cover { transform: scale(1.03); }
-.work-card__cover-tag { font: 600 clamp(10px, 2.6cqi, 13px)/1 var(--font); letter-spacing: .18em; text-transform: uppercase; color: #8B5A2B; }
 .work-card__cover-name { font: 700 clamp(30px, 11cqi, 64px)/1 var(--font); letter-spacing: -.02em; font-variation-settings: "opsz" 96, "SOFT" 50; }
 .work-card__cover-rule { width: 44px; height: 1px; background: rgba(43, 29, 22, .3); }
 .work-card__cover-kind { font: italic 400 clamp(13px, 3.4cqi, 17px)/1.3 var(--font); color: var(--espresso); }
@@ -809,7 +808,7 @@ section { position: relative; }
 .letter {
   --lh: calc(var(--fs-18) * 1.65);
   --pad-l: clamp(40px, 6vw, 84px); --pad-r: clamp(28px, 4vw, 60px);
-  --paper: #ece4d3; --rule: #cdc2ad;
+  --paper: #FBF6EC; --rule: #E6DCCB; /* same cream paper as the notebook and the case-study covers */
   position: relative; font-size: var(--fs-18);
   max-width: calc(68ch + var(--pad-l) + var(--pad-r));
   padding: calc(var(--lh) * 2) var(--pad-r) calc(var(--lh) * 2) var(--pad-l);

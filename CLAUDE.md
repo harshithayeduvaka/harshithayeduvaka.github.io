@@ -9,7 +9,7 @@ an open notebook with her name, title and tagline written on it, plus headphones
 an instax camera (click = her photo slides out as a print), a pen, a cappuccino, an alarm clock (click = short ring + shake) and a binder clip (click = snap), both where the vinyl card used to be, and a stained-glass lamp partly behind the notebook (click = lights up 1s + switch click; kit item listed first so it sits under the notebook). A small player (⏮ ▶ ⏭) is fixed on the right edge;
 it only moves when dragged. Playlist data lives in content.js `playlist`; audio via Spotify's official
 iFrame embed (loaded on first play; 30s previews unless logged in). Vinyl record card removed.
-Below it: "The Story So Far" badges, case studies, About (a letter on recycled ruled paper, plain tone with no specks: text from content.js `about`, no photo (removed at her request), signature.png, her wooden knight photo cut out as assets/objects/knight.avif; the ruled lines follow `--lh`, so keep paragraph spacing at one line), "On My Shelf" (scripts/bookshelf.js: books from content.js `books`, covers in assets/covers/<slug>.jpg; click a spine = tip, neighbours lean, slide out + turn to the cover in a <dialog>; tunables at the top of bookshelf.js), contact. (ohmyATS demo removed: its badge
+Below it: "The Story So Far" badges, case studies, About (a letter on ruled paper, same cream #FBF6EC as the notebook and case-study covers, soft tone, no specks: text from content.js `about`, no photo (removed at her request), signature.png, her wooden knight photo cut out as assets/objects/knight.avif; the ruled lines follow `--lh`, so keep paragraph spacing at one line), "On My Shelf" (scripts/bookshelf.js: books from content.js `books`, covers in assets/covers/<slug>.jpg; click a spine = tip, neighbours lean, slide out + turn to the cover in a <dialog>; tunables at the top of bookshelf.js), contact. (ohmyATS demo removed: its badge
 links to the real product instead.) She asked for: no CV-copy intro, no object labels/numbers,
 no Spotify, warm coffee palette, no em dashes (—) in visible copy, no skills section,
 no "PASS" rail labels. Experience = "The Story So Far ✦" (2026-11-19, replaced the coffee bags): a flip-book notebook, one spread per WORK role,
@@ -55,7 +55,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 - Phase 2 done (lamp, see above). Phase 3 done: scripts/cup.js = fixed coffee cup bottom left (SVG; liquid group translateY 0..36 = scroll progress; slosh once ~0.5s when scrolling stops; steam loop 3.6s; appears after 35% of the hero; "Refill?" button above it when empty, focusable only then, scrolls to top and focuses .brand). Footer has 104px bottom padding so its text clears the cup. Remaining (needs her OK): 4 wax-sealed envelope after a successful contact form send.
 
 ## Case Studies cards (2026-11-19, reviewer feedback)
-- Every card: one cover template (cream ruled paper, "Case study", brand name in the serif, kind in italic; no deck images, the
+- Every card: one cover template (cream ruled paper, brand name in the serif, kind in italic; no deck images, the
   brands' logos/colours stay inside the decks), then title, "SKEMA case study · kind" (projects[].tag), the question
   (projects[].question, one italic line), The Stack, The Impact, Open deck.
 - Impacts from her CV (2026-11-19 version): Comintelli = partner-led US entry avoiding a sales hire costing 92% of cash reserves
