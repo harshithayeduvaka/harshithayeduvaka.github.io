@@ -1,12 +1,12 @@
 // app.js — motion orchestration, desk interactions, section rendering.
-import { play, playFile } from "./sound.js?v=20261119i";
-import { initMusic } from "./music.js?v=20261119i";
-import { initBookshelf } from "./bookshelf.js?v=20261119i";
-import { doodles } from "./doodles.js?v=20261119i";
-import { initCup } from "./cup.js?v=20261119i";
+import { play, playFile } from "./sound.js?v=20261119j";
+import { initMusic } from "./music.js?v=20261119j";
+import { initBookshelf } from "./bookshelf.js?v=20261119j";
+import { doodles } from "./doodles.js?v=20261119j";
+import { initCup } from "./cup.js?v=20261119j";
 import {
   meta, about, kit, tools, experience, projects, playlist, books, marquee,
-} from "./content.js?v=20261119i";
+} from "./content.js?v=20261119j";
 
 const { gsap, ScrollTrigger, Lenis } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,7 @@ const canDrag = matchMedia("(pointer: fine)").matches; // mouse/trackpad: object
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // bump with the ?v= in index.html whenever an image in assets/ is replaced, so browsers refetch it
-const ASSET_V = "20261119i";
+const ASSET_V = "20261119j";
 
 // ------------------------------------------------------------------
 // Paris time + theme (light = Iced Latte / dark = Espresso). The lamp on the desk switches it; with no saved choice it follows the time of day in Paris (evening = lamp on).

@@ -719,7 +719,7 @@ section { position: relative; }
    ============================================================ */
 /* Featured Work: frosted glass cards over a slow, warm, blurred background (glass needs
    something behind it to frost). One card per project; the whole card opens the deck. */
-.work-sec { isolation: isolate; overflow: hidden; }
+.work-sec { isolation: isolate; overflow-x: clip; overflow-y: visible; } /* the glow fades into the sections above and below (no hard edge); clipped sideways only */
 .work-sec::before, .work-sec::after { /* drifting blobs: transform only */
   content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%; filter: blur(60px);
   animation: blob-drift 26s var(--ease) infinite alternate;
