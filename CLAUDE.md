@@ -42,7 +42,7 @@ never advances; inject `*{transition:none!important}` in test harnesses to see f
 - Fonts: Fraunces only, everywhere (her request, 2026-11-18). Her handwriting on the notebook is an image. Token: --font.
 - Case Studies (was "Featured Work") = glass card grid (pass05): thumb, title, kind, The Stack (content.js projects[].stack, pulled from each project's text), The Impact (projects[].impact), Open deck. Blurred caramel blobs drift behind (#p05::before/::after).
 - "What makes me, me?" + "On My Shelf" merged into "Off the Menu" (#about): marquee (content.js `marquee`), letter (the knight and the desk photo slot were both removed at her request), shelf (#books kept for the in-text link).
-- Reveals for new elements: IntersectionObserver reveal() in app.js (existing GSAP reveals kept). Footer text is exact; "Say hi." = mailto.
+- Reveals for new elements: IntersectionObserver reveal() in app.js (existing GSAP reveals kept). Footer: "Designed & built by Harshitha in Paris. Say hi." ("Fueled by..." removed at her request); "Say hi." = mailto.
 
 ## Time of day + lamp (2026-11-18)
 - Alarm clock = real Paris time: app.js clockFace() draws an SVG face (Fraunces numerals) over the photo's dial (.clock-face: left 11.76% / top 30.24% / width 78.43% of the image); hands set every second; aria-label says the time. Reduced motion: no second hand.
